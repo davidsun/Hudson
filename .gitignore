@@ -1,1 +1,7 @@
 *.pyc
+.DS_Store
+*.orig
+nohup.out
+venv
+permdirvenv
+permdir
