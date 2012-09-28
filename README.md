@@ -11,3 +11,5 @@ Config your MySQL
 
 ###2. Run
     make love
+
+Checkout [http://0.0.0.0:8964/](http://0.0.0.0:8964/)
