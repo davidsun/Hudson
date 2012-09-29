@@ -15,8 +15,6 @@ love_syc:
 	python manage.py runserver 0.0.0.0:8965
 love_jly:
 	python manage.py runserver 0.0.0.0:8966
-love_zs:
-	python manage.py runserver 0.0.0.0:8967
 
 .PHONY : install love all run web
 
