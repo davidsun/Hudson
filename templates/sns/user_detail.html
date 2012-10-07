@@ -1,0 +1,10 @@
+{% extends "base_site.html" %}
+
+{% block title %}{{ user.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ user.name }}</h1>
+
+<h2>{{ user.nickname }}</h2>
+
+{% endblock %}

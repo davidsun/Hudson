@@ -1,0 +1,17 @@
+{% extends "base_site.html" %}
+
+{% block title %}用户列表{% endblock %}
+
+{% block content %}
+
+{% if user_list %}
+    <ul>
+    {% for user in user_list %}
+        <li><a href="../{{ user.id }}/">{{ user.nickname }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>无用户存在...</p>
+{% endif %}
+
+{% endblock %}

@@ -1,5 +1,4 @@
-from sns.models.user import User
-from sns.models.message import Message
+from sns.models import User, Message
 
 from django.contrib import admin
 
