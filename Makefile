@@ -5,7 +5,8 @@ all:
 
 install:
 	pip install -r requirements.txt
-
+db:
+	python manage.py syncdb
 run: love
 web: love
 love: love_zhy

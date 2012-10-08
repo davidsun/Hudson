@@ -1,7 +1,33 @@
+{% extends "base_site.html" %}
+
+{% block title %}请登录{% endblock %}
+
+{% block content %}
 <form action="/sns/login_user/" method="post">
 {% csrf_token %}
-<input type="field" name="username" />
-<input type="field" name="password" />
-<input type="submit" value="login" />
+<table align="center">
+<tr align="left">
+    <td>
+        用户名：
+    </td>
+    <td>
+        <input name="username">
+    </td>
+</tr>
+<tr align="left">
+    <td>
+        密码：
+    </td>
+    <td>
+        <input type="password" name="password">
+    </td>
+</tr>
+<tr align="center">
+    <td colspan=2>
+        <input type="submit" value="登录">
+    </td>
+</tr>
+</table>
 </form>
 
+{% endblock %}
