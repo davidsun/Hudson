@@ -1,2 +1,2 @@
-from user import User
+from userprofile import UserProfile
 from message import Message

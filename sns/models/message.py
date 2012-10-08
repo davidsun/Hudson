@@ -1,5 +1,5 @@
 from django.db import models
-from user import User
+from django.contrib.auth.models import User
 
 class Message(models.Model):
     user = models.ForeignKey(User)

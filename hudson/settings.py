@@ -151,3 +151,6 @@ LOGGING = {
         },
     }
 }
+
+AUTH_PROFILE_MODULE = 'sns.UserProfile'
+ 
