@@ -9,7 +9,10 @@ Config your MySQL
     user: hudson_admin
     pass: 134256
 
-###2. Run
+###2. Syncdb
+    make db
+
+###3. Run
     make love
 
 Checkout [http://0.0.0.0:8964/](http://0.0.0.0:8964/)
