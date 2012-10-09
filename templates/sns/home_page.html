@@ -2,7 +2,7 @@
 
 {% block title %}Hudson交友平台{% endblock %}
 {% block content %}
-<form action="/sns/post_message/" method="post">
+<form action="/post_message/" method="post">
 {% csrf_token %}
     <table align="center">
         <tr>
@@ -20,7 +20,7 @@
 <table align="center">
     {% for message in message_list %}
     <tr>
-        <td><a href="/sns/{{message.user.id}}">{{message.user}}</a></td>
+        <td><a href="/{{message.user.id}}">{{message.user}}</a></td>
         <td>{{message}}</td>
     </tr>
     {% endfor %}
