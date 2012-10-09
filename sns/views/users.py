@@ -3,7 +3,6 @@ import hamlpy
 # Currently all views are here
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -23,20 +22,16 @@ def home_page(request) :
 def index(request) :
     return render_to_response("layout/login_signup")
 
-def login_user(request) : # rename here to avoid name conflict.
+def login(request) :
+    from django.contrib.auth import authenticate, login
     if request.method == 'POST' :
         username = request.POST['username']
         password = request.POST['password']
-        print "here"
         user = authenticate(username=username, password=password)
-        print user
         if user is not None:
-            print "ok"
             if user.is_active:
-                print "ok"
                 login(request, user)
                 return HttpResponseRedirect(reverse('sns.views.users.home_page'))
-
     else :
         return render_to_response('sns/login.html', context_instance=RequestContext(request))
 
