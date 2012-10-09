@@ -5,7 +5,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
     nickname = models.CharField(max_length = 30)
-    friends = models.ManyToManyField(User, related_name='sns_userprofile_friends')
+    friends = models.ManyToManyField('self', symmetrical=False, related_name='sns_userprofile_friends', blank=True)
 
     def __unicode__(self):
         return self.nickname
