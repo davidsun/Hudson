@@ -1,10 +1,12 @@
 from django.conf.urls import patterns, include, url
 
-urlpatterns = patterns('sns.views',
+urlpatterns = patterns('sns.views.users',
     url(r'^$', 'home_page'),
-    url(r'^(?P<user_id>\d+)/$', 'view_user'),
-    url(r'^users/$', 'list_users'),
-    url(r'^login/$', 'entrance'),
-    url(r'^login_user/$', 'login_user'),
-    url(r'^post_message/$', 'post_message'),
-) 
+    url(r'^(?P<user_id>\d+)/?$', 'show'),
+    url(r'^users/?$', 'index'),
+    url(r'^login/?$', 'login'),
+)
+
+urlpatterns += patterns('sns.views.messages',
+    url(r'^post_message/$', 'post_message'),    
+)

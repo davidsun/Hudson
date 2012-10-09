@@ -84,7 +84,8 @@ SECRET_KEY = '79&amp;9fc(vf+&amp;p38t-%(%5uy&amp;)4+5yrh+=xdh@iky#5!^x=miwxz'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'hamlpy.template.loaders.HamlPyFilesystemLoader',
+    'hamlpy.template.loaders.HamlPyAppDirectoriesLoader'
 )
 
 MIDDLEWARE_CLASSES = (
