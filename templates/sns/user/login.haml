@@ -1,0 +1,22 @@
+- extends "layout/login_signup"
+
+- block title
+  登录
+
+- block content
+  .span8.offset2
+    .page-header
+      %h1 登录
+    %form.form-horizontal{action:"/login/", method:"post"}
+      - csrf_token
+      .control-group
+        %label.control-label 邮箱
+        .controls
+          %input.input-xlarge{type:"text", placeholder:"邮箱", name:'email'}
+      .control-group
+        %label.control-label 密码
+        .controls
+          %input.input-xlarge{type:"password", placeholder:"密码", name:'password'}
+      .form-actions
+        %button.btn.btn-large.btn-primary{type:'submit'} 登&nbsp;&nbsp;录
+        %a.btn.btn-large{type:'submit', href:"{% url sns.views.users.signup %}"} 注&nbsp;&nbsp;册

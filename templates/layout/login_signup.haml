@@ -1,5 +1,9 @@
-%head
-  %meta{"http-equiv":"Content-Type", "content":"text/html;charset=UTF-8"}
-  %link{"rel":"stylesheet", "href":"bootstrap.css", "type":"text/css"}
-%html
-  
+- extends "layout/site"
+
+- block site_content
+  .navbar.navbar-inverse.navbar-fixed-top
+    .navbar-inner
+      .container
+        .brand Hudson
+  .container.main-content
+    - block content

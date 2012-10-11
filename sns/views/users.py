@@ -1,7 +1,7 @@
 import hamlpy
 
 # Currently all views are here
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
@@ -19,24 +19,39 @@ def home_page(request) :
     return render_to_response("sns/home_page.html", {'message_list':message_list[:MAX_MESSAGE_COUNT]},
                               context_instance=RequestContext(request))
 
+@login_required(login_url='/login/')
 def index(request) :
-    return render_to_response("layout/login_signup")
+    pass
 
 def login(request) :
     from django.contrib.auth import authenticate, login
+    if request.user.is_authenticated() : return redirect('/')
     if request.method == 'POST' :
-        username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
+        user = authenticate(email=email, password=password)
+        if user is not None :
+            if user.is_active :
                 login(request, user)
                 return HttpResponseRedirect(reverse('sns.views.users.home_page'))
+        else :
+            return redirect(reverse('sns.views.users.login'))
     else :
-        return render_to_response('sns/login.html', context_instance=RequestContext(request))
+        return render_to_response('sns/user/login', context_instance=RequestContext(request))
+
+def logout(request) :
+    from django.contrib.auth import logout
+    logout(request)
+    return redirect('/')
 
 @login_required(login_url='/login/')
 def show(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     return render_to_response('sns/user_detail.html', {'user': user})
 
+def signup(request) :
+    if request.user.is_authenticated() : return redirect('/')
+    if request.method == 'POST' :
+        pass
+    else :
+        return render_to_response('sns/user/signup', context_instance=RequestContext(request))
