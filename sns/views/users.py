@@ -51,7 +51,14 @@ def show(request, user_id):
 
 def signup(request) :
     if request.user.is_authenticated() : return redirect('/')
+    from forms.user import Signup
     if request.method == 'POST' :
-        pass
+        form = Signup(request.POST)
+        if form.is_valid() :
+            form.save()
+            return redirect('/')
+        else :
+            return render_to_response('sns/user/signup', {'form':form}, context_instance=RequestContext(request))
     else :
+        form = Signup()
         return render_to_response('sns/user/signup', context_instance=RequestContext(request))
