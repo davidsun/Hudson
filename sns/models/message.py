@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from sns.models import UserProfile
+from sns.models.user_profile import UserProfile
 
 class Message(models.Model):
     user = models.ForeignKey(UserProfile)

@@ -1,8 +1,37 @@
 .brand{
     font-family: 'Molle', cursive;
     margin-top: 3px;
+    margin-bottom: -3px;
 }
 
 .main-content{
     margin-top: 80px;
+}
+
+.main-right-content{
+    margin-left: 20px;
+}
+
+.user-home-left .form-post .post{
+    font-size: 20px;
+    line-height: 26px;
+    padding: 8px;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.user-home-left .section-news{
+    padding-top: 20px;
+}
+
+.user-home-right .section{
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+
+.user-home-right .section-title{
+    border-bottom: 1px solid #E5E5E5;
 }

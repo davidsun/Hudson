@@ -13,11 +13,7 @@ MAX_MESSAGE_COUNT = 20
 
 @login_required(login_url='/login/')
 def home(request) :
-    message_list = [message for friend in request.user.get_profile().friends.all() for message in
-                    sorted(friend.message_set.all(), reverse=True, key=lambda x: x.post_time)[:MAX_MESSAGE_COUNT]]
-    message_list.sort(reverse=True, key=lambda x: x.post_time)
-    return render_to_response("sns/home_page.html", {'message_list':message_list[:MAX_MESSAGE_COUNT]},
-                              context_instance=RequestContext(request))
+    return render_to_response('sns/user/home', context_instance=RequestContext(request))
 
 def login(request) :
     if request.user.is_authenticated() : return redirect('/')

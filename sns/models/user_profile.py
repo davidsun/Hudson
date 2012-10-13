@@ -7,3 +7,5 @@ class UserProfile(models.Model):
 
     class Meta : 
         app_label = 'sns'
+
+User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])

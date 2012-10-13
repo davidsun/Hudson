@@ -1,0 +1,25 @@
+- extends 'layout/main'
+
+- block title
+  主页
+
+- block left_content
+  .user-home-left
+    %form.form-post
+      %legend 发布我的新鲜事
+      %textarea.post{rows:3,placeholder:'写些什么吧...'}
+      %button.btn.btn-primary{type:'submit'} 发布
+    .section-news
+      .page-header
+        %h1 新鲜事
+
+- block right_content
+  .user-home-right
+    .section
+      %h5.section-title 搜索好友
+      %form.user-home-form-search-user.form-search
+        %input{type:'text',placeholder:'查找好友...'}
+        %button.btn{type:'submit'} 搜索
+    .section
+      %h5.section-title 我的好友
+
