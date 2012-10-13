@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('sns.views.users',
-    url(r'^$', 'home_page'),
+    url(r'^$', 'home'),
     url(r'^(?P<user_id>\d+)/?$', 'show'),
     url(r'^login/?$', 'login'),
     url(r'^logout/?$', 'logout'),

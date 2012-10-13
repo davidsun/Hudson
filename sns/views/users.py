@@ -12,7 +12,7 @@ from mako.template import Template
 MAX_MESSAGE_COUNT = 20
 
 @login_required(login_url='/login/')
-def home_page(request) :
+def home(request) :
     message_list = [message for friend in request.user.get_profile().friends.all() for message in
                     sorted(friend.message_set.all(), reverse=True, key=lambda x: x.post_time)[:MAX_MESSAGE_COUNT]]
     message_list.sort(reverse=True, key=lambda x: x.post_time)
@@ -24,20 +24,18 @@ def index(request) :
     pass
 
 def login(request) :
-    from django.contrib.auth import authenticate, login
     if request.user.is_authenticated() : return redirect('/')
+    from forms.user import Login
     if request.method == 'POST' :
-        email = request.POST['email']
-        password = request.POST['password']
-        user = authenticate(email=email, password=password)
-        if user is not None :
-            if user.is_active :
-                login(request, user)
-                return HttpResponseRedirect(reverse('sns.views.users.home_page'))
+        form = Login(request.POST)
+        if form.is_valid() :
+            form.save(request)
+            return HttpResponseRedirect(reverse('sns.views.users.home'))
         else :
-            return redirect(reverse('sns.views.users.login'))
+            return render_to_response('sns/user/login', {'form':form}, context_instance=RequestContext(request))
     else :
-        return render_to_response('sns/user/login', context_instance=RequestContext(request))
+        form = Login()
+        return render_to_response('sns/user/login', {'form':form}, context_instance=RequestContext(request))
 
 def logout(request) :
     from django.contrib.auth import logout
