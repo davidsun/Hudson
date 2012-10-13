@@ -13,6 +13,7 @@ class Login(forms.Form) :
         email = self.cleaned_data.get("email", "")
         password = self.cleaned_data.get("password")
         if authenticate(email=email, password=password) is None : raise validators.ValidationError(u'您输入的邮箱或密码不正确。')
+        return self.cleaned_data
     
     def save(self, request) :
         email = self.cleaned_data.get("email", "")

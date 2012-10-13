@@ -21,7 +21,7 @@ def home(request) :
 
 def login(request) :
     if request.user.is_authenticated() : return redirect('/')
-    from forms.user import Login
+    from forms.users import Login
     if request.method == 'POST' :
         form = Login(request.POST)
         if form.is_valid() :
@@ -45,7 +45,7 @@ def show(request, user_id):
 
 def signup(request) :
     if request.user.is_authenticated() : return redirect('/')
-    from forms.user import Signup
+    from forms.users import Signup
     if request.method == 'POST' :
         form = Signup(request.POST)
         if form.is_valid() :
