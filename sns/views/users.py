@@ -19,10 +19,6 @@ def home(request) :
     return render_to_response("sns/home_page.html", {'message_list':message_list[:MAX_MESSAGE_COUNT]},
                               context_instance=RequestContext(request))
 
-@login_required(login_url='/login/')
-def index(request) :
-    pass
-
 def login(request) :
     if request.user.is_authenticated() : return redirect('/')
     from forms.user import Login

@@ -6,7 +6,6 @@ urlpatterns = patterns('sns.views.users',
     url(r'^login/?$', 'login'),
     url(r'^logout/?$', 'logout'),
     url(r'^signup/?$', 'signup'),
-    url(r'^users/?$', 'index'),
 )
 
 urlpatterns += patterns('sns.views.messages',
