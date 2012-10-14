@@ -9,35 +9,44 @@
       - csrf_token
       %legend 发布我的新鲜事
       %textarea.post{rows:3,placeholder:'写些什么吧...'}
-      %button.btn.btn-primary{type:'submit'} 发布
-    .section-news
-      .page-header
-        %h1 新鲜事
-  :javascript
-    $(".form-post").submit(function(){
-      var content = $(this).find(".post").val();
-      if (content.length == 0){
-        $(this).find(".post").tooltip({
-          placement: 'top',
-          title: "请输入您希望发布的内容...", 
-          trigger: "manual",
-        }).tooltip("show");
-        $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
-          $(this).tooltip('destroy');
+      %button.btn.btn-primary{type:'submit'} 发布 
+    :javascript
+      $(".form-post").submit(function(){
+        var content = $(this).find(".post").val();
+        if (content.length == 0){
+          $(this).find(".post").tooltip({
+            placement: 'top',
+            title: "请输入您希望发布的内容...", 
+            trigger: "manual",
+          }).tooltip("show");
+          $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
+            $(this).tooltip('destroy');
+          });
+          return false;
+        }
+        $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
+        $.post("/posts", {
+          "content": content,
+          "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
+        }, function(result){
+          if (result.status == "ok"){
+            window.location.reload();
+          }
         });
         return false;
-      }
-      $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
-      $.post("/posts", {
-        "content": content,
-        "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
-      }, function(result){
-        if (result.status == "ok"){
-          window.location.reload();
-        }
       });
-      return false;
-    });
+    .section-news
+      %h1 新鲜事
+      - if posts
+        - for post in posts 
+          %div.post
+            %div.clearfix
+              %a.pull-left ={post.user.username}
+              .muted.pull-right {{ post.created_at|date:"m-d H:i" }}
+            %div.content ={post.content}
+      - else
+        .row-fluid
+          .offset4.span4.btn.btn-large.disabled 没有新鲜事...
 
 - block right_content
   .users-index-right
@@ -48,18 +57,19 @@
         %button.btn{type:'submit'} 搜索
     .section
       %h5.section-title 我的粉丝
-      - if followers.count == 0
-        .muted 还没有人关注我...
-      - else
+      - if followers
         %ul.unstyled
           - for follower in followers
             %li ={follower.follower.username}
+      - else
+        .muted 还没有人关注我...
     .section
       %h5.section-title 我的关注
-      - if followees.count == 0
-        .muted 还没有关注任何人...
-      - else
+      - if followees
         %ul.unstyled
           - for followee in followees
             %li ={followee.followee.username}
+      - else
+        .muted 还没有关注任何人...
+        
 

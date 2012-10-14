@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from mako.template import Template
-from sns.models.user_follow import UserFollow
+from sns.models import Post, UserFollow
 
 @login_required(login_url='/login/')
 def follow(request, user_id) :
@@ -19,11 +19,13 @@ def follow(request, user_id) :
 
 @login_required(login_url='/login/')
 def index(request) :
-    followers = request.user.followers.all()[:5]
-    followees = request.user.followees.all()[:5]
-    posts = request.user.post_set.all()
+    followers = list(request.user.followers.all()[:5])
+    followees = list(request.user.followees.all()[:5])
+    followed_ids = list(request.user.followees.values_list('id', flat=True))
+    followed_ids.append(request.user.id)
+    posts = list(Post.objects.filter(user_id__in=followed_ids).order_by("-created_at").all())
     
-    return render_to_response('sns/users/index', {'followers':followers, 'followees':followees}, context_instance=RequestContext(request))
+    return render_to_response('sns/users/index', {'followers':followers, 'followees':followees, 'posts':posts}, context_instance=RequestContext(request))
 
 def login(request) :
     if request.user.is_authenticated() : return redirect('/')
@@ -52,7 +54,7 @@ def show(request, user_id):
 
 @login_required(login_url='/login/')
 def search(request) :
-    users = User.objects.filter(username__icontains=request.GET.get('q', '')).all()
+    users = list(User.objects.filter(username__icontains=request.GET.get('q', '')).all())
     for user in users : user.followed = user.followers.filter(follower_id=request.user.id).count() > 0
     return render_to_response('sns/users/search', {'users':users}, context_instance=RequestContext(request)) 
 
