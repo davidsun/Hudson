@@ -17,9 +17,23 @@
   .users-home-right
     .section
       %h5.section-title 搜索好友
-      %form.form-search{action:"{% url sns.views.users.search %}"}
+      %form.form-inline{action:"{% url sns.views.users.search %}"}
         %input{type:'text',placeholder:'查找好友...',name:'q'}
         %button.btn{type:'submit'} 搜索
     .section
-      %h5.section-title 我的好友
+      %h5.section-title 我的粉丝
+      - if followers.count == 0
+        .muted 还没有人关注我...
+      - else
+        %ul.unstyled
+          - for follower in followers
+            %li ={follower.follower.username}
+    .section
+      %h5.section-title 我的关注
+      - if followees.count == 0
+        .muted 还没有关注任何人...
+      - else
+        %ul.unstyled
+          - for followee in followees
+            %li ={followee.followee.username}
 
