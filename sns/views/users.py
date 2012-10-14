@@ -18,7 +18,7 @@ def follow(request, user_id) :
     return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
 
 @login_required(login_url='/login/')
-def home(request) :
+def index(request) :
     followers = request.user.followers.all()[:5]
     followees = request.user.followees.all()[:5]
     return render_to_response('sns/users/home', {'followers':followers, 'followees':followees}, context_instance=RequestContext(request))

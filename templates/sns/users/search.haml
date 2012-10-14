@@ -57,12 +57,12 @@
             t.find(".hover").addClass("hidden");
             t.removeClass("btn-danger");
           });
-          ele.find(".followed").click(function(){
+          ele.find(".followed").unbind('click').click(function(){
             $.get("/users/" + user_id + "/unfollow");
             ele.attr("followed", "false");
             showFollowButton(ele);
           });
-          ele.find(".not-followed").click(function(){
+          ele.find(".not-followed").unbind('click').click(function(){
             $.get("/users/" + user_id + "/follow");
             ele.attr("followed", "true");
             showFollowButton(ele);
