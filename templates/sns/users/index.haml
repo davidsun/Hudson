@@ -13,21 +13,13 @@
     :javascript
       $(".form-post").submit(function(){
         var content = $(this).find(".post").val();
-        if (content.length == 0){
+        var error = "";
+        if (content.length == 0) error = "请输入您希望发布的内容...";
+        else if (content.length > 200) error = "您输入的内容太长了。";
+        if (error.length > 0){
           $(this).find(".post").tooltip({
             placement: 'top',
-            title: "请输入您希望发布的内容...", 
-            trigger: "manual",
-          }).tooltip("show");
-          $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
-            $(this).tooltip('destroy');
-          });
-          return false;
-        }
-        if (content.length > 200 ){
-          $(this).find(".post").tooltip({
-            placement: 'top',
-            title: "您输入的内容超过长度限制...", 
+            title: error, 
             trigger: "manual",
           }).tooltip("show");
           $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
