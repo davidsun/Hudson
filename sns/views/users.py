@@ -21,7 +21,7 @@ def follow(request, user_id) :
 def index(request) :
     followers = list(request.user.followers.all()[:5])
     followees = list(request.user.followees.all()[:5])
-    followed_ids = list(request.user.followees.values_list('id', flat=True))
+    followed_ids = list(request.user.followees.values_list('followee_id', flat=True))
     followed_ids.append(request.user.id)
     posts = list(Post.objects.filter(user_id__in=followed_ids).order_by("-created_at").all())
     
