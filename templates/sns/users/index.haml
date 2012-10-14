@@ -24,6 +24,17 @@
           });
           return false;
         }
+        if (content.length > 200 ){
+          $(this).find(".post").tooltip({
+            placement: 'top',
+            title: "您输入的内容超过长度限制...", 
+            trigger: "manual",
+          }).tooltip("show");
+          $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
+            $(this).tooltip('destroy');
+          });
+          return false;
+        }
         $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
         $.post("/posts", {
           "content": content,
