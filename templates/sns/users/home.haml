@@ -4,7 +4,7 @@
   主页
 
 - block left_content
-  .user-home-left
+  .users-home-left
     %form.form-post
       %legend 发布我的新鲜事
       %textarea.post{rows:3,placeholder:'写些什么吧...'}
@@ -14,11 +14,11 @@
         %h1 新鲜事
 
 - block right_content
-  .user-home-right
+  .users-home-right
     .section
       %h5.section-title 搜索好友
-      %form.user-home-form-search-user.form-search
-        %input{type:'text',placeholder:'查找好友...'}
+      %form.form-search{action:"{% url sns.views.users.search %}"}
+        %input{type:'text',placeholder:'查找好友...',name:'q'}
         %button.btn{type:'submit'} 搜索
     .section
       %h5.section-title 我的好友

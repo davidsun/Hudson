@@ -1,0 +1,28 @@
+- extends "layout/main"
+
+- block title
+  查找好友
+
+- block left_content
+  .users-search-left
+    .row-fluid
+      .span4
+        %h1 
+          查找好友
+      %h1
+        %form.pull-right.form-search{action:"{% url sns.views.users.search %}"}
+          %input{type:'text',placeholder:'查找好友...',name:'q',value:"{{ request.GET.q }}"}
+          %button.btn{type:'submit'} 搜索
+    - if users.count == 0
+      .row-fluid
+        .offset4.span4.btn.btn-large.disabled 没有找到好友...
+    - else
+      %table.table.table-hover
+        %tbody
+          - for user in users
+            %tr
+              %td ={user.username}
+              %td
+                - if user == request.user
+                - else
+                  .btn.btn-primary.btn-mini.pull-right 关注
