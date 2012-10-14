@@ -51,8 +51,7 @@ def show(request, user_id):
 @login_required(login_url='/login/')
 def search(request) :
     users = User.objects.filter(username__icontains=request.GET.get('q', '')).all()
-    for user in users :
-        user.followed = request.user.followees.filter(follower_id=request.user.id).count() > 0
+    for user in users : user.followed = user.followers.filter(follower_id=request.user.id).count() > 0
     return render_to_response('sns/users/search', {'users':users}, context_instance=RequestContext(request)) 
 
 def signup(request) :
