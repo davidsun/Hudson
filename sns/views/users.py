@@ -21,7 +21,9 @@ def follow(request, user_id) :
 def index(request) :
     followers = request.user.followers.all()[:5]
     followees = request.user.followees.all()[:5]
-    return render_to_response('sns/users/home', {'followers':followers, 'followees':followees}, context_instance=RequestContext(request))
+    posts = request.user.post_set.all()
+    
+    return render_to_response('sns/users/index', {'followers':followers, 'followees':followees}, context_instance=RequestContext(request))
 
 def login(request) :
     if request.user.is_authenticated() : return redirect('/')
@@ -30,7 +32,7 @@ def login(request) :
         form = Login(request.POST)
         if form.is_valid() :
             form.save(request)
-            return HttpResponseRedirect(reverse('sns.views.users.home'))
+            return HttpResponseRedirect(reverse('sns.views.users.index'))
         else :
             return render_to_response('sns/users/login', {'form':form}, context_instance=RequestContext(request))
     else :

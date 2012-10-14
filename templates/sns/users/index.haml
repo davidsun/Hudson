@@ -4,7 +4,7 @@
   主页
 
 - block left_content
-  .users-home-left
+  .users-index-left
     %form.form-post
       - csrf_token
       %legend 发布我的新鲜事
@@ -40,7 +40,7 @@
     });
 
 - block right_content
-  .users-home-right
+  .users-index-right
     .section
       %h5.section-title 搜索好友
       %form.form-inline{action:"{% url sns.views.users.search %}"}

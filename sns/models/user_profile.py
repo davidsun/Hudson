@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User 
 from django.db import models 
+from sns.models import HudsonModel
 
-class UserProfile(models.Model):
+class UserProfile(HudsonModel):
     user = models.OneToOneField(User)
 
     class Meta : 

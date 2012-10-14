@@ -12,7 +12,7 @@
     margin-left: 20px;
 }
 
-.users-home-left .form-post .post{
+.users-index-left .form-post .post{
     font-size: 20px;
     line-height: 26px;
     padding: 8px;
@@ -23,16 +23,16 @@
     box-sizing: border-box;
 }
 
-.users-home-left .section-news{
+.users-index-left .section-news{
     padding-top: 20px;
 }
 
-.users-home-right .section{
+.users-index-right .section{
     padding-top: 10px;
     padding-bottom: 5px;
 }
 
-.users-home-right .section-title{
+.users-index-right .section-title{
     border-bottom: 1px solid #E5E5E5;
 }
 
