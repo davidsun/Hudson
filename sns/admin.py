@@ -1,4 +1,4 @@
-from sns.models import Message, UserProfile
+from sns.models import Post, UserProfile
 from django.contrib.auth.models import User
 from django.contrib import admin
 
