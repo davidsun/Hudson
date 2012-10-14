@@ -45,8 +45,8 @@
               .muted.pull-right {{ post.created_at|date:"m-d H:i" }}
             %div.content ={post.content}
       - else
-        .row-fluid
-          .offset4.span4.btn.btn-large.disabled 没有新鲜事...
+        .row-fluid.empty-result
+          .offset4.span4.btn.btn-large.disabled 没有更多新鲜事了...
 
 - block right_content
   .users-index-right
