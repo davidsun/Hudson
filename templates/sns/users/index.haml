@@ -74,5 +74,11 @@
             %li ={followee.followee.username}
       - else
         .muted 还没有关注任何人...
-        
-
+    .section
+      %h5.section-title 最新注册
+      - if latest_users
+        %ul.unstyled
+          - for user in latest_users
+            %li ={user.username}
+      - else
+        .muted 还没有任何人注册...
