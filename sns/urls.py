@@ -13,6 +13,8 @@ urlpatterns = patterns('sns.views.users',
 
 urlpatterns += patterns('sns.views.posts',
     url(r'^posts/?$', 'index'),
+    url(r'^posts/(?P<post_id>\d+)/like?$', 'like'),
+    url(r'^posts/(?P<post_id>\d+)/unlike?$', 'unlike'),
 )
 
 urlpatterns += patterns('sns.views.messages',

@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from mako.template import Template
+from sns.models import Post, PostLike
 
 @login_required(login_url='/login/')
 def index(request) :
@@ -19,3 +20,13 @@ def index(request) :
         else :
             return HttpResponse(simplejson.dumps({'status': 'error'}), mimetype="application/json")
 
+@login_required(login_url='/login/')
+def like(request, post_id):
+    liked_post = Post.objects.get(id=post_id)
+    liked_post.likers.get_or_create(liker_id=request.user.id)
+    return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
+
+@login_required(login_url='/login/')
+def unlike(request, post_id):
+    PostLike.objects.filter(liker_id=request.user.id, liked_post_id=post_id).delete()
+    return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
