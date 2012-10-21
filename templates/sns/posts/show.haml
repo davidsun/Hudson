@@ -1,0 +1,15 @@
+- extends "layout/main"
+
+- block title
+  {{post.user.username}}: {{post.content}}
+
+- block left_content
+  .posts-list-post
+    .clearfix
+      %a.pull-left ={post.user.username} 
+    .clearfix
+      .content.pull-left ={post.content}
+    .clearfix.post-bottom
+      .pull-right
+        %span.muted {{ post.created_at|date:"m-d H:i" }}
+

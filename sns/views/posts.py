@@ -30,3 +30,9 @@ def like(request, post_id):
 def unlike(request, post_id):
     PostLike.objects.filter(user_id=request.user.id, post_id=post_id).delete()
     return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
+
+@login_required(login_url='/login/')
+def show(request, post_id):
+    post = Post.objects.get(id=post_id)
+    return render_to_response('sns/posts/show', {'post':post}, context_instance=RequestContext(request))
+

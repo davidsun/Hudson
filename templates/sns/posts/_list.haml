@@ -13,6 +13,8 @@
           %a.btn-like.muted.not-liked.hidden{href:"javascript:void(0);"} 收藏
         %span.muted ·
         %span.muted {{ post.created_at|date:"m-d H:i" }}
+        %span.muted ·
+        %a.btn-like{href:"{% url sns.views.posts.show post.id %}"} 详情
       
 :javascript
   function showLikeButton(ele){
