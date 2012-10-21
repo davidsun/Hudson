@@ -15,7 +15,7 @@ from sns.models import Post, PostLike
 def index(request) :
     if request.method == 'POST' :
         if len(request.POST.get('content', '')) > 0 :
-            request.user.post_set.create(content=request.POST['content'])
+            request.user.posts.create(content=request.POST['content'])
             return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
         else :
             return HttpResponse(simplejson.dumps({'status': 'error'}), mimetype="application/json")

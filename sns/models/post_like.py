@@ -3,13 +3,14 @@
 from django.contrib.auth.models import User
 from django.core import validators
 from django.db import models 
-from sns.models import HudsonModel, Post
+from sns.models.hudson_model import HudsonModel
+from sns.models.post import Post
 
 class PostLike(HudsonModel) :
     created_at = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, related_name='likes')
-    user = models.ForeignKey(User, related_name='post_likes')
     updated_at = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, related_name='post_likes')
 
     class Meta :
         app_label = 'sns'
