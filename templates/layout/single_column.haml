@@ -1,0 +1,19 @@
+- extends 'layout/site'
+
+- block site_content
+  .navbar.navbar-inverse.navbar-fixed-top
+    .navbar-inner
+      .container
+        .row
+          .offset2.span8
+            %a.brand{href:'/'} Hudson
+            .nav-collapse.collapse.pull-right
+              %ul.nav
+                %li
+                  %a 欢迎，={ request.user.username }！
+                %li
+                  %a{href:"{% url sns.views.users.logout %}"} 登出
+  .container.main-content
+    .row
+      .offset2.span8
+        - block content

@@ -6,6 +6,8 @@
       .content.pull-left ={post.content}
     .clearfix.post-bottom
       .pull-right
+        %a.muted.btn-like{href:"{% url sns.views.posts.show post.id %}"} 详情
+        %span.muted ·
         %span.like-buttons{liked:"{{post.liked|lower}}", post_id:"{{post.id}}"}
           %a.btn-like.muted.liked.hidden{href:"javascript:void(0);"}
             %span.not-hover 已收藏
@@ -13,8 +15,6 @@
           %a.btn-like.muted.not-liked.hidden{href:"javascript:void(0);"} 收藏
         %span.muted ·
         %span.muted {{ post.created_at|date:"m-d H:i" }}
-        %span.muted ·
-        %a.btn-like{href:"{% url sns.views.posts.show post.id %}"} 详情
       
 :javascript
   function showLikeButton(ele){

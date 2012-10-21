@@ -73,3 +73,23 @@
 .posts-list-post .post-bottom{
     font-size: 14px;
 }
+
+/*
+ * sns/posts/show
+ */
+.posts-show-post{
+    border-bottom: 1px solid #E5E5E5;
+    padding: 10px;
+}
+.posts-show-post .post-top{
+    font-size: 30px;
+    line-height: 40px;
+}
+.posts-show-post .content{
+    font-size: 45px;
+    line-height: 60px;
+}
+.posts-show-post .post-bottom{
+    font-size: 18px;
+    line-height: 24px;
+}
