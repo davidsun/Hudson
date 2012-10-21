@@ -12,4 +12,44 @@
         .content.pull-left ={post.content}
       .clearfix.post-bottom
         %span.muted {{ post.created_at|date:"m-d H:i" }}
+        %span.muted ·
+        %span.like-buttons{liked:"{{post.liked|lower}}", post_id:"{{post.id}}"}
+          %a.btn-like.muted.liked.hidden{href:"javascript:void(0);"} 已收藏
+          %a.btn-like.muted.not-liked.hidden{href:"javascript:void(0);"} 收藏
+
+	:javascript	
+		function showLikeButton(ele){
+		  ele = $(ele);
+		  var post_id = ele.attr("post_id");
+		  if (ele.attr("liked") == "true"){
+		    ele.find(".not-liked").addClass("hidden");
+		    ele.find(".liked").removeClass("hidden");
+		  } else {
+		    ele.find(".not-liked").removeClass("hidden");
+		    ele.find(".liked").addClass("hidden");
+		  }
+		  ele.find(".liked").unbind('hover').hover(function(){
+		    $(this).html("取消收藏");
+		  }, function(){
+		    $(this).html("已收藏");
+		  });
+		  ele.find(".liked").unbind('click').click(function(){
+		    $.get("/posts/" + post_id + "/unlike");
+		    ele.attr("liked", "false");
+		    showLikeButton(ele);
+		  });
+		  ele.find(".not-liked").unbind('click').click(function(){
+		    $.get("/posts/" + post_id + "/like");
+		    ele.attr("liked", "true");
+		    showLikeButton(ele);
+		  });
+		}
+		$(".posts-show-post .like-buttons").each(function(){ 
+		  showLikeButton(this);  
+		});
+		$(".posts-show-post").unbind('hover').hover(function(){
+		  $(this).find(".post-bottom a").removeClass("muted");
+		}, function(){
+		  $(this).find(".post-bottom a").addClass("muted");
+		});
 

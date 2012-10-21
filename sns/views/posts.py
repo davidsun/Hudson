@@ -34,5 +34,6 @@ def unlike(request, post_id):
 @login_required(login_url='/login/')
 def show(request, post_id):
     post = Post.objects.get(id=post_id)
+    post.liked = post.likes.filter(user_id=request.user.id).count() > 0
     return render_to_response('sns/posts/show', {'post':post}, context_instance=RequestContext(request))
 
