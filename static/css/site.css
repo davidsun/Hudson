@@ -33,17 +33,9 @@
     margin-bottom: 0;
     border-bottom: 1px solid #E5E5E5;
 }
-.users-index-left .section-news .post{
-    padding: 10px 8px;
-    border-bottom: 1px solid #E5E5E5;
-}
 .users-index-left .section-news{
     font-size: 17px;
     line-height: 26px;
-}
-.users-index-left .section-news .post .content{
-    font-size: 24px;
-    line-height: 38px;
 }
 .users-index-left .section-news .empty-result{
     padding-top: 20px;
@@ -62,4 +54,22 @@
 .users-search-left .empty-result{
     border-top: 1px solid #E5E5E5;
     padding-top: 20px;
+}
+
+/*
+ * sns/posts/_list
+ */
+.posts-list-post{
+    padding: 10px 12px;
+    border-bottom: 1px solid #E5E5E5;
+}
+.posts-list-post:hover{
+    background-color: #F5F5F5;
+}
+.posts-list-post .content{
+    font-size: 25px;
+    line-height: 32px;
+}
+.posts-list-post .post-bottom{
+    font-size: 14px;
 }

@@ -25,8 +25,7 @@ def index(request) :
     followed_ids = list(request.user.followees.values_list('followee_id', flat=True))
     followed_ids.append(request.user.id)
     posts = list(Post.objects.filter(user_id__in=followed_ids).order_by("-created_at").all())
-    for post in posts : post.liked = post.likers.filter(liker_id=request.user.id).count() > 0
-    
+    for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
     return render_to_response('sns/users/index', {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}, context_instance=RequestContext(request))
 
 def login(request) :

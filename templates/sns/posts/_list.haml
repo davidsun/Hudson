@@ -1,0 +1,56 @@
+- for post in posts
+  .posts-list-post
+    .clearfix
+      %a.pull-left ={post.user.username} 
+    .clearfix
+      .content.pull-left ={post.content}
+    .clearfix.post-bottom
+      .pull-right
+        %span.like-buttons{liked:"{{post.liked|lower}}", post_id:"{{post.id}}"}
+          %a.btn-like.muted.liked.hidden{href:"javascript:void(0);"}
+            %span.not-hover 已收藏
+            %span.hover.hidden 取消收藏
+          %a.btn-like.muted.not-liked.hidden{href:"javascript:void(0);"} 收藏
+        %span.muted ·
+        %span.muted {{ post.created_at|date:"m-d H:i" }}
+      
+:javascript
+  function showLikeButton(ele){
+    ele = $(ele);
+    var post_id = ele.attr("post_id");
+    if (ele.attr("liked") == "true"){
+      ele.find(".not-liked").addClass("hidden");
+      ele.find(".liked").removeClass("hidden");
+    } else {
+      ele.find(".not-liked").removeClass("hidden");
+      ele.find(".liked").addClass("hidden");
+    }
+    ele.find(".liked").unbind('hover').hover(function(){
+      var t = $(this);
+      t.find(".not-hover").addClass("hidden");
+      t.find(".hover").removeClass("hidden");
+    }, function(){
+      var t = $(this);
+      t.find(".not-hover").removeClass("hidden");
+      t.find(".hover").addClass("hidden");
+    });
+    ele.find(".liked").unbind('click').click(function(){
+      $.get("/posts/" + post_id + "/unlike");
+      ele.attr("liked", "false");
+      showLikeButton(ele);
+    });
+    ele.find(".not-liked").unbind('click').click(function(){
+      $.get("/posts/" + post_id + "/like");
+      ele.attr("liked", "true");
+      showLikeButton(ele);
+    });
+  }
+  $(".posts-list-post .like-buttons").each(function(){ 
+    showLikeButton(this);  
+  });
+  $(".posts-list-post").unbind('hover').hover(function(){
+    $(this).find(".post-bottom a").removeClass("muted");
+  }, function(){
+    $(this).find(".post-bottom a").addClass("muted");
+  });
+

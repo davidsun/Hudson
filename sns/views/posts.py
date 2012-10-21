@@ -23,10 +23,10 @@ def index(request) :
 @login_required(login_url='/login/')
 def like(request, post_id):
     liked_post = Post.objects.get(id=post_id)
-    liked_post.likers.get_or_create(liker_id=request.user.id)
+    liked_post.likes.get_or_create(user_id=request.user.id)
     return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
 
 @login_required(login_url='/login/')
 def unlike(request, post_id):
-    PostLike.objects.filter(liker_id=request.user.id, liked_post_id=post_id).delete()
+    PostLike.objects.filter(user_id=request.user.id, post_id=post_id).delete()
     return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")

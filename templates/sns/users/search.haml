@@ -47,7 +47,7 @@
           ele.find(".not-followed").removeClass("hidden");
           ele.find(".followed").addClass("hidden");
         }
-        ele.find(".followed").hover(function(){
+        ele.find(".followed").unbind('hover').hover(function(){
           var t = $(this);
           t.find(".not-hover").addClass("hidden");
           t.find(".hover").removeClass("hidden");
