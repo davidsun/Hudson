@@ -1,6 +1,9 @@
 *.pyc
-.DS_Store
 *.orig
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
 nohup.out
 venv
 permdirvenv
