@@ -37,3 +37,7 @@ def show(request, post_id):
     post.liked = post.likes.filter(user_id=request.user.id).count() > 0
     return render_to_response('sns/posts/show', {'post':post}, context_instance=RequestContext(request))
 
+@login_required(login_url='/login/')
+def liked(request):
+    liked_post = PostLike.objects.filter(user_id=request.user.id)
+    return render_to_response('sns/posts/liked',{'liked':liked_post})
