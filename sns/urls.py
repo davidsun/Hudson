@@ -9,6 +9,7 @@ urlpatterns = patterns('sns.views.users',
     url(r'^logout/?$', 'logout'),
     url(r'^signup/?$', 'signup'),
     url(r'^users/search/?$', 'search'),
+    url(r'^accounts/?$', 'edit'),
 )
 
 urlpatterns += patterns('sns.views.posts',

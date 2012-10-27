@@ -12,6 +12,7 @@ from mako.template import Template
 
 from sns.models import Post, UserFollow
 from sns.libs.utils import jsonize
+from sns.views.forms.users import Edit
 
 @login_required(login_url='/login/')
 @jsonize
@@ -89,4 +90,15 @@ def unfollow(request, user_id) :
 
 @login_required(login_url='/login/')
 def edit(request):
-    pass
+    if request.method == 'POST':
+        form = Edit(request.POST)
+        if form.is_valid():
+            print "true"
+            form.save(request)
+            #logout(request)
+            return redirect('/')
+        else:
+            return render_to_response('sns/users/edit', {'form':form}, context_instance=RequestContext(request))
+    else:
+        form = Edit()
+        return render_to_response('sns/users/edit', {'form':form}, context_instance=RequestContext(request))

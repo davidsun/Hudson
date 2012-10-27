@@ -1,0 +1,20 @@
+- extends "layout/login_signup"
+
+- block title
+  编辑
+
+- block content
+  .span8.offset2
+    .page-header
+      %h1 编辑
+    %form.form-horizontal{action:"{% url sns.views.users.edit %}", method:"post"}
+      - csrf_token
+      - for field in form
+        .control-group{class:"{% if field.errors %}error{% endif %}"}
+          %label.control-label ={field.label}
+          .controls
+            ={field}
+            - if field.errors
+              %span.help-inline= field.errors.as_text
+      .form-actions
+        %button.btn.btn-large.btn-primary{type:'submit'} 提&nbsp;&nbsp;交
