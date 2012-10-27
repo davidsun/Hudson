@@ -1,5 +1,5 @@
 import hamlpy
-import simplejson
+import json
 
 # Currently all views are here
 from django.shortcuts import render_to_response, get_object_or_404, redirect

@@ -1,5 +1,5 @@
 import hamlpy
-import simplejson
+import json
 
 # Currently all views are here
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -16,20 +16,20 @@ def index(request) :
     if request.method == 'POST' :
         if len(request.POST.get('content', '')) > 0 :
             request.user.posts.create(content=request.POST['content'])
-            return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
+            return HttpResponse(json.dumps({'status': 'ok'}), mimetype="application/json")
         else :
-            return HttpResponse(simplejson.dumps({'status': 'error'}), mimetype="application/json")
+            return HttpResponse(json.dumps({'status': 'error'}), mimetype="application/json")
 
 @login_required(login_url='/login/')
 def like(request, post_id):
     liked_post = Post.objects.get(id=post_id)
     liked_post.likes.get_or_create(user_id=request.user.id)
-    return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
+    return HttpResponse(json.dumps({'status': 'ok'}), mimetype="application/json")
 
 @login_required(login_url='/login/')
 def unlike(request, post_id):
     PostLike.objects.filter(user_id=request.user.id, post_id=post_id).delete()
-    return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
+    return HttpResponse(json.dumps({'status': 'ok'}), mimetype="application/json")
 
 @login_required(login_url='/login/')
 def show(request, post_id):
