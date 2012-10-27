@@ -13,8 +13,10 @@
               %a{href:"{% url sns.views.users.logout %}"} 登出
   .container.main-content
     .row
-      .span8.main-left-content
+      .span2.main-left-content
         - block left_content
+      .span6.main-center-content
+        - block center_content
       .span4.main-right-content-wrap
         .main-right-content
           - block right_content

@@ -51,7 +51,12 @@ def logout(request) :
 @login_required(login_url='/login/')
 def show(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    return render_to_response('sns/user_detail.html', {'user': user})
+    user.followed = user.followers.filter(follower_id=request.user.id).count() > 0
+    followers = list(user.followers.all()[:5])
+    followees = list(user.followees.all()[:5])
+    posts = list(Post.objects.filter(user=user).order_by("-created_at").all())
+    for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
+    return render_to_response('sns/users/show', {'followers':followers, 'followees':followees, 'posts':posts, 'user':user}, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 def search(request) :
