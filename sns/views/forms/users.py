@@ -61,3 +61,25 @@ class Signup(forms.ModelForm) :
         if commit : user.save()
         return user
 
+# How django forms anti-human is !!!
+class Edit(forms.Form):
+    old_password = forms.CharField(label=u'旧密码', widget=forms.PasswordInput, required=True)
+    password = forms.CharField(label=u'新密码', widget=forms.PasswordInput, required=True, min_length=6, max_length=30)
+    confirm_password = forms.CharField(label=u'重复密码', widget=forms.PasswordInput, required=True) 
+
+    def clean_confirm_password(self):
+        password = self.cleaned_data.get("password", "")
+        confirm_password = self.cleaned_data.get("confirm_password", "")
+        if password != confirm_password:
+            raise forms.ValidationError(u'两次输入的密码不相同。')
+        return confirm_password
+
+    def save(self, request):
+        user = request.user
+        print user
+        if not user.check_password(self.cleaned_data.get("old_password", "")):
+            raise validators.ValidationError(u'您输入的或密码不正确。')
+        user.set_password(self.cleaned_data["password"])
+        user.save()
+        return user
+

@@ -1,5 +1,5 @@
 import hamlpy
-import simplejson
+import json
 
 # Currently all views are here
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -9,13 +9,17 @@ from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from mako.template import Template
+
 from sns.models import Post, UserFollow
+from sns.libs.utils import jsonize
+from sns.views.forms.users import Edit
 
 @login_required(login_url='/login/')
+@jsonize
 def follow(request, user_id) :
     user = User.objects.get(id=user_id)
     user.followers.get_or_create(follower_id=request.user.id)
-    return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
+    return {'status': 'ok'}
 
 @login_required(login_url='/login/')
 def index(request) :
@@ -79,6 +83,22 @@ def signup(request) :
         return render_to_response('sns/users/signup', {'form':form}, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
+@jsonize
 def unfollow(request, user_id) :
     UserFollow.objects.filter(follower_id=request.user.id, followee_id=user_id).delete()
-    return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
+    return {'status': 'ok'}
+
+@login_required(login_url='/login/')
+def edit(request):
+    if request.method == 'POST':
+        form = Edit(request.POST)
+        if form.is_valid():
+            print "true"
+            form.save(request)
+            #logout(request)
+            return redirect('/')
+        else:
+            return render_to_response('sns/users/edit', {'form':form}, context_instance=RequestContext(request))
+    else:
+        form = Edit()
+        return render_to_response('sns/users/edit', {'form':form}, context_instance=RequestContext(request))
