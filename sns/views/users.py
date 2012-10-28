@@ -90,7 +90,7 @@ def unfollow(request, user_id) :
 
 @login_required(login_url='/login/')
 def edit(request, user_id) :
-    if user_id != request.user.id : return redirect('/')
+    if int(user_id) != request.user.id : return redirect('/')
     if request.method == 'POST':
         form = Edit(request.POST)
         if form.is_valid():
