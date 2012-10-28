@@ -20,5 +20,5 @@ urlpatterns += patterns('sns.views.posts',
 )
 
 urlpatterns += patterns('sns.views.messages',
-    url(r'^post_message/$', 'post_message'),    
+    url(r'^messages/$', 'post_message'),    
 )
