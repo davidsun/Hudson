@@ -53,6 +53,7 @@ def liked(request):
 @login_required(login_url='/login/')
 def search(request) :
     posts = list(Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at").all())
+    for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
     return render_to_response('sns/posts/search', {'posts':posts}, context_instance=RequestContext(request)) 
 
 
