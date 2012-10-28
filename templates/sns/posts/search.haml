@@ -1,0 +1,24 @@
+- extends 'layout/main'
+
+- block title
+  主页
+
+- block center_content
+  .users-search-left
+    .row-fluid
+      .span4
+        %h1 
+          查找新鲜事
+      %h1
+        %form.pull-right.form-search{action:"{% url sns.views.posts.search %}"}
+          %input{type:'text',placeholder:'查找新鲜事...',name:'q',value:"{{ request.GET.q }}"}
+          %button.btn{type:'submit'} 搜索
+    .section-news
+      %h1 搜索结果
+      - if posts
+        {% include "sns/posts/_list" with posts=posts %}
+      - else
+        .row-fluid.empty-result
+          .offset4.span4.btn.btn-large.disabled 没有更多新鲜事了...
+
+
