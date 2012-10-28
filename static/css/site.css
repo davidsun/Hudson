@@ -32,10 +32,6 @@
     margin-bottom: 0;
     border-bottom: 1px solid #E5E5E5;
 }
-.users-index-left .section-news{
-    font-size: 17px;
-    line-height: 26px;
-}
 .users-index-left .section-news .empty-result{
     padding-top: 20px;
 }
@@ -113,8 +109,10 @@
  * sns/posts/_list
  */
 .posts-list-post{
-    padding: 10px 12px;
     border-bottom: 1px solid #E5E5E5;
+    font-size: 17px;
+    line-height: 26px;
+    padding: 10px 12px;
 }
 .posts-list-post:hover{
     background-color: #F5F5F5;
