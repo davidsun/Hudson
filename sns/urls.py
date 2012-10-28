@@ -18,6 +18,7 @@ urlpatterns += patterns('sns.views.posts',
     url(r'^posts/(?P<post_id>\d+)/unlike/?$', 'unlike'),
     url(r'^posts/(?P<post_id>\d+)/?$', 'show'),
     url(r'^posts/liked/?$', 'liked'),
+    url(r'^posts/search/?$', 'search'),
 )
 
 urlpatterns += patterns('sns.views.messages',
