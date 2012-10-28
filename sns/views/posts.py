@@ -49,3 +49,10 @@ def liked(request):
     liked_id = [item.id for item in PostLike.objects.filter(user_id=request.user.id)]
     posts = Post.objects.filter(id__in = liked_id)
     return render_to_response('sns/posts/liked', {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}, context_instance=RequestContext(request))
+    
+@login_required(login_url='/login/')
+def search(request) :
+    posts = list(Post.objects.filter(content__icontains=request.GET.get('q', '')).all())
+    return render_to_response('sns/posts/search', {'posts':posts}, context_instance=RequestContext(request)) 
+
+
