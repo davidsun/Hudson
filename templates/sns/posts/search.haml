@@ -14,7 +14,6 @@
           %input{type:'text',placeholder:'查找新鲜事...',name:'q',value:"{{ request.GET.q }}"}
           %button.btn{type:'submit'} 搜索
     .section-news
-      %h1 搜索结果
       - if posts
         {% include "sns/posts/_list" with posts=posts %}
       - else
