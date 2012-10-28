@@ -89,13 +89,12 @@ def unfollow(request, user_id) :
     return {'status': 'ok'}
 
 @login_required(login_url='/login/')
-def edit(request):
+def edit(request, user_id) :
+    if user_id != request.user.id : return redirect('/')
     if request.method == 'POST':
         form = Edit(request.POST)
         if form.is_valid():
-            print "true"
             form.save(request)
-            #logout(request)
             return redirect('/')
         else:
             return render_to_response('sns/users/edit', {'form':form}, context_instance=RequestContext(request))

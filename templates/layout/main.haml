@@ -5,6 +5,12 @@
     .navbar-inner
       .container
         %a.brand{href:'/'} Hudson
+        .nav-collapse
+          %ul.nav
+            %li
+              %a{href:'/'} 主页
+            %li
+              %a{href:"{% url sns.views.users.show request.user.id %}"} 个人主页
         .nav-collapse.collapse.pull-right
           %ul.nav
             %li
@@ -13,10 +19,9 @@
               %a{href:"{% url sns.views.users.logout %}"} 登出
   .container.main-content
     .row
-      .span2.main-left-content
-        - block left_content
-      .span6.main-center-content
-        - block center_content
+      .span8.main-center-content-wrap
+        .main-center-content
+          - block center_content
       .span4.main-right-content-wrap
         .main-right-content
           - block right_content
