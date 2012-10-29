@@ -7,7 +7,8 @@
   .row-fluid
     .posts-show-post
       .clearfix.post-top
-        %a.pull-left ={post.user.username} 
+        %a.pull-left{href:"{% url sns.views.users.show post.user.id %}" } 
+        	{{ post.user.username }}
       .clearfix
         .content.pull-left ={post.content}
       .clearfix.post-bottom

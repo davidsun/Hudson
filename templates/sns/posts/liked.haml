@@ -58,7 +58,9 @@
       - if followers
         %ul.unstyled
           - for follower in followers
-            %li ={follower.follower.username}
+            %li
+              %a{href:"{% url sns.views.users.show follower.follower.id %}" } 
+                {{follower.follower.username}}
       - else
         .muted 还没有人关注我...
     .section
@@ -66,7 +68,9 @@
       - if followees
         %ul.unstyled
           - for followee in followees
-            %li ={followee.followee.username}
+            %li
+              %a{href:"{% url sns.views.users.show followee.followee.id %}" } 
+                {{followee.followee.username}}
       - else
         .muted 还没有关注任何人...
     .section
@@ -74,6 +78,8 @@
       - if latest_users
         %ul.unstyled
           - for user in latest_users
-            %li ={user.username}
+            %li
+              %a{href:"{% url sns.views.users.show user.id %}" } 
+                {{user.username}}
       - else
         .muted 还没有任何人注册...

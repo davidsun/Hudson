@@ -18,7 +18,8 @@
         %tbody
           - for user in users
             %tr
-              %td ={user.username}
+              %td{href:"{% url sns.views.users.show post.user.id %}" } 
+                {{ post.user.username }}
               %td.follow-buttons{followed:"{{user.followed|lower}}", user_id:"{{user.id}}"}
                 - if user == request.user
                 - else 
