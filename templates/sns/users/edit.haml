@@ -7,7 +7,7 @@
   .span8.offset2
     .page-header
       %h1 编辑
-    %form.form-horizontal{action:"{% url sns.views.users.edit %}", method:"post"}
+    %form.form-horizontal{action:"{% url sns.views.users.edit request.user.id %}", method:"post"}
       - csrf_token
       - for field in form
         .control-group{class:"{% if field.errors %}error{% endif %}"}

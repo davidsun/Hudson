@@ -92,9 +92,9 @@ def unfollow(request, user_id) :
 def edit(request, user_id) :
     if int(user_id) != request.user.id : return redirect('/')
     if request.method == 'POST':
-        form = Edit(request.POST)
+        form = Edit(user=request.user, data=request.POST)
         if form.is_valid():
-            form.save(request)
+            form.save()
             return redirect('/')
         else:
             return render_to_response('sns/users/edit', {'form':form}, context_instance=RequestContext(request))
