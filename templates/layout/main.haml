@@ -12,7 +12,7 @@
             %li
               %a{href:"{% url sns.views.users.show request.user.id %}"} 个人主页
             %li
-              %a{href:"{% url sns.views.posts.liked request.user.id %}"} 我的收藏
+              %a{href:"{% url sns.views.posts.liked %}"} 我的收藏
           %ul.nav.pull-right
             %li.divider-vertical
             %li.dropdown
