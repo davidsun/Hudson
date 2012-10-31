@@ -43,7 +43,7 @@ def show(request, post_id):
 
 @login_required(login_url='/login/')
 def liked(request):
-    liked_id = PostLike.objects.filter(user_id=request.user.id).values('id')
+    liked_id = PostLike.objects.filter(user_id=request.user.id).values('user_id')
     posts = Post.objects.filter(id__in=liked_id)
     return render_to_response('sns/posts/liked', {'posts':posts}, context_instance=RequestContext(request))
     
