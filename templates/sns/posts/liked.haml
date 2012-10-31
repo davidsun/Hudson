@@ -1,10 +1,10 @@
 - extends 'layout/main'
 
 - block title
-  主页
+  我的收藏
 
 - block left_content
-  .users-index-left
+  .users-liked-left
     %form.form-post
       - csrf_token
       %legend 发布我的新鲜事
@@ -38,7 +38,7 @@
         });
         return false;
       });
-    .section-news
+    .section-liked
       %h1 收藏
       - if posts
         {% include "sns/posts/_list" with posts=posts %}
