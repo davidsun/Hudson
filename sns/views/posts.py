@@ -43,12 +43,9 @@ def show(request, post_id):
 
 @login_required(login_url='/login/')
 def liked(request):
-    followers = list(request.user.followers.all()[:5])
-    followees = list(request.user.followees.all()[:5])
-    latest_users = list(User.objects.order_by('-date_joined')[:5])
-    liked_id = [item.id for item in PostLike.objects.filter(user_id=request.user.id)]
-    posts = Post.objects.filter(id__in = liked_id)
-    return render_to_response('sns/posts/liked', {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}, context_instance=RequestContext(request))
+    liked_id = PostLike.objects.filter(user_id=request.user.id).values('id')
+    posts = Post.objects.filter(id__in=liked_id)
+    return render_to_response('sns/posts/liked', {'posts':posts}, context_instance=RequestContext(request))
     
 @login_required(login_url='/login/')
 def search(request) :
