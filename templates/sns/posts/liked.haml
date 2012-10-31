@@ -3,7 +3,7 @@
 - block title
   我的收藏
 
-- block left_content
+- block center_content
   .users-liked-left
     %form.form-post
       - csrf_token
@@ -45,41 +45,3 @@
       - else
         .row-fluid.empty-result
           .offset4.span4.btn.btn-large.disabled 没有更多已收藏的内容了...
-
-- block right_content
-  .users-index-right
-    .section
-      %h5.section-title 搜索好友
-      %form.form-inline{action:"{% url sns.views.users.search %}"}
-        %input{type:'text',placeholder:'查找好友...',name:'q'}
-        %button.btn{type:'submit'} 搜索
-    .section
-      %h5.section-title 我的粉丝
-      - if followers
-        %ul.unstyled
-          - for follower in followers
-            %li
-              %a{href:"{% url sns.views.users.show follower.follower.id %}" } 
-                {{follower.follower.username}}
-      - else
-        .muted 还没有人关注我...
-    .section
-      %h5.section-title 我的关注
-      - if followees
-        %ul.unstyled
-          - for followee in followees
-            %li
-              %a{href:"{% url sns.views.users.show followee.followee.id %}" } 
-                {{followee.followee.username}}
-      - else
-        .muted 还没有关注任何人...
-    .section
-      %h5.section-title 最新注册
-      - if latest_users
-        %ul.unstyled
-          - for user in latest_users
-            %li
-              %a{href:"{% url sns.views.users.show user.id %}" } 
-                {{user.username}}
-      - else
-        .muted 还没有任何人注册...
