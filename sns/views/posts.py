@@ -48,6 +48,7 @@ def liked(request):
     latest_users = list(User.objects.order_by('-date_joined')[:5])
     liked_id = PostLike.objects.filter(user_id=request.user.id).values('post_id')
     posts = Post.objects.filter(id__in=liked_id).order_by("-created_at")
+    for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
     return render_to_response('sns/posts/liked', {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}, context_instance=RequestContext(request))
     
 @login_required(login_url='/login/')
