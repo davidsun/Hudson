@@ -5,39 +5,6 @@
 
 - block center_content
   .users-liked-left
-    %form.form-post
-      - csrf_token
-      %legend 发布我的新鲜事
-      %textarea.post{rows:3,placeholder:'写些什么吧...'}
-      %button.btn.btn-primary{type:'submit'} 发布 
-    :javascript
-      $(".form-post").submit(function(){
-        var content = $(this).find(".post").val();
-        var error = "";
-        if (content.length == 0) error = "请输入您希望发布的内容...";
-        else if (content.length > 200) error = "您输入的内容太长了。";
-        if (error.length > 0){
-          $(this).find(".post").tooltip({
-            placement: 'top',
-            title: error, 
-            trigger: "manual",
-          }).tooltip("show");
-          $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
-            $(this).tooltip('destroy');
-          });
-          return false;
-        }
-        $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
-        $.post("/posts", {
-          "content": content,
-          "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
-        }, function(result){
-          if (result.status == "ok"){
-            window.location.reload();
-          }
-        });
-        return false;
-      });
     .section-liked
       %h1 收藏
       - if posts
