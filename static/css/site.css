@@ -62,6 +62,25 @@
 }
 
 /*
+ * sns/posts/liked
+ */
+.posts-liked-left .section-news h1{
+    padding-bottom: 8px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #E5E5E5;
+}
+.posts-liked-left .section-news .empty-result{
+    padding-top: 20px;
+}
+.posts-liked-right .section{
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+.posts-liked-right .section-title{
+    border-bottom: 1px solid #E5E5E5;
+}
+
+/*
  * sns/users/show
  */
 .users-show-left .users-show-header h1{

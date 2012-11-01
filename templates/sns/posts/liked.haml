@@ -4,16 +4,16 @@
   我的收藏
 
 - block center_content
-  .users-liked-left
-    .section-liked
+  .posts-liked-left
+    .section-news
       %h1 收藏
       - if posts
         {% include "sns/posts/_list" with posts=posts %}
       - else
         .row-fluid.empty-result
-          .offset4.span4.btn.btn-large.disabled 没有更多已收藏的内容了...
+          .offset4.span4.btn.btn-large.disabled 没有更多新鲜事了...
 - block right_content
-  .users-index-right
+  .posts-liked-right
     .section
       %h5.section-title 搜索好友
       %form.form-inline{action:"{% url sns.views.users.search %}"}
