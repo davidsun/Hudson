@@ -163,3 +163,36 @@
     font-size: 18px;
     line-height: 24px;
 }
+
+/*
+ * sns/notifications/list
+ */
+.notifications-list-notification{
+    border-bottom: 1px solid #E5E5E5;
+    font-size: 17px;
+    line-height: 26px;
+    padding: 10px 12px;
+}
+.notifications-list-notification .content{
+    font-size: 18px;
+    line-height: 24px;
+}
+.notifications-list-notification .notification-bottom{
+    font-size: 14px;
+}
+.notifications-list-left .section-news h1{
+    padding-bottom: 8px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #E5E5E5;
+}
+.notifications-list-left .section-news .empty-result{
+    padding-top: 20px;
+}
+.notifications-list-right .section{
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+.notifications-list-right .section-title{
+    border-bottom: 1px solid #E5E5E5;
+}
+

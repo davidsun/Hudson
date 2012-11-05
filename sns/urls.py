@@ -24,3 +24,8 @@ urlpatterns += patterns('sns.views.posts',
 urlpatterns += patterns('sns.views.messages',
     url(r'^messages/$', 'post_message'),    
 )
+
+urlpatterns += patterns('sns.views.notifications',
+    url(r'^notifications/?$', 'index'),
+)
+
