@@ -1,3 +1,5 @@
+#-*- coding:utf-8 -*-
+
 import hamlpy
 import json
 
@@ -11,14 +13,19 @@ from django.core.urlresolvers import reverse
 from mako.template import Template
 
 from sns.models import Post, PostLike
-from sns.libs.utils import jsonize
+from sns.libs.utils import jsonize, notify_at_users
 
 @login_required(login_url='/login/')
 @jsonize
 def index(request) :
     if request.method == 'POST' :
         if len(request.POST.get('content', '')) > 0 :
-            request.user.posts.create(content=request.POST['content'])
+            content = request.POST['content']
+            post = request.user.posts.create(content=content)
+
+            # get users who has been @, and send notification to them
+            notify_at_users(content, "post", post.id, request.user)
+
             return {'status': 'ok'}
         else :
             return {'status': 'error'}
