@@ -19,7 +19,7 @@ def jsonize(func):
 def get_notification_template(object_type, object_id):
     if object_type == "post":
         url = "/posts/%s/" % str(object_id)
-        tmpl = "@%s 在 <a href='" + url + "'>%s</a> 中提到了你"
+        tmpl = "@%s 在「<a href='" + url + "'>%s</a>」中提到了你"
     # elif object_type == "xxx"
     return unicode(tmpl, 'utf-8')
 
@@ -37,6 +37,7 @@ def notify_at_users(content, object_type, object_id, by_user):
     NOTIFI_CONTENT_LIMIT = 15
     if len(content) > NOTIFI_CONTENT_LIMIT + 3:
         content = content[:NOTIFI_CONTENT_LIMIT] + '...'
+    content = content.replace("@", "&#64;")
     for username in usernames:
         try:
             user = User.objects.get(username=username)
