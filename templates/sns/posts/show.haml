@@ -1,4 +1,5 @@
 - extends "layout/single_column"
+- load custom_filters
 
 - block title
   {{post.user.username}}: {{post.content}}
@@ -10,7 +11,7 @@
         %a.pull-left{href:"{% url sns.views.users.show post.user.id %}" } 
         	{{ post.user.username }}
       .clearfix
-        .content.pull-left ={post.content}
+        .content.pull-left {{post.content|at_users}}
       .clearfix.post-bottom
         %span.muted {{ post.created_at|date:"m-d H:i" }}
         %span.muted ·

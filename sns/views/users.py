@@ -101,3 +101,18 @@ def edit(request, user_id) :
     else:
         form = Edit()
         return render_to_response('sns/users/edit', {'form':form}, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/login/')
+@jsonize
+def contact(request, query):
+    # TODO: a better rank & performance sort algorithm
+    count = int(request.GET.get('count', 5))
+    follower_ids = list(request.user.followers.values_list('follower_id', flat=True))
+    followee_ids = list(request.user.followees.values_list('followee_id', flat=True))
+    contact_ids = list(set(follower_ids + followee_ids))
+    contacts = User.objects.filter(id__in=contact_ids)
+    if query:
+        contacts = contacts.filter(username__contains=query)
+    contacts = contacts[:count]
+    return {"contacts": [u.username for u in contacts]}
