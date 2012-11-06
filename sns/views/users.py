@@ -106,13 +106,33 @@ def edit(request, user_id) :
 @login_required(login_url='/login/')
 @jsonize
 def contact(request, query):
-    # TODO: a better rank & performance sort algorithm
+    # TODO: a better performance sort algorithm ...
     count = int(request.GET.get('count', 5))
     follower_ids = list(request.user.followers.values_list('follower_id', flat=True))
     followee_ids = list(request.user.followees.values_list('followee_id', flat=True))
     contact_ids = list(set(follower_ids + followee_ids))
     contacts = User.objects.filter(id__in=contact_ids)
+    prefix = []
+    others = []
+    other_ids = []
     if query:
+        others = []
         contacts = contacts.filter(username__contains=query)
-    contacts = contacts[:count]
-    return {"contacts": [u.username for u in contacts]}
+        for u in contacts:
+            if u.username.startswith(query):
+                prefix.append(u)
+            else:
+                others.append(u)
+                other_ids.append(u.id)
+    else:
+        others.extend(contacts)
+        other_ids.extend(contact_ids)
+    chated_ids = list(request.user.sent_messages.all().filter(sender_id__in=other_ids).order_by('-created_at').values_list('receiver_id', flat=True)[:count])
+    chated = User.objects.filter(id__in=chated_ids)
+    total = []
+    total.extend(prefix[:count])
+    total.extend(chated[:count])
+    total.extend(others[:count])
+    result_set = set([])
+    result = [u.username for u in total if u.username not in result_set and result_set.add(u.username) is None][:count]
+    return {"contacts": result}
