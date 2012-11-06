@@ -1,9 +1,10 @@
+- load custom_filters
 - for post in posts
   .posts-list-post
     .clearfix
       %a.pull-left ={post.user.username} 
     .clearfix
-      .content.pull-left ={post.content}
+      .content.pull-left {{post.content|at_users}}
     .clearfix.post-bottom
       .pull-right
         %a.muted.btn-like{href:"{% url sns.views.posts.show post.id %}"} 详情

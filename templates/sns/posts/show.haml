@@ -1,4 +1,5 @@
 - extends "layout/single_column"
+- load custom_filters
 
 - block title
   {{post.user.username}}: {{post.content}}
@@ -9,7 +10,7 @@
       .clearfix.post-top
         %a.pull-left ={post.user.username} 
       .clearfix
-        .content.pull-left ={post.content}
+        .content.pull-left {{post.content|at_users}}
       .clearfix.post-bottom
         %span.muted {{ post.created_at|date:"m-d H:i" }}
         %span.muted ·

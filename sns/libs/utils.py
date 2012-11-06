@@ -47,3 +47,14 @@ def notify_at_users(content, object_type, object_id, by_user):
         noti = tmpl % (by_user.username, content)
         user.notifications.create(content=noti)
 
+def filter_at_users(content):
+    "Add link to '@somebody'"
+    def add_link(username):
+        username = username.group(0)[1:].strip()
+        try:
+            user = User.objects.get(username=username)
+        except Exception, e:
+            return "@" + username + " "
+        return u"@<a href='/users/%d/'>%s</a> " % (user.id, username)
+    content = RE_AT_USERS.sub(add_link, content + " ")
+    return content.strip()
