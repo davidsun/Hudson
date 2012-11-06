@@ -10,6 +10,7 @@ urlpatterns = patterns('sns.views.users',
     url(r'^logout/?$', 'logout'),
     url(r'^signup/?$', 'signup'),
     url(r'^users/search/?$', 'search'),
+    url(r'^users/contact/(?P<query>\S+)?$', 'contact')
 )
 
 urlpatterns += patterns('sns.views.posts',
