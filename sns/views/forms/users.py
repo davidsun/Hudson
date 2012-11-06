@@ -64,12 +64,22 @@ class Signup(forms.ModelForm) :
 # How django forms anti-human is !!!
 class Edit(forms.Form):
     old_password = forms.CharField(label=u'旧密码', widget=forms.PasswordInput, required=True)
-    password = forms.CharField(label=u'新密码', widget=forms.PasswordInput, required=True, min_length=6, max_length=30)
-    confirm_password = forms.CharField(label=u'重复密码', widget=forms.PasswordInput, required=True) 
+    username = forms.CharField(label=u'用户名', min_length=1, max_length=30, required=False)
+    password = forms.CharField(label=u'新密码', widget=forms.PasswordInput, min_length=6, max_length=30, required=False)
+    confirm_password = forms.CharField(label=u'重复密码', widget=forms.PasswordInput, required=False) 
 
     def __init__(self, user=None, *args, **kwargs):
         super(Edit, self).__init__(*args, **kwargs)
         self._user = user
+
+    def clean_username(self) :
+        username = self.cleaned_data.get("username", "")
+        if not username: return username
+        try :
+            User.objects.get(username=username)
+        except User.DoesNotExist :
+            return username
+        raise validators.ValidationError(u'抱歉，用户名 %s 已被使用。' % username)
 
     def clean_old_password(self):
         old_password = self.cleaned_data.get("old_password", "")
@@ -85,7 +95,12 @@ class Edit(forms.Form):
         return confirm_password
 
     def save(self):
-        self._user.set_password(self.cleaned_data["password"])
+        password = self.cleaned_data.get("password", "")
+        username = self.cleaned_data.get("username", "")
+        if password:
+            self._user.set_password(self.cleaned_data["password"])
+        if username:
+            self._user.username = username
         self._user.save()
         return self._user
 

@@ -1,5 +1,5 @@
 import hamlpy
-import simplejson
+import json
 
 # Currently all views are here
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -10,14 +10,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from mako.template import Template
 from sns.models import Message, UserProfile
+from sns.libs.utils import jsonize
+
 
 @login_required(login_url='/login/')
+@jsonize
 def post_message(request):
 	if request.method == 'POST' :
 		if len(request.POST.get('content', '')) > 0 and len(request.POST.get('content',''))<=200 :
-			return HttpResponse(simplejson.dumps({'status': 'ok'}), mimetype="application/json")
+			return {'status': 'ok'}
 		else :
-			return HttpResponse(simplejson.dumps({'status': 'error'}), mimetype="application/json")
+			return {'status': 'error'}
 
 	
 	
