@@ -13,7 +13,7 @@ from django.core.urlresolvers import reverse
 from mako.template import Template
 
 from sns.models import Post, PostLike
-from sns.libs.utils import jsonize, notify_at_users
+from sns.libs.utils import jsonize, notify_at_users, posts_loader
 
 @login_required(login_url='/login/')
 @jsonize
@@ -49,19 +49,18 @@ def show(request, post_id):
     return render_to_response('sns/posts/show', {'post':post}, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
+@posts_loader('sns/posts/liked')
 def liked(request):
     followers = list(request.user.followers.all()[:5])
     followees = list(request.user.followees.all()[:5])
     latest_users = list(User.objects.order_by('-date_joined')[:5])
     liked_id = PostLike.objects.filter(user_id=request.user.id).values('post_id')
     posts = Post.objects.filter(id__in=liked_id).order_by("-created_at")
-    for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
-    return render_to_response('sns/posts/liked', {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}, context_instance=RequestContext(request))
+    return {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}
     
 @login_required(login_url='/login/')
+@posts_loader('sns/posts/search')
 def search(request) :
-    posts = list(Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at").all())
-    for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
-    return render_to_response('sns/posts/search', {'posts':posts}, context_instance=RequestContext(request)) 
+    return {'posts':Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at")}
 
 

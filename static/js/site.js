@@ -24,6 +24,49 @@ $.posts = {
     }
   },
 
+  initAppendingList: function(element, options){
+    var t = $(element);
+    var btn = t.find(".list-indicator a");
+    var post_count = t.find(".posts-list-post").length;
+    var url_params = $.url().param();
+    var url_path = $.url().attr('path');
+    var is_loading = false;
+
+    function loadPosts(){
+      if (is_loading) return;
+      is_loading = true;
+      btn.html("正在载入，请稍后...").unbind("click");
+      url_params['offset'] = post_count;
+      $.get(url_path, url_params, function(result){
+        t.find(".posts-appending-list-posts").append(result);
+        var new_post_count = t.find(".posts-list-post").length;
+        if (new_post_count > post_count){
+          $.posts.initAppendingList(t);
+        } else {
+          btn.html("没有更多新鲜事了...");
+          btn.addClass("disabled");
+        }
+      });
+    }
+
+    if (options && options.auto_load){
+      if ($(window).scrollTop() > $(document).height() - $(window).height() - 100) loadPosts();
+      $(window).scroll(function(){
+        if ($(window).scrollTop() > $(document).height() - $(window).height() - 100){
+          loadPosts();
+        }
+      });
+    }
+
+    if (post_count == 0){
+      btn.html("没有更多新鲜事了...");
+      btn.addClass("disabled");
+    }
+    btn.removeClass("disabled").html("更多新鲜事...").unbind("click").click(function(){
+      loadPosts();
+    });
+  },
+
   showInList: function(element){
     var t = $(element);
     t.find("a[data-toggle='like-link']").each(function(){
@@ -42,7 +85,11 @@ $.posts = {
     t.find("a[data-toggle='like-link']").each(function(){
       $.posts.bindLikeLink(this);
     });
-  }
+  },
+};
+
+$.fn.initPostAppendingList = function(options){
+  $.posts.initAppendingList(this, options);
 };
 
 $.fn.showListPost = function(){
@@ -52,3 +99,4 @@ $.fn.showListPost = function(){
 $.fn.showSinglePost = function(){
   $.posts.showSingle(this);
 }
+

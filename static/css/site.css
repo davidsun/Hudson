@@ -32,9 +32,6 @@
     margin-bottom: 0;
     border-bottom: 1px solid #E5E5E5;
 }
-.users-index-left .section-news .empty-result{
-    padding-top: 20px;
-}
 .users-index-right .section{
     padding-top: 10px;
     padding-bottom: 5px;
@@ -54,11 +51,10 @@
 }
 
 /*
- * sns/posts/search
+ * sns/posts/_appending_list
  */
-.posts-search-left .empty-result{
-    border-top: 1px solid #E5E5E5;
-    padding-top: 20px;
+.posts-appending-list .list-indicator{
+    padding: 15px 0;
 }
 
 /*
@@ -68,9 +64,6 @@
     padding-bottom: 8px;
     margin-bottom: 0;
     border-bottom: 1px solid #E5E5E5;
-}
-.posts-liked-left .section-news .empty-result{
-    padding-top: 20px;
 }
 .posts-liked-right .section{
     padding-top: 10px;
@@ -112,9 +105,6 @@
 .users-show-left .section-news{
     font-size: 17px;
     line-height: 26px;
-}
-.users-show-left .section-news .empty-result{
-    padding-top: 20px;
 }
 .users-show-right .section{
     padding-top: 10px;

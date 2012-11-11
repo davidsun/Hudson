@@ -7,11 +7,7 @@
   .posts-liked-left
     .section-news
       %h1 收藏
-      - if posts
-        {% include "sns/posts/_list" with posts=posts %}
-      - else
-        .row-fluid.empty-result
-          .offset4.span4.btn.btn-large.disabled 没有更多新鲜事了...
+      {% include "sns/posts/_appending_list" with posts=posts %}
 - block right_content
   .posts-liked-right
     .section

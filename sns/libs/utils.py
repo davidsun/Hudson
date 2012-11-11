@@ -6,7 +6,8 @@ from functools import wraps
 
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
-
+from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.template import RequestContext
 
 def jsonize(func):
     @wraps(func)
@@ -15,6 +16,30 @@ def jsonize(func):
         return HttpResponse(json.dumps(result), mimetype="application/json")
     return _
 
+def posts_loader(template):
+    DEFAULT_LIMIT = 20
+
+    def decorator(func):
+        @wraps(func)
+        def _(*args, **kwargs):
+            request = args[0]
+            offset = int(request.GET.get('offset', 0))
+            result = func(*args, **kwargs)
+
+            if 'posts' in result :
+                posts = result['posts']
+                if offset > 0 : posts = posts.all()[offset:offset + DEFAULT_LIMIT]
+                else : posts = posts.all()[:DEFAULT_LIMIT]
+                posts = list(posts)
+                for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
+                result['posts'] = posts
+
+            if offset > 0:
+                return render_to_response('sns/posts/_list', result, context_instance=RequestContext(request))
+            else:
+                return render_to_response(template, result, context_instance=RequestContext(request))
+        return _
+    return decorator
 
 def get_notification_template(object_type, object_id):
     if object_type == "post":

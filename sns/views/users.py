@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 from mako.template import Template
 
 from sns.models import Post, UserFollow
-from sns.libs.utils import jsonize
+from sns.libs.utils import jsonize, posts_loader
 from sns.views.forms.users import Edit
 
 @login_required(login_url='/login/')
@@ -22,15 +22,15 @@ def follow(request, user_id) :
     return {'status': 'ok'}
 
 @login_required(login_url='/login/')
+@posts_loader('sns/users/index')
 def index(request) :
     followers = list(request.user.followers.all()[:5])
     followees = list(request.user.followees.all()[:5])
     latest_users = list(User.objects.order_by('-date_joined')[:5])
     followed_ids = list(request.user.followees.values_list('followee_id', flat=True))
     followed_ids.append(request.user.id)
-    posts = list(Post.objects.filter(user_id__in=followed_ids).order_by("-created_at").all())
-    for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
-    return render_to_response('sns/users/index', {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}, context_instance=RequestContext(request))
+    posts = Post.objects.filter(user_id__in=followed_ids).order_by("-created_at")
+    return {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}
 
 def login(request) :
     if request.user.is_authenticated() : return redirect('/')
@@ -53,14 +53,14 @@ def logout(request) :
     return redirect('/')
 
 @login_required(login_url='/login/')
+@posts_loader('sns/users/show')
 def show(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     user.followed = user.followers.filter(follower_id=request.user.id).count() > 0
     followers = list(user.followers.all()[:5])
     followees = list(user.followees.all()[:5])
-    posts = list(Post.objects.filter(user=user).order_by("-created_at").all())
-    for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
-    return render_to_response('sns/users/show', {'followers':followers, 'followees':followees, 'posts':posts, 'user':user}, context_instance=RequestContext(request))
+    posts = Post.objects.filter(user=user).order_by("-created_at")
+    return {'followers':followers, 'followees':followees, 'posts':posts, 'user':user}
 
 @login_required(login_url='/login/')
 def search(request) :

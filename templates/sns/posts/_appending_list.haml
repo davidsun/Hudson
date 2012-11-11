@@ -1,0 +1,8 @@
+.posts-appending-list
+  .posts-appending-list-posts
+    {% include "sns/posts/_list" with posts=posts %}
+  .row-fluid.list-indicator
+    %a.offset4.span4.btn.btn-large.disabled{href:"javascript:void(0);"}
+  :javascript
+    $(".posts-appending-list").initPostAppendingList({auto_load:true});
+
