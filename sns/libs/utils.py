@@ -56,6 +56,6 @@ def filter_at_users(content):
             user = User.objects.get(username=username)
         except Exception, e:
             return "@" + username + " "
-        return u"@<a href='/users/%d/'>%s</a> " % (user.id, username)
+        return u"<a href='/users/%d/'>@%s</a> " % (user.id, username)
     content = RE_AT_USERS.sub(add_link, content + " ")
     return content.strip()
