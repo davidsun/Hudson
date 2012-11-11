@@ -13,9 +13,10 @@
               %a{href:"{% url sns.views.users.show request.user.id %}"} 个人主页
             %li
               %a{href:"{% url sns.views.posts.liked %}"} 我的收藏
-            %li
-              %a{href:"{% url sns.views.notifications.index %}"} 我的通知
           %ul.nav.pull-right
+            %li.divider-vertical
+            %li
+              %a{href:"{% url sns.views.notifications.index %}"} 通知
             %li.divider-vertical
             %li.dropdown
               %a.dropdown-toggle{href:"javascript:void(0);", "data-toggle":"dropdown"}
@@ -23,9 +24,14 @@
                 %b.caret
               %ul.dropdown-menu
                 %li
-                  %a{href:"{% url sns.views.users.edit request.user.id %}"} 编辑资料
+                  %a{href:"{% url sns.views.users.edit request.user.id %}"} 
+                    %i.icon-edit
+                    编辑资料
+                %li.divider
                 %li
-                  %a{href:"{% url sns.views.users.logout %}"} 登出
+                  %a{href:"{% url sns.views.users.logout %}"}
+                    %i.icon-remove
+                    登出
           %form.navbar-search.pull-right{action: "{% url sns.views.posts.search %}"}
             %input.search-query{type:"text", name:"q", placeholder:"搜索新鲜事..."}
   .container.main-content
