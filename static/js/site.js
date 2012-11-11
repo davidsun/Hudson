@@ -50,9 +50,9 @@ $.posts = {
     }
 
     if (options && options.auto_load){
-      if ($(window).scrollTop() > $(document).height() - $(window).height() - 100) loadPosts();
+      if ($(window).scrollTop() > $(document).height() - $(window).height() - $(window).height() / 2) loadPosts();
       $(window).scroll(function(){
-        if ($(window).scrollTop() > $(document).height() - $(window).height() - 100){
+        if ($(window).scrollTop() > $(document).height() - $(window).height() - $(window).height() / 2){
           loadPosts();
         }
       });
