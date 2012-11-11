@@ -49,22 +49,23 @@ $.posts = {
       });
     }
 
-    if (options && options.auto_load){
-      if ($(window).scrollTop() > $(document).height() - $(window).height() - $(window).height() / 2) loadPosts();
-      $(window).scroll(function(){
-        if ($(window).scrollTop() > $(document).height() - $(window).height() - $(window).height() / 2){
-          loadPosts();
-        }
-      });
-    }
-
     if (post_count == 0){
       btn.html("没有更多新鲜事了...");
       btn.addClass("disabled");
+    }  else {
+      if (options && options.auto_load){
+        if ($(window).scrollTop() > $(document).height() - $(window).height() - $(window).height() / 2) loadPosts();
+        $(window).scroll(function(){
+          if ($(window).scrollTop() > $(document).height() - $(window).height() - $(window).height() / 2){
+            loadPosts();
+          }
+        });
+      }
+
+      btn.removeClass("disabled").html("更多新鲜事...").unbind("click").click(function(){
+        loadPosts();
+      });
     }
-    btn.removeClass("disabled").html("更多新鲜事...").unbind("click").click(function(){
-      loadPosts();
-    });
   },
 
   showInList: function(element){
