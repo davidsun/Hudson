@@ -41,7 +41,7 @@ $.posts = {
         t.find(".posts-appending-list-posts").append(result);
         var new_post_count = t.find(".posts-list-post").length;
         if (new_post_count > post_count){
-          $.posts.initAppendingList(t);
+          $.posts.initAppendingList(t, options);
         } else {
           btn.html("没有更多新鲜事了...");
           btn.addClass("disabled");
