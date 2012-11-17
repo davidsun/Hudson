@@ -166,9 +166,6 @@ $.posts = {
     t.find(".form-post").each(function(){
       $.posts.initCommentPost(this);
     });
-    t.find("a[data-toggle='comments-link']").each(function(){
-      $.posts.bindCommentLink(this);
-    });
   },
 };
 

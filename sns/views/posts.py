@@ -47,7 +47,8 @@ def unlike(request, post_id):
 def show(request, post_id):
     post = Post.objects.get(id=post_id)
     post.liked = post.likes.filter(user_id=request.user.id).count() > 0
-    return render_to_response('sns/posts/show', {'post':post}, context_instance=RequestContext(request))
+    comments = list(post.comments.all())
+    return render_to_response('sns/posts/show', {'post':post, 'comments':comments}, context_instance=RequestContext(request))
 
 @login_required(login_url='/login/')
 @posts_loader('sns/posts/liked')
@@ -81,7 +82,8 @@ def post_comment(request):
             post = Post.objects.get(id=post_id)
             post.comments.create(content=content,user=request.user)
 
-            # TODO  get users who has been @, and send notification to them 
+            #get users who has been @, and send notification to them 
+            notify_at_users(content, "post", post.id, request.user)
             return {'status': 'ok'}
         else :
             return {'status': 'error'} 

@@ -153,6 +153,9 @@
     font-size: 18px;
     line-height: 24px;
 }
+.posts-show-post .input-comment{
+    width: 736px;
+}
 
 /*
  * sns/notifications/list

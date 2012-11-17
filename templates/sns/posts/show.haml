@@ -16,5 +16,19 @@
         %span.muted {{ post.created_at|date:"m-d H:i" }}
         %span.muted ·
         %a{"data-toggle":"like-link", href:"javascript:void(0);", liked:"{{post.liked|lower}}", "post-id":"{{post.id}}"} 收藏
+      .clearfix.comments
+        .comments-list
+          - for comment in comments
+            .clearfix
+              %span {{comment.content|at_users}}
+              %span.muted -
+              %a{href:"{% url sns.views.users.show comment.user.id %}" }
+                {{ comment.user.username }}
+        %form.form-post{"post-id":"{{post.id}}"}
+          - csrf_token
+          %textarea.input-comment.post{rows:1,placeholder:'发点评论吧'}
+          %button.btn.btn-primary{type:'submit'} 发布评论  
+
       :javascript
       	$(".post-{{ post.id }}").showSinglePost();
+
