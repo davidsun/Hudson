@@ -14,7 +14,7 @@ from sns.models import Post, UserFollow
 from sns.libs.utils import jsonize, posts_loader
 from sns.views.forms.users import Edit
 
-@login_required(login_url='/login/')
+@login_required
 @jsonize
 def follow(request, user_id) :
     user = User.objects.get(id=user_id)
@@ -46,13 +46,13 @@ def login(request) :
         form = Login()
         return render_to_response('sns/users/login', {'form':form}, context_instance=RequestContext(request))
 
-@login_required(login_url='/login/')
+@login_required
 def logout(request) :
     from django.contrib.auth import logout
     logout(request)
     return redirect('/')
 
-@login_required(login_url='/login/')
+@login_required
 @posts_loader('sns/users/show')
 def show(request, user_id):
     user = get_object_or_404(User, pk=user_id)
@@ -62,7 +62,7 @@ def show(request, user_id):
     posts = Post.objects.filter(user=user).order_by("-created_at")
     return {'followers':followers, 'followees':followees, 'posts':posts, 'user':user}
 
-@login_required(login_url='/login/')
+@login_required
 def search(request) :
     users = list(User.objects.filter(username__icontains=request.GET.get('q', '')).all())
     for user in users : user.followed = user.followers.filter(follower_id=request.user.id).count() > 0
@@ -82,13 +82,13 @@ def signup(request) :
         form = Signup()
         return render_to_response('sns/users/signup', {'form':form}, context_instance=RequestContext(request))
 
-@login_required(login_url='/login/')
+@login_required
 @jsonize
 def unfollow(request, user_id) :
     UserFollow.objects.filter(follower_id=request.user.id, followee_id=user_id).delete()
     return {'status': 'ok'}
 
-@login_required(login_url='/login/')
+@login_required
 def edit(request, user_id) :
     if int(user_id) != request.user.id : return redirect('/')
     if request.method == 'POST':
@@ -103,7 +103,7 @@ def edit(request, user_id) :
         return render_to_response('sns/users/edit', {'form':form}, context_instance=RequestContext(request))
 
 
-@login_required(login_url='/login/')
+@login_required
 @jsonize
 def contact(request, query):
     # TODO: a better performance sort algorithm ...

@@ -13,7 +13,7 @@ from sns.models import Message, UserProfile
 from sns.libs.utils import jsonize
 
 
-@login_required(login_url='/login/')
+@login_required
 @jsonize
 def post_message(request):
 	if request.method == 'POST' :

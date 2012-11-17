@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 
-@login_required(login_url='/login/')
+@login_required
 def index(request) :
     followers = list(request.user.followers.all()[:5])
     followees = list(request.user.followees.all()[:5])

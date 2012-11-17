@@ -15,7 +15,7 @@ from mako.template import Template
 from sns.models import Post, PostLike, PostComment
 from sns.libs.utils import jsonize, notify_at_users, posts_loader
 
-@login_required(login_url='/login/')
+@login_required
 @jsonize
 def index(request) :
     if request.method == 'POST' :
@@ -30,27 +30,27 @@ def index(request) :
         else :
             return {'status': 'error'}
 
-@login_required(login_url='/login/')
+@login_required
 @jsonize
 def like(request, post_id):
     liked_post = Post.objects.get(id=post_id)
     liked_post.likes.get_or_create(user_id=request.user.id)
     return {'status': 'ok'}
 
-@login_required(login_url='/login/')
+@login_required
 @jsonize
 def unlike(request, post_id):
     PostLike.objects.filter(user_id=request.user.id, post_id=post_id).delete()
     return {'status': 'ok'}
 
-@login_required(login_url='/login/')
+@login_required
 def show(request, post_id):
     post = Post.objects.get(id=post_id)
     post.liked = post.likes.filter(user_id=request.user.id).count() > 0
     comments = list(post.comments.all())
     return render_to_response('sns/posts/show', {'post':post, 'comments':comments}, context_instance=RequestContext(request))
 
-@login_required(login_url='/login/')
+@login_required
 @posts_loader('sns/posts/liked')
 def liked(request):
     followers = list(request.user.followers.all()[:5])
@@ -60,7 +60,7 @@ def liked(request):
     posts = Post.objects.filter(id__in=liked_id).order_by("-created_at")
     return {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}
     
-@login_required(login_url='/login/')
+@login_required
 @posts_loader('sns/posts/search')
 def search(request) :
     return {'posts':Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at")}
