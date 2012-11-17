@@ -8,7 +8,7 @@
       .content.pull-left {{post.content|at_users}}
     .clearfix.post-bottom
       .pull-right
-        %a.muted.btn-comments{href:"javascript:void(0);"} 
+        %a{"data-toggle":"comments-link", href:"javascript:void(0);", "post-class":".post-{{ post.id }}", "post-id":"{{post.id}}"}
           回复({{ post.comments_count }})
         %span.muted ·
         %a.muted.btn-like{href:"{% url sns.views.posts.show post.id %}"} 详情
@@ -16,5 +16,11 @@
         %a{"data-toggle":"like-link", href:"javascript:void(0);", liked:"{{post.liked|lower}}", "post-id":"{{post.id}}"} 收藏
         %span.muted ·
         %span.muted {{ post.created_at|date:"m-d H:i" }}  
+    .clearfix.comments
+      .comments-list
+      %form.form-post{"post-id":"{{post.id}}"}
+        - csrf_token
+        %textarea.post{rows:1,placeholder:'发点评论吧'}
+        %button.btn.btn-primary{type:'submit'} 发布评论
     :javascript
       $(".post-{{ post.id }}").showListPost();

@@ -14,13 +14,7 @@ $.posts = {
           if (result.status == "ok"){
             t.attr("liked", "false");
             $.posts.bindLikeLink(t);
-          } else {
-            $(this).find(".post").tooltip({
-              placement: 'top',
-              title: "取消收藏失败", 
-              trigger: "manual",
-            }).tooltip("show");
-          }
+          } 
         });
       });
     } else {
@@ -30,16 +24,75 @@ $.posts = {
           if (result.status == "ok"){
             t.attr("liked", "true");
             $.posts.bindLikeLink(t); 
-          } else {
-            $(this).find(".post").tooltip({
-              placement: 'top',
-              title: "收藏失败", 
-              trigger: "manual",
-            }).tooltip("show");
-          }
+          } 
         });
       });
     }
+  },
+
+  bindCommentLink: function(element){
+    var t = $(element);
+    var post_id = t.attr("post-id");
+    var comments_dev = $(t.attr("post-class")).find(".comments");
+    comments_dev.hide();
+    t.attr("showed","false");
+    t.unbind("click").click(function(){
+      if (t.attr("showed") == "true"){
+        comments_dev.hide();
+        t.attr("showed","false");
+        var count = comments_dev.find(".comments-data").attr("count");
+        if (count == null) count = 0;
+        t.html("回复("+count+")");
+
+      } else {
+        comments_dev.show();
+        t.attr("showed","true");
+        t.html("收起回复");
+        $.get("/posts/"+post_id+"/get_comments",function(result){
+          comments_dev.find(".comments-list").html(result); 
+        });
+      }
+    });
+  },
+
+  initCommentPost: function(element){
+    var t = $(element);
+    var post_id = t.attr("post-id");
+    
+    t.find(".post").atTips();
+    t.submit(function(){
+      var content = $(this).find(".post").val();
+      var error = "";
+      if (content.length == 0) error = "请输入您希望发布的内容...";
+      else if (content.length > 200) error = "您输入的内容太长了。";
+      if (error.length > 0){
+        $(this).find(".post").tooltip({
+          placement: 'top',
+          title: error, 
+          trigger: "manual",
+        }).tooltip("show");
+        $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
+          $(this).tooltip('destroy');
+        });
+        return false;
+      }
+      $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
+      $.post("/posts/post_comment", {
+        "content": content,
+        "post_id": post_id,
+        "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
+      }, function(result){
+        if (result.status == "ok"){
+          $.get("/posts/"+post_id+"/get_comments",function(result){
+            t.parent().find(".comments-list").html(result); 
+          });
+          t.find(".btn-primary").removeClass("disabled").html("发布评论");
+          t.find(".post").val("");
+        }
+      });
+      return false;
+    });
+
   },
 
   initAppendingList: function(element, options){
@@ -97,12 +150,24 @@ $.posts = {
     }, function(){
       t.find(".post-bottom a").addClass("muted");
     });
+    t.find(".form-post").each(function(){
+      $.posts.initCommentPost(this);
+    });
+    t.find("a[data-toggle='comments-link']").each(function(){
+      $.posts.bindCommentLink(this);
+    });
   },
 
   showSingle: function(element){
     var t = $(element);
     t.find("a[data-toggle='like-link']").each(function(){
       $.posts.bindLikeLink(this);
+    });
+    t.find(".form-post").each(function(){
+      $.posts.initCommentPost(this);
+    });
+    t.find("a[data-toggle='comments-link']").each(function(){
+      $.posts.bindCommentLink(this);
     });
   },
 };

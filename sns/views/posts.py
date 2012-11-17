@@ -64,4 +64,26 @@ def liked(request):
 def search(request) :
     return {'posts':Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at")}
 
+@login_required
+def get_comments(request, post_id):
+    post = Post.objects.get(id=post_id)
+    comments = list(post.comments.all())
+    count = len(comments)
+    return render_to_response('sns/posts/_comments_list', {'comments':comments, 'count':count}, context_instance=RequestContext(request))
+    
+@login_required
+@jsonize
+def post_comment(request):
+    if request.method == 'POST' :
+        if len(request.POST.get('content','')) > 0 and len(request.POST.get('content',''))<=200 :
+            content = request.POST['content']
+            post_id = int(request.POST['post_id'])
+            post = Post.objects.get(id=post_id)
+            post.comments.create(content=content,user=request.user)
+
+            # TODO  get users who has been @, and send notification to them 
+            return {'status': 'ok'}
+        else :
+            return {'status': 'error'} 
+
 

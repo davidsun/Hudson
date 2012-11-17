@@ -4,6 +4,8 @@
 *.sublime-project
 *.sublime-workspace
 .DS_Store
+.idea
+build/
 
 nohup.out
 venv

@@ -1,0 +1,9 @@
+- load custom_filters
+.comments-data{"count": "{{count}}" }
+- for comment in comments
+  .clearfix
+    %span {{comment.content|at_users}}
+    %span.muted -
+    %a{href:"{% url sns.views.users.show comment.user.id %}" }
+      {{ comment.user.username }}
+

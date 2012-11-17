@@ -20,6 +20,8 @@ urlpatterns += patterns('sns.views.posts',
     url(r'^posts/(?P<post_id>\d+)/?$', 'show'),
     url(r'^posts/liked/?$', 'liked'),
     url(r'^posts/search/?$', 'search'),
+    url(r'^posts/post_comment/?$','post_comment'),
+    url(r'^posts/(?P<post_id>\d+)/get_comments/?$', 'get_comments')
 )
 
 urlpatterns += patterns('sns.views.messages',
