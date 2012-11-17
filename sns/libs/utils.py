@@ -32,6 +32,7 @@ def posts_loader(template):
                 else : posts = posts.all()[:DEFAULT_LIMIT]
                 posts = list(posts)
                 for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
+                for post in posts : post.comments_count = post.comments.count()
                 result['posts'] = posts
 
             if offset > 0:

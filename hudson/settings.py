@@ -170,3 +170,6 @@ LOGGING = {
 
 AUTH_PROFILE_MODULE = 'sns.UserProfile'
  
+
+# The URL where requests are redirected for login
+LOGIN_URL = '/login/'

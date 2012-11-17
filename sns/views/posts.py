@@ -12,7 +12,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from mako.template import Template
 
-from sns.models import Post, PostLike
+from sns.models import Post, PostLike, PostComment
 from sns.libs.utils import jsonize, notify_at_users, posts_loader
 
 @login_required(login_url='/login/')
@@ -38,6 +38,7 @@ def like(request, post_id):
     return {'status': 'ok'}
 
 @login_required(login_url='/login/')
+@jsonize
 def unlike(request, post_id):
     PostLike.objects.filter(user_id=request.user.id, post_id=post_id).delete()
     return {'status': 'ok'}

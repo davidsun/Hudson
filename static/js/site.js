@@ -10,16 +10,34 @@ $.posts = {
         t.html("已收藏");
       });
       t.unbind("click").click(function(){
-        $.get("/posts/" + post_id + "/unlike");
-        t.attr("liked", "false");
-        $.posts.bindLikeLink(t);
+        $.get("/posts/" + post_id + "/unlike", function(result){
+          if (result.status == "ok"){
+            t.attr("liked", "false");
+            $.posts.bindLikeLink(t);
+          } else {
+            $(this).find(".post").tooltip({
+              placement: 'top',
+              title: "取消收藏失败", 
+              trigger: "manual",
+            }).tooltip("show");
+          }
+        });
       });
     } else {
       t.html("收藏").unbind("hover");
       t.unbind("click").click(function(){
-        $.get("/posts/" + post_id + "/like");
-        t.attr("liked", "true");
-        $.posts.bindLikeLink(t);
+        $.get("/posts/" + post_id + "/like", function(result){
+          if (result.status == "ok"){
+            t.attr("liked", "true");
+            $.posts.bindLikeLink(t); 
+          } else {
+            $(this).find(".post").tooltip({
+              placement: 'top',
+              title: "收藏失败", 
+              trigger: "manual",
+            }).tooltip("show");
+          }
+        });
       });
     }
   },

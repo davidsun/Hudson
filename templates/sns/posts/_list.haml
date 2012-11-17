@@ -8,6 +8,9 @@
       .content.pull-left {{post.content|at_users}}
     .clearfix.post-bottom
       .pull-right
+        %a.muted.btn-comments{href:"javascript:void(0);"} 
+          回复({{ post.comments_count }})
+        %span.muted ·
         %a.muted.btn-like{href:"{% url sns.views.posts.show post.id %}"} 详情
         %span.muted ·
         %a{"data-toggle":"like-link", href:"javascript:void(0);", liked:"{{post.liked|lower}}", "post-id":"{{post.id}}"} 收藏

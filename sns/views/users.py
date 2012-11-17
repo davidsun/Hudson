@@ -21,7 +21,7 @@ def follow(request, user_id) :
     user.followers.get_or_create(follower_id=request.user.id)
     return {'status': 'ok'}
 
-@login_required(login_url='/login/')
+@login_required
 @posts_loader('sns/users/index')
 def index(request) :
     followers = list(request.user.followers.all()[:5])
