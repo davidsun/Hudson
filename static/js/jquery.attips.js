@@ -70,18 +70,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
       this.highlighter = this.options.highlighter || this.highlighter;
       this.updater = this.options.updater || this.updater;
       this.$menu = $(this.options.menu).appendTo('body');
-      this.$wrapper = $(this.options.wrapper).appendTo('body').css({
-        position: 'absolute',
-        overflow: 'hidden',
-        'z-index': -9999,
-        left: this.$el.offset().left,
-        top: this.$el.offset().top,
-        height: this.$el.outerHeight(),
-        width: this.$el.outerWidth(),
-        'line-height': this.$el.css('line-height'),
-        'padding': this.$el.css('padding'),
-        'font-size': this.$el.css('font-size')
-      });
+      this.$wrapper = $(this.options.wrapper).appendTo('body');
       this.shown = false;
       this.listen();
     }
@@ -178,6 +167,18 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
 
     AtTips.prototype.show = function() {
       var pos;
+      this.$wrapper.css({
+        position: 'absolute',
+        overflow: 'hidden',
+        'z-index': -9999,
+        left: this.$el.offset().left,
+        top: this.$el.offset().top,
+        height: this.$el.outerHeight(),
+        width: this.$el.outerWidth(),
+        'line-height': this.$el.css('line-height'),
+        'padding': this.$el.css('padding'),
+        'font-size': this.$el.css('font-size')
+      });
       pos = $.extend({}, $('cite', this.$wrapper).offset(), {
         height: parseFloat(this.$wrapper.css('line-height').replace('px', ''))
       });
@@ -192,6 +193,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
 
     AtTips.prototype.hide = function() {
       this.$menu.hide();
+      this.$wrapper.html('');
       this.shown = false;
       return this;
     };

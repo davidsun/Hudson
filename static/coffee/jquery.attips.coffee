@@ -25,18 +25,19 @@ Usage: $('input').atTips()
       @updater = @options.updater or @updater
 
       @$menu = $(@options.menu).appendTo('body')
-      @$wrapper = $(@options.wrapper).appendTo('body').css(
-          position: 'absolute'
-          overflow: 'hidden'
-          'z-index': -9999
-          left: @$el.offset().left
-          top: @$el.offset().top
-          height: @$el.outerHeight()
-          width: @$el.outerWidth()
-          'line-height': @$el.css('line-height')
-          'padding': @$el.css('padding')
-          'font-size': @$el.css('font-size')
-        )
+      @$wrapper = $(@options.wrapper).appendTo('body')
+      #.css(
+      #    position: 'absolute'
+      #    overflow: 'hidden'
+      #    'z-index': -9999
+      #    left: @$el.offset().left
+      #    top: @$el.offset().top
+      #    height: @$el.outerHeight()
+      #    width: @$el.outerWidth()
+      #    'line-height': @$el.css('line-height')
+      #    'padding': @$el.css('padding')
+      #    'font-size': @$el.css('font-size')
+      #  )
       @shown = false
       @listen()
 
@@ -109,6 +110,18 @@ Usage: $('input').atTips()
       $(e.currentTarget).addClass('active')
 
     show: =>
+      @$wrapper.css(
+        position: 'absolute'
+        overflow: 'hidden'
+        'z-index': -9999
+        left: @$el.offset().left
+        top: @$el.offset().top
+        height: @$el.outerHeight()
+        width: @$el.outerWidth()
+        'line-height': @$el.css('line-height')
+        'padding': @$el.css('padding')
+        'font-size': @$el.css('font-size')
+      )
       pos = $.extend({}, $('cite', @$wrapper).offset(), {
         height: parseFloat(@$wrapper.css('line-height').replace('px', ''))
       })
@@ -124,6 +137,7 @@ Usage: $('input').atTips()
 
     hide: =>
       @$menu.hide()
+      @$wrapper.html('')
       @shown = false
       @
 
