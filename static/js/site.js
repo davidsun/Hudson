@@ -1,4 +1,29 @@
 $.posts = {
+  bindCommentLink: function(element){
+    var t = $(element);
+    var post_id = t.attr("post-id");
+    var comments_dev = $(t.attr("post-class")).find(".comments");
+    comments_dev.hide();
+    t.attr("showed","false");
+    t.unbind("click").click(function(){
+      if (t.attr("showed") == "true"){
+        comments_dev.hide();
+        t.attr("showed","false");
+        var count = comments_dev.find(".comments-data").attr("count");
+        if (count == null) count = 0;
+        t.html("回复("+count+")");
+
+      } else {
+        comments_dev.show();
+        t.attr("showed","true");
+        t.html("收起回复");
+        $.get("/posts/" + post_id + "/comments", function(result){
+          comments_dev.find(".comments-list").html(result); 
+        });
+      }
+    });
+  },
+
   bindLikeLink: function(element){
     var t = $(element);
     var post_id = t.attr("post-id");
@@ -30,32 +55,7 @@ $.posts = {
     }
   },
 
-  bindCommentLink: function(element){
-    var t = $(element);
-    var post_id = t.attr("post-id");
-    var comments_dev = $(t.attr("post-class")).find(".comments");
-    comments_dev.hide();
-    t.attr("showed","false");
-    t.unbind("click").click(function(){
-      if (t.attr("showed") == "true"){
-        comments_dev.hide();
-        t.attr("showed","false");
-        var count = comments_dev.find(".comments-data").attr("count");
-        if (count == null) count = 0;
-        t.html("回复("+count+")");
-
-      } else {
-        comments_dev.show();
-        t.attr("showed","true");
-        t.html("收起回复");
-        $.get("/posts/"+post_id+"/get_comments",function(result){
-          comments_dev.find(".comments-list").html(result); 
-        });
-      }
-    });
-  },
-
-  initCommentPost: function(element){
+  initPostComment: function(element){
     var t = $(element);
     var post_id = t.attr("post-id");
     
@@ -77,13 +77,12 @@ $.posts = {
         return false;
       }
       $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
-      $.post("/posts/post_comment", {
+      $.post("/posts/" + post_id + "/comments", {
         "content": content,
-        "post_id": post_id,
         "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
       }, function(result){
         if (result.status == "ok"){
-          $.get("/posts/"+post_id+"/get_comments",function(result){
+          $.get("/posts/" + post_id + "/comments", function(result){
             t.parent().find(".comments-list").html(result); 
           });
           t.find(".btn-primary").removeClass("disabled").html("发布评论");
@@ -151,7 +150,7 @@ $.posts = {
       t.find(".post-bottom a").addClass("muted");
     });
     t.find(".form-post").each(function(){
-      $.posts.initCommentPost(this);
+      $.posts.initPostComment(this);
     });
     t.find("a[data-toggle='comments-link']").each(function(){
       $.posts.bindCommentLink(this);
@@ -164,7 +163,7 @@ $.posts = {
       $.posts.bindLikeLink(this);
     });
     t.find(".form-post").each(function(){
-      $.posts.initCommentPost(this);
+      $.posts.initPostComment(this);
     });
   },
 };

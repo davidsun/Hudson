@@ -51,6 +51,29 @@ def show(request, post_id):
     return render_to_response('sns/posts/show', {'post':post, 'comments':comments}, context_instance=RequestContext(request))
 
 @login_required
+def comments(request, post_id):
+    if request.method == 'POST' :
+        return comments_post(request, post_id)
+    else :
+        post = Post.objects.get(id=post_id)
+        comments = list(post.comments.all())
+        count = len(comments)
+        return render_to_response('sns/posts/_comments_list', {'comments':comments, 'count':count}, context_instance=RequestContext(request))
+
+@jsonize
+def comments_post(request, post_id) :
+    if len(request.POST.get('content', '')) > 0 and len(request.POST.get('content','')) <= 200 :
+        content = request.POST['content']
+        post = Post.objects.get(id=post_id)
+        post.comments.create(content=content, user=request.user)
+
+        # get users who has been @, and send notification to them 
+        notify_at_users(content, "post", post.id, request.user)
+        return {'status': 'ok'}
+    else :
+        return {'status': 'error'} 
+
+@login_required
 @posts_loader('sns/posts/liked')
 def liked(request):
     followers = list(request.user.followers.all()[:5])
@@ -64,28 +87,5 @@ def liked(request):
 @posts_loader('sns/posts/search')
 def search(request) :
     return {'posts':Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at")}
-
-@login_required
-def get_comments(request, post_id):
-    post = Post.objects.get(id=post_id)
-    comments = list(post.comments.all())
-    count = len(comments)
-    return render_to_response('sns/posts/_comments_list', {'comments':comments, 'count':count}, context_instance=RequestContext(request))
     
-@login_required
-@jsonize
-def post_comment(request):
-    if request.method == 'POST' :
-        if len(request.POST.get('content','')) > 0 and len(request.POST.get('content',''))<=200 :
-            content = request.POST['content']
-            post_id = int(request.POST['post_id'])
-            post = Post.objects.get(id=post_id)
-            post.comments.create(content=content,user=request.user)
-
-            #get users who has been @, and send notification to them 
-            notify_at_users(content, "post", post.id, request.user)
-            return {'status': 'ok'}
-        else :
-            return {'status': 'error'} 
-
 
