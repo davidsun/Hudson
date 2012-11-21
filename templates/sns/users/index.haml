@@ -53,7 +53,7 @@
     .section
       %h5.section-title 我的粉丝
         {% include "sns/users/_followers" %}
-        %a{ 'href': '#followersModal', 'role': 'button', 'class': 'btn', 'data-toggle': 'modal' }
+        %a{ 'href': '#followersModal', 'role': 'button', 'class': 'btn', 'data-toggle': 'modal', 'align': 'right' }
           显示全部
       - if followers
         %ul.unstyled
@@ -79,7 +79,7 @@
    .section
       %h5.section-title 我的关注
         {% include "sns/users/_followees" %}
-        %a{ 'href': '#followeesModal', 'role': 'button', 'class': 'btn', 'data-toggle': 'modal' }
+        %a{ 'href': '#followeesModal', 'role': 'button', 'class': 'btn', 'data-toggle': 'modal', 'align': 'right' }
           显示全部
       - if followees
         %ul.unstyled
