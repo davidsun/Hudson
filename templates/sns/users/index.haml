@@ -52,9 +52,9 @@
         %button.btn{type:'submit'} 搜索
     .section
       %h5.section-title 我的粉丝
-        {% include "sns/users/_followers" %}
-        %a{ 'href': '#followersModal', 'role': 'button', 'class': 'btn', 'data-toggle': 'modal', 'align': 'right' }
+        %a{ 'href': '#followersModal', 'data-toggle': 'modal', 'align': 'right' }
           显示全部
+      {% include "sns/users/_followers" %}
       - if followers
         %ul.unstyled
           - for follower in followers
