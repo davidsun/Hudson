@@ -1,0 +1,17 @@
+/ Modal
+%div{ 'id': 'followeesModal', 'class': 'modal hide fade', 'tabindex': '-1', 'role': 'dialog', 'aria-labelledby': 'followeesLabel', 'aria-hidden': 'true' }
+  %div{ 'class': 'modal-header' }
+    %h3{ 'id': 'followeesLabel' }
+      我的关注
+  %div{ 'class': 'modal-body' }
+    - if followees
+      %ul.unstyled
+        - for followee in followees
+          %li
+            %a{href:"{% url sns.views.users.show followee.followee.id %}" } 
+              {{followee.followee.username}}
+    - else
+      .muted 还没有关注任何人...
+  %div{ 'class': 'modal-footer' }
+    %button{ 'class': 'btn', 'data-dismiss': 'modal', 'aria-hidden': 'true' }
+      关闭

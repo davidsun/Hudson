@@ -22,14 +22,22 @@ def follow(request, user_id) :
     return {'status': 'ok'}
 
 @login_required
+@jsonize
 def followers(request, user_id) :
     followers = list(User.objects.get(id=user_id).followers.all())
-    return {'followers': followers}
+    allfollowers = {}
+    for follower in followers:
+        allfollowers[follower.follower.id] = follower.follower.username
+    return json.dumps(allfollowers)
 
 @login_required
+@jsonize
 def followees(request, user_id) :
     followees = list(User.objects.get(id=user_id).followees.all())
-    return {'followees': followees}
+    allfollowees = {}
+    for followee in followees:
+        allfollowees[followee.followee.id] = followee.followee.username
+    return json.dumps(allfollowees)
 
 @login_required
 @posts_loader('sns/users/index')

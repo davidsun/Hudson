@@ -52,6 +52,9 @@
         %button.btn{type:'submit'} 搜索
     .section
       %h5.section-title 我的粉丝
+        %a{ 'href': '#followersModal', 'data-toggle': 'modal', 'align': 'right' }
+          显示全部
+      {% include "sns/users/_followers" %}
       - if followers
         %ul.unstyled
           - for follower in followers
@@ -75,6 +78,9 @@
         .muted 还没有人关注我...    
    .section
       %h5.section-title 我的关注
+        %a{ 'href': '#followeesModal', 'data-toggle': 'modal', 'align': 'right' }
+          显示全部
+      {% include "sns/users/_followees" %}
       - if followees
         %ul.unstyled
           - for followee in followees
