@@ -22,13 +22,11 @@ def follow(request, user_id) :
     return {'status': 'ok'}
 
 @login_required
-@jsonize
 def followers(request, user_id) :
     followers = list(User.objects.get(id=user_id).followers.all())
     return {'followers': followers}
 
 @login_required
-@jsonize
 def followees(request, user_id) :
     followees = list(User.objects.get(id=user_id).followees.all())
     return {'followees': followees}
