@@ -58,7 +58,7 @@
       - if followers
         %ul.unstyled
           - for follower in followers
-            %li
+            %li.li-height
               %a{href:"{% url sns.views.users.show follower.follower.id %}" } 
                   {{follower.follower.username}}
               %small.follow-buttons{followed:"{{follower.followed|lower}}", user_id:"{{follower.follower.id}}"}
@@ -84,7 +84,7 @@
       - if followees
         %ul.unstyled
           - for followee in followees
-            %li
+            %li.li-height
               %a{href:"{% url sns.views.users.show followee.followee.id %}" } 
                 {{followee.followee.username}}
               %small.follow-buttons{followed:"{{followee.followed|lower}}", user_id:"{{followee.followee.id}}"}
