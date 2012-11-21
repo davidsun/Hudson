@@ -22,6 +22,18 @@ def follow(request, user_id) :
     return {'status': 'ok'}
 
 @login_required
+@jsonize
+def followers(request) :
+    followers = list(request.user.followers.all())
+    return {'followers': followers}
+
+@login_required
+@jsonize
+def followees(request) :
+    followees = list(request.user.followees.all())
+    return {'followees': followees}
+
+@login_required
 @posts_loader('sns/users/index')
 def index(request) :
     followers = list(request.user.followers.all()[:5])
