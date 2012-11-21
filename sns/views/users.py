@@ -27,7 +27,7 @@ def followers(request, user_id) :
     followers = list(User.objects.get(id=user_id).followers.all())
     allfollowers = {}
     for follower in followers:
-        allfollowers[follower.id] = follower.username
+        allfollowers[follower.follower.id] = follower.follower.username
     return json.dumps(allfollowers)
 
 @login_required
@@ -36,7 +36,7 @@ def followees(request, user_id) :
     followees = list(User.objects.get(id=user_id).followees.all())
     allfollowees = {}
     for followee in followees:
-        allfollowees[followee.id] = followee.username
+        allfollowees[followee.followee.id] = followee.followee.username
     return json.dumps(allfollowees)
 
 @login_required
