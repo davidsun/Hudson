@@ -114,6 +114,9 @@
     border-bottom: 1px solid #E5E5E5;
 }
 
+.unstyled .li-height{
+    line-height: 30px;
+}
 /*
  * sns/posts/_list
  */

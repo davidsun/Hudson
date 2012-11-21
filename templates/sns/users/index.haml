@@ -101,10 +101,10 @@
       - if latest_users
         %ul.unstyled
           - for user in latest_users
-            %li
+            %li.li-height
               %a{href:"{% url sns.views.users.show user.id %}" } 
                 {{user.username}}
-              %small.follow-buttons{followed:"{{user.followed|lower}}", user_id:"{{user.id}}"}
+              %small.follow-buttons{followed:"{{follower.followed|lower}}", user_id:"{{user.id}}"}
                 - if user == request.user
                 - else
                   .btn.btn-small.btn-follow.pull-right.followed.hidden
