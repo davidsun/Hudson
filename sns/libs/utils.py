@@ -72,7 +72,7 @@ def notify_at_users(content, object_type, object_id, by_user):
         if not user: continue
         tmpl = get_notification_template(object_type, object_id)
         noti = tmpl % (by_user.username, content)
-        user.notifications.create(content=noti)
+        user.notifications.create(content=noti, viewed=False)
 
 def filter_at_users(content):
     "Add link to '@somebody'"

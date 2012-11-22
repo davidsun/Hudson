@@ -13,7 +13,10 @@
           .row-fluid
             .notifications-list-notification
               .clearfix
-                .content.pull-left {{notification.content|safe|at_users}}
+                - if notification.viewed
+                  .content.pull-left {{notification.content|safe|at_users}}
+                - else
+                  %strong.content.pull-left {{notification.content|safe|at_users}}
               .clearfix.notification-bottom
                 .pull-right
                   %span.muted {{ notification.created_at|date:"m-d H:i" }}

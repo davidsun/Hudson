@@ -9,5 +9,6 @@ def index(request) :
     followees = list(request.user.followees.all()[:5])
     latest_users = list(User.objects.order_by('-date_joined')[:5])
     notifications = list(request.user.notifications.order_by("-created_at").all())
+    request.user.notifications.filter(viewed=False).update(viewed=True)
     return render_to_response('sns/notifications/index', {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'notifications' : notifications}, context_instance=RequestContext(request))
 

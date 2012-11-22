@@ -51,7 +51,9 @@ def index(request) :
     followed_ids = list(request.user.followees.values_list('followee_id', flat=True))
     followed_ids.append(request.user.id)
     posts = Post.objects.filter(user_id__in=followed_ids).order_by("-created_at")
-    return {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}
+    new_notification_count = request.user.notifications.filter(viewed=False).count()
+    return {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts,
+            'new_notification_count':new_notification_count}
 
 def login(request) :
     if request.user.is_authenticated() : return redirect('/')
