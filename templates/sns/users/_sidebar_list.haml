@@ -1,0 +1,18 @@
+%ul.unstyled
+  - for user in users
+    %li
+      %a{href:"{% url sns.views.users.show follower.follower.id %}" } 
+          {{follower.follower.username}}
+      %small.follow-buttons{followed:"{{follower.followed|lower}}", user_id:"{{follower.follower.id}}"}
+        - if follower.follower == request.user
+        - else
+          .btn.btn-small.btn-follow.pull-right.followed.hidden
+            %span.not-hover
+              %i.icon-ok
+              已关注
+            %span.hover.hidden
+              %i.icon-white.icon-remove
+              取消关注
+         .btn.btn-primary.btn-small.btn-follow.pull-right.not-followed.hidden
+           %i.icon-white.icon-plus
+           关注

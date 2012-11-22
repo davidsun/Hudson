@@ -42,11 +42,11 @@ def followees(request, user_id) :
 @login_required
 @posts_loader('sns/users/index')
 def index(request) :
-    followers = list(request.user.followers.all()[:5])
-    followees = list(request.user.followees.all()[:5])
+    followers = list(User.objects.filter(id__in=list(request.user.followers.values_list('follower_id', flat=True)[:5])))
+    followees = list(User.objects.filter(id__in=list(request.user.followees.values_list('followee_id', flat=True)[:5])))
     latest_users = list(User.objects.order_by('-date_joined')[:5])
-    for follower in followers : follower.followed = follower.follower.followers.filter(follower_id=request.user.id).count() > 0
-    for followee in followees : followee.followed = followee.followee.followers.filter(follower_id=request.user.id).count() > 0
+    for follower in followers : follower.followed = follower.followers.filter(follower_id=request.user.id).count() > 0
+    for followee in followees : followee.followed = followee.followers.filter(follower_id=request.user.id).count() > 0
     for latest_user in latest_users : latest_user.followed = latest_user.followers.filter(follower_id=request.user.id).count() > 0
     followed_ids = list(request.user.followees.values_list('followee_id', flat=True))
     followed_ids.append(request.user.id)

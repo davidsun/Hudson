@@ -8,8 +8,8 @@
       %ul.unstyled
         - for followee in followees
           %li
-            %a{href:"{% url sns.views.users.show followee.followee.id %}" } 
-              {{followee.followee.username}}
+            %a{href:"{% url sns.views.users.show followee.id %}" } 
+              {{followee.username}}
     - else
       .muted 还没有关注任何人...
   %div{ 'class': 'modal-footer' }
