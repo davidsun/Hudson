@@ -9,7 +9,8 @@
       关闭
 :javascript
 	$(function(){
-		$.getJSON("/users/"+2+"/followers",function(data){
+		var user_id = $('#allfollowers').attr('user_id')
+		$.getJSON("/users/"+user_id+"/followers",function(data){
 			$.each(data,function(idx,item){
 				$('#followersModalBody').append(" <li> <a href= \'/users/" + item.id + "\'> " + item.name + " </a> </li> " );
 			});
