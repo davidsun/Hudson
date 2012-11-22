@@ -3,15 +3,15 @@
   %div{ 'class': 'modal-header' }
     %h3{ 'id': 'followersLabel' }
       我的粉丝
-  %div{ 'class': 'modal-body' }
-    - if followers
-      %ul.unstyled
-        - for follower in followers
-          %li
-            %a{href:"{% url sns.views.users.show follower.id %}" } 
-              {{follower.username}}
-    - else
-      .muted 还没有人关注我...
+  %div{ 'class': 'modal-body', 'id':'followersModalBody' }
   %div{ 'class': 'modal-footer' }
     %button{ 'class': 'btn', 'data-dismiss': 'modal', 'aria-hidden': 'true' }
       关闭
+:javascript
+	$(function(){
+		$.getJSON("/users/"+2+"/followers",function(data){
+			$.each(data,function(idx,item){
+				$('#followersModalBody').append(" <li> <a href= \'/users/" + item.id + "\'> " + item.name + " </a> </li> " );
+			});
+		});
+	});

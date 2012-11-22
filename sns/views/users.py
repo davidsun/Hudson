@@ -25,18 +25,18 @@ def follow(request, user_id) :
 @jsonize
 def followers(request, user_id) :
     followers = list(User.objects.get(id=user_id).followers.all())
-    allfollowers = {}
+    allfollowers = []
     for follower in followers:
-        allfollowers[follower.follower.id] = follower.follower.username
+        allfollowers.append({ 'id':follower.follower.id, 'name': follower.follower.username})
     return allfollowers
 
 @login_required
 @jsonize
 def followees(request, user_id) :
     followees = list(User.objects.get(id=user_id).followees.all())
-    allfollowees = {}
+    allfollowees = []
     for followee in followees:
-        allfollowees[followee.followee.id] = followee.followee.username
+        allfollowees.append({ 'id':followee.followee.id, 'name': followee.followee.username})
     return allfollowees
 
 @login_required

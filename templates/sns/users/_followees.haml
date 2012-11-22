@@ -3,15 +3,16 @@
   %div{ 'class': 'modal-header' }
     %h3{ 'id': 'followeesLabel' }
       我的关注
-  %div{ 'class': 'modal-body' }
-    - if followees
-      %ul.unstyled
-        - for followee in followees
-          %li
-            %a{href:"{% url sns.views.users.show followee.id %}" } 
-              {{followee.username}}
-    - else
-      .muted 还没有关注任何人...
+  %div{ 'class': 'modal-body', 'id':'followeesModalBody' }
   %div{ 'class': 'modal-footer' }
     %button{ 'class': 'btn', 'data-dismiss': 'modal', 'aria-hidden': 'true' }
       关闭
+
+:javascript
+	$(function(){
+		$.getJSON("/users/"+2+"/followees",function(data){
+			$.each(data,function(idx,item){
+				$('#followeesModalBody').append(" <li> <a href= \'/users/" + item.id + "\'> " + item.name + " </a> </li> " );
+			});
+		});
+	});
