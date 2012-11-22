@@ -28,7 +28,7 @@ def followers(request, user_id) :
     allfollowers = {}
     for follower in followers:
         allfollowers[follower.follower.id] = follower.follower.username
-    return json.dumps(allfollowers)
+    return allfollowers
 
 @login_required
 @jsonize
@@ -37,7 +37,7 @@ def followees(request, user_id) :
     allfollowees = {}
     for followee in followees:
         allfollowees[followee.followee.id] = followee.followee.username
-    return json.dumps(allfollowees)
+    return allfollowees
 
 @login_required
 @posts_loader('sns/users/index')
