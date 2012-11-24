@@ -5,11 +5,6 @@
 
 - block center_content
   .users-index-left
-    - if new_notification_count
-      .section-news
-        你有(={new_notification_count})条新通知，点击
-        %a{href:"{% url sns.views.notifications.index %}"}此处
-        查看
     %form.form-post
       - csrf_token
       %legend 发布我的新鲜事
@@ -50,6 +45,12 @@
 
 - block right_content
   .users-index-right
+    - if new_notification_count
+      .section
+        %h5.section-title 通知
+        .section-news
+          %a{href:"{% url sns.views.notifications.index %}"} 
+            你有 {{new_notification_count}} 条新通知，点击查看。
     .section
       %h5.section-title 搜索好友
       %form.form-inline{action:"{% url sns.views.users.search %}"}
