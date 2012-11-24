@@ -72,9 +72,15 @@ def comments_post(request, post_id):
 @process_login_user
 @posts_loader('sns/posts/liked')
 def liked(request):
-    followers = list(request.user.followers.all()[:5])
-    followees = list(request.user.followees.all()[:5])
+    followers = list(User.objects.filter(id__in=list(request.user.followers.values_list('follower_id', flat=True)[:5])))
+    followees = list(User.objects.filter(id__in=list(request.user.followees.values_list('followee_id', flat=True)[:5])))
     latest_users = list(User.objects.order_by('-date_joined')[:5])
+    for follower in followers:
+        follower.followed = follower.followers.filter(follower_id=request.user.id).count() > 0
+    for followee in followees:
+        followee.followed = followee.followers.filter(follower_id=request.user.id).count() > 0
+    for latest_user in latest_users:
+        latest_user.followed = latest_user.followers.filter(follower_id=request.user.id).count() > 0
     liked_id = PostLike.objects.filter(user_id=request.user.id).values('post_id')
     posts = Post.objects.filter(id__in=liked_id).order_by("-created_at")
     return {'followers': followers, 'followees': followees, 'latest_users': latest_users, 'posts': posts}

@@ -64,29 +64,24 @@
  */
 .users-show-left .users-show-header h1{
     padding-bottom: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     border-bottom: 1px solid #E5E5E5;
 }
 .users-show-left .users-show-header .follow-buttons{
     padding-top: 5px;
 }
-.users-show-left .form-post .post{
-    font-size: 20px;
-    line-height: 26px;
+.users-show-left .form-send-message{
+    margin: 0;
+}
+.users-show-left .form-send-message .post{
+    font-size: 18px;
+    line-height: 24px;
     padding: 8px;
     width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
-}
-.users-show-left .section-news{
-    padding-top: 20px;
-}
-.users-show-left .section-news h1{
-    padding-bottom: 8px;
-    margin-bottom: 0;
-    border-bottom: 1px solid #E5E5E5;
 }
 .users-show-left .section-news{
     font-size: 17px;

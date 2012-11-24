@@ -9,8 +9,7 @@
       %h1 
         ={user.username} 的个人主页
         %small.pull-right.follow-buttons{followed:"{{user.followed|lower}}", user_id:"{{user.id}}"}
-          - if user == request.user
-          - else 
+          - if user != request.user
             .btn.btn-follow.followed.hidden
               %span.not-hover
                 %i.icon-ok
@@ -21,42 +20,92 @@
             .btn.btn-primary.btn-follow.not-followed.hidden
               %i.icon-white.icon-plus
               关注
-    %form.form-post
-      - csrf_token
-      %textarea.post{rows:3,placeholder:'给他留言...'}
-      %button.btn.btn-primary{type:'submit'} 发布 
+            .btn.btn-send-message
+              给 {{user.username}} 留言
+      {% include "sns/posts/_appending_list" with posts=posts %}
+    %div.modal-send-message.modal.hide.fade{role:'dialog'}
+      %form.form-send-message
+        %div.modal-header
+          %h3
+            给 {{user.username}} 留言
+        %div.modal-body
+          - csrf_token
+          %textarea.post{rows:3,placeholder:'请输入留言内容...'}
+        %div.modal-footer
+          %button.btn.btn-primary{type:'submit'} 发送
+          %button.btn{'data-dismiss':'modal'} 关闭
     :javascript
-      $(".form-post").submit(function(){
-        var content = $(this).find(".post").val();
+      $(".btn-send-message").click(function(){
+        $(".modal-send-message button[type='submit']").addClass("btn-primary").removeClass("btn-success").html("发送");
+        $(".modal-send-message .post").val("");
+        $(".modal-send-message").modal('show');
+      });
+      $(".form-send-message").submit(function(){
+        var t = $(this);
+        var content = t.find(".post").val();
         var error = "";
         if (content.length == 0) error = "请输入您希望发布的内容...";
         else if (content.length > 200) error = "您输入的内容太长了。";
         if (error.length > 0){
-          $(this).find(".post").tooltip({
+          t.find(".post").tooltip({
             placement: 'top',
             title: error, 
             trigger: "manual",
-          }).tooltip("show");
-          $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
+          }).tooltip("show").data('tooltip').tip().css('z-index', 2080);
+          t.find(".post").unbind('click keydown').bind('click keydown', function(){
             $(this).tooltip('destroy');
           });
           return false;
         }
-        $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
-        $.post("/messages", {
+        t.unbind("click").find("button[type='submit']").addClass("disabled").html("正在发送，请稍后...");
+        $.post("/users/{{ user.id }}/messages/", {
           "content": content,
-          "receiver": useer_id,
           "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
         }, function(result){
           if (result.status == "ok"){
-            window.location.reload();
+            t.find("button[type='submit']").removeClass("disabled").removeClass("btn-primary").addClass("btn-success").html("发送成功！");
+            setTimeout(function(){
+              $(".modal-send-message").modal('hide');
+            }, 1500);
           }
         });
         return false;
       });
-    .section-news
-      %h1 新鲜事
-      {% include "sns/posts/_appending_list" with posts=posts %}
+    
+    :javascript
+      function showFollowButton(ele){
+        ele = $(ele);
+        var user_id = ele.attr("user_id");
+        if (ele.attr("followed") == "true"){
+          ele.find(".not-followed").addClass("hidden");
+          ele.find(".followed").removeClass("hidden");
+        } else {
+          ele.find(".not-followed").removeClass("hidden");
+          ele.find(".followed").addClass("hidden");
+        }
+        ele.find(".followed").unbind('hover').hover(function(){
+          var t = $(this);
+          t.find(".not-hover").addClass("hidden");
+          t.find(".hover").removeClass("hidden");
+          t.addClass("btn-danger");
+        }, function(){
+          var t = $(this);
+          t.find(".not-hover").removeClass("hidden");
+          t.find(".hover").addClass("hidden");
+          t.removeClass("btn-danger");
+        });
+        ele.find(".followed").unbind('click').click(function(){
+          $.get("/users/" + user_id + "/unfollow");
+          ele.attr("followed", "false");
+          showFollowButton(ele);
+        });
+        ele.find(".not-followed").unbind('click').click(function(){
+          $.get("/users/" + user_id + "/follow");
+          ele.attr("followed", "true");
+          showFollowButton(ele);
+        });
+      }
+      $(".follow-buttons").each(function(){ showFollowButton(this); });
 
 - block right_content
   .users-index-right
@@ -78,3 +127,4 @@
         {% include "sns/users/_sidebar_list" with users=followees %}
       - else
         .muted 他还没有关注任何人...
+  
