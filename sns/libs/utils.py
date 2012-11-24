@@ -4,9 +4,10 @@ import re
 import json
 from functools import wraps
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 
@@ -47,6 +48,16 @@ def posts_loader(template):
                 return render_to_response(template, result, context_instance=RequestContext(request))
         return _
     return decorator
+
+
+def process_login_user(func):
+    @wraps(func)
+    @login_required
+    def _(*args, **kwargs):
+        request = args[0]
+        request.user.new_notifications = list(request.user.notifications.filter(viewed=False))
+        return func(*args, **kwargs)
+    return _
 
 
 def get_notification_template(object_type, object_id):

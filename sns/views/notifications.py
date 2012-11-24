@@ -1,10 +1,10 @@
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
+from sns.libs.utils import process_login_user
 
 
-@login_required
+@process_login_user
 def index(request):
     followers = list(User.objects.filter(id__in=list(request.user.followers.values_list('follower_id', flat=True)[:5])))
     followees = list(User.objects.filter(id__in=list(request.user.followees.values_list('followee_id', flat=True)[:5])))

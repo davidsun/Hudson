@@ -45,12 +45,12 @@
 
 - block right_content
   .users-index-right
-    - if new_notification_count
+    - if request.new_notifications|length
       .section
         %h5.section-title 通知
         .section-news
           %a{href:"{% url sns.views.notifications.index %}"} 
-            你有 {{new_notification_count}} 条新通知，点击查看。
+            你有 {{ request.new_notifications|length }} 条新通知，点击查看。
     .section
       %h5.section-title 搜索好友
       %form.form-inline{action:"{% url sns.views.users.search %}"}

@@ -1,22 +1,13 @@
 #-*- coding:utf-8 -*-
 
-import hamlpy
-import json
-
-# Currently all views are here
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from mako.template import Template
-
-from sns.models import Post, PostLike, PostComment
-from sns.libs.utils import jsonize, notify_at_users, posts_loader
+from sns.models import Post, PostLike
+from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login_user
 
 
-@login_required
+@process_login_user
 @jsonize
 def index(request):
     if request.method == 'POST':
@@ -26,13 +17,12 @@ def index(request):
 
             # get users who has been @, and send notification to them
             notify_at_users(content, "post", post.id, request.user)
-
             return {'status': 'ok'}
         else:
             return {'status': 'error'}
 
 
-@login_required
+@process_login_user
 @jsonize
 def like(request, post_id):
     liked_post = Post.objects.get(id=post_id)
@@ -40,14 +30,14 @@ def like(request, post_id):
     return {'status': 'ok'}
 
 
-@login_required
+@process_login_user
 @jsonize
 def unlike(request, post_id):
     PostLike.objects.filter(user_id=request.user.id, post_id=post_id).delete()
     return {'status': 'ok'}
 
 
-@login_required
+@process_login_user
 def show(request, post_id):
     post = Post.objects.get(id=post_id)
     post.liked = post.likes.filter(user_id=request.user.id).count() > 0
@@ -55,7 +45,7 @@ def show(request, post_id):
     return render_to_response('sns/posts/show', {'post': post, 'comments': comments}, context_instance=RequestContext(request))
 
 
-@login_required
+@process_login_user
 def comments(request, post_id):
     if request.method == 'POST':
         return comments_post(request, post_id)
@@ -79,7 +69,7 @@ def comments_post(request, post_id):
         return {'status': 'error'}
 
 
-@login_required
+@process_login_user
 @posts_loader('sns/posts/liked')
 def liked(request):
     followers = list(request.user.followers.all()[:5])
@@ -90,7 +80,7 @@ def liked(request):
     return {'followers': followers, 'followees': followees, 'latest_users': latest_users, 'posts': posts}
 
 
-@login_required
+@process_login_user
 @posts_loader('sns/posts/search')
 def search(request):
     return {'posts': Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at")}

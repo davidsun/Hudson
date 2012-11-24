@@ -1,21 +1,15 @@
-import hamlpy
-import json
-
-# Currently all views are here
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from mako.template import Template
 
 from sns.models import Post, UserFollow
-from sns.libs.utils import jsonize, posts_loader
+from sns.libs.utils import jsonize, posts_loader, process_login_user
 from sns.views.forms.users import Edit
 
 
-@login_required
+@process_login_user
 @jsonize
 def follow(request, user_id):
     user = User.objects.get(id=user_id)
@@ -23,7 +17,7 @@ def follow(request, user_id):
     return {'status': 'ok'}
 
 
-@login_required
+@process_login_user
 def followees(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     followees = list(User.objects.filter(id__in=list(user.followees.values_list('followee_id', flat=True))))
@@ -32,7 +26,7 @@ def followees(request, user_id):
     return render_to_response('sns/users/_modal_list', {'users': followees}, context_instance=RequestContext(request))
 
 
-@login_required
+@process_login_user
 def followers(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     followers = list(User.objects.filter(id__in=list(user.followers.values_list('follower_id', flat=True))))
@@ -41,7 +35,7 @@ def followers(request, user_id):
     return render_to_response('sns/users/_modal_list', {'users': followers}, context_instance=RequestContext(request))
 
 
-@login_required
+@process_login_user
 @posts_loader('sns/users/index')
 def index(request):
     followers = list(User.objects.filter(id__in=list(request.user.followers.values_list('follower_id', flat=True)[:5])))
@@ -56,9 +50,7 @@ def index(request):
     followed_ids = list(request.user.followees.values_list('followee_id', flat=True))
     followed_ids.append(request.user.id)
     posts = Post.objects.filter(user_id__in=followed_ids).order_by("-created_at")
-    new_notification_count = request.user.notifications.filter(viewed=False).count()
-    return {'followers': followers, 'followees': followees, 'latest_users': latest_users, 'posts': posts,
-            'new_notification_count': new_notification_count}
+    return {'followers': followers, 'followees': followees, 'latest_users': latest_users, 'posts': posts}
 
 
 def login(request):
@@ -77,14 +69,14 @@ def login(request):
         return render_to_response('sns/users/login', {'form': form}, context_instance=RequestContext(request))
 
 
-@login_required
+@process_login_user
 def logout(request):
     from django.contrib.auth import logout
     logout(request)
     return redirect('/')
 
 
-@login_required
+@process_login_user
 @posts_loader('sns/users/show')
 def show(request, user_id):
     user = get_object_or_404(User, pk=user_id)
@@ -99,7 +91,7 @@ def show(request, user_id):
     return {'followers': followers, 'followees': followees, 'posts': posts, 'user': user}
 
 
-@login_required
+@process_login_user
 def search(request):
     users = list(User.objects.filter(username__icontains=request.GET.get('q', '')).all())
     for user in users:
@@ -123,14 +115,14 @@ def signup(request):
         return render_to_response('sns/users/signup', {'form': form}, context_instance=RequestContext(request))
 
 
-@login_required
+@process_login_user
 @jsonize
 def unfollow(request, user_id):
     UserFollow.objects.filter(follower_id=request.user.id, followee_id=user_id).delete()
     return {'status': 'ok'}
 
 
-@login_required
+@process_login_user
 def edit(request, user_id):
     if int(user_id) != request.user.id:
         return redirect('/')
@@ -146,7 +138,7 @@ def edit(request, user_id):
         return render_to_response('sns/users/edit', {'form': form}, context_instance=RequestContext(request))
 
 
-@login_required
+@process_login_user
 @jsonize
 def contact(request, query):
     # TODO: a better performance sort algorithm ...

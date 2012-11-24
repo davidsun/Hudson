@@ -19,7 +19,8 @@
           %ul.nav.pull-right
             %li.divider-vertical
             %li
-              %a{href:"{% url sns.views.notifications.index %}"} 通知
+              %a{href:"{% url sns.views.notifications.index %}"}
+                通知 ({{ request.new_notifications|length }})
             %li.divider-vertical
             %li.dropdown
               %a.dropdown-toggle{href:"javascript:void(0);", "data-toggle":"dropdown"}
