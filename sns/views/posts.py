@@ -15,11 +15,12 @@ from mako.template import Template
 from sns.models import Post, PostLike, PostComment
 from sns.libs.utils import jsonize, notify_at_users, posts_loader
 
+
 @login_required
 @jsonize
-def index(request) :
-    if request.method == 'POST' :
-        if len(request.POST.get('content', '')) > 0 :
+def index(request):
+    if request.method == 'POST':
+        if len(request.POST.get('content', '')) > 0:
             content = request.POST['content']
             post = request.user.posts.create(content=content)
 
@@ -27,8 +28,9 @@ def index(request) :
             notify_at_users(content, "post", post.id, request.user)
 
             return {'status': 'ok'}
-        else :
+        else:
             return {'status': 'error'}
+
 
 @login_required
 @jsonize
@@ -37,41 +39,45 @@ def like(request, post_id):
     liked_post.likes.get_or_create(user_id=request.user.id)
     return {'status': 'ok'}
 
+
 @login_required
 @jsonize
 def unlike(request, post_id):
     PostLike.objects.filter(user_id=request.user.id, post_id=post_id).delete()
     return {'status': 'ok'}
 
+
 @login_required
 def show(request, post_id):
     post = Post.objects.get(id=post_id)
     post.liked = post.likes.filter(user_id=request.user.id).count() > 0
     comments = list(post.comments.all())
-    return render_to_response('sns/posts/show', {'post':post, 'comments':comments}, context_instance=RequestContext(request))
+    return render_to_response('sns/posts/show', {'post': post, 'comments': comments}, context_instance=RequestContext(request))
+
 
 @login_required
 def comments(request, post_id):
-    if request.method == 'POST' :
+    if request.method == 'POST':
         return comments_post(request, post_id)
-    else :
+    else:
         post = Post.objects.get(id=post_id)
         comments = list(post.comments.all())
-        count = len(comments)
-        return render_to_response('sns/posts/_comments_list', {'comments':comments, 'count':count}, context_instance=RequestContext(request))
+        return render_to_response('sns/posts/_comments_list', {'comments': comments}, context_instance=RequestContext(request))
+
 
 @jsonize
-def comments_post(request, post_id) :
-    if len(request.POST.get('content', '')) > 0 and len(request.POST.get('content','')) <= 200 :
+def comments_post(request, post_id):
+    if len(request.POST.get('content', '')) > 0 and len(request.POST.get('content', '')) <= 200:
         content = request.POST['content']
         post = Post.objects.get(id=post_id)
         post.comments.create(content=content, user=request.user)
 
-        # get users who has been @, and send notification to them 
+        # get users who has been @, and send notification to them
         notify_at_users(content, "post", post.id, request.user)
         return {'status': 'ok'}
-    else :
-        return {'status': 'error'} 
+    else:
+        return {'status': 'error'}
+
 
 @login_required
 @posts_loader('sns/posts/liked')
@@ -81,11 +87,10 @@ def liked(request):
     latest_users = list(User.objects.order_by('-date_joined')[:5])
     liked_id = PostLike.objects.filter(user_id=request.user.id).values('post_id')
     posts = Post.objects.filter(id__in=liked_id).order_by("-created_at")
-    return {'followers':followers, 'followees':followees, 'latest_users':latest_users, 'posts':posts}
-    
+    return {'followers': followers, 'followees': followees, 'latest_users': latest_users, 'posts': posts}
+
+
 @login_required
 @posts_loader('sns/posts/search')
-def search(request) :
-    return {'posts':Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at")}
-    
-
+def search(request):
+    return {'posts': Post.objects.filter(content__icontains=request.GET.get('q', '')).order_by("-created_at")}

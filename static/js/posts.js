@@ -1,24 +1,23 @@
 $.posts = {
-  bindCommentLink: function(element){
+  bindCommentLink: function(comments_block, element){
     var t = $(element);
     var post_id = t.attr("post-id");
-    var comments_dev = $(t.attr("post-class")).find(".comments");
-    comments_dev.hide();
-    t.attr("showed","false");
+    comments_block = $(comments_block);
+    comments_block.hide();
+    t.attr("shown", "false");
     t.unbind("click").click(function(){
-      if (t.attr("showed") == "true"){
-        comments_dev.hide();
-        t.attr("showed","false");
-        var count = comments_dev.find(".comments-data").attr("count");
+      if (t.attr("shown") == "true"){
+        comments_block.hide();
+        t.attr("shown", "false");
+        var count = comments_block.find(".posts-comments-list .comment").length;
         if (count === null) count = 0;
-        t.html("回复("+count+")");
-
+        t.html("回复(" + count + ")");
       } else {
-        comments_dev.show();
-        t.attr("showed","true");
+        comments_block.show();
+        t.attr("shown", "true");
         t.html("收起回复");
         $.get("/posts/" + post_id + "/comments", function(result){
-          comments_dev.find(".comments-list").html(result);
+          comments_block.find(".comments-list").html(result);
         });
       }
     });
@@ -91,7 +90,6 @@ $.posts = {
       });
       return false;
     });
-
   },
 
   initAppendingList: function(element, options){
@@ -153,7 +151,7 @@ $.posts = {
       $.posts.initPostComment(this);
     });
     t.find("a[data-toggle='comments-link']").each(function(){
-      $.posts.bindCommentLink(this);
+      $.posts.bindCommentLink(t.find(".comments"), this);
     });
   },
 

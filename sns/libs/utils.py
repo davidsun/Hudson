@@ -9,12 +9,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 
+
 def jsonize(func):
     @wraps(func)
     def _(*args, **kwargs):
         result = func(*args, **kwargs)
         return HttpResponse(json.dumps(result), mimetype="application/json")
     return _
+
 
 def posts_loader(template):
     DEFAULT_LIMIT = 20
@@ -26,13 +28,17 @@ def posts_loader(template):
             offset = int(request.GET.get('offset', 0))
             result = func(*args, **kwargs)
 
-            if 'posts' in result :
+            if 'posts' in result:
                 posts = result['posts']
-                if offset > 0 : posts = posts.all()[offset:offset + DEFAULT_LIMIT]
-                else : posts = posts.all()[:DEFAULT_LIMIT]
+                if offset > 0:
+                    posts = posts.all()[offset:offset + DEFAULT_LIMIT]
+                else:
+                    posts = posts.all()[:DEFAULT_LIMIT]
                 posts = list(posts)
-                for post in posts : post.liked = post.likes.filter(user_id=request.user.id).count() > 0
-                for post in posts : post.comments_count = post.comments.count()
+                for post in posts:
+                    post.liked = post.likes.filter(user_id=request.user.id).count() > 0
+                for post in posts:
+                    post.comments_count = post.comments.count()
                 result['posts'] = posts
 
             if offset > 0:
@@ -42,6 +48,7 @@ def posts_loader(template):
         return _
     return decorator
 
+
 def get_notification_template(object_type, object_id):
     if object_type == "post":
         url = "/posts/%s/" % str(object_id)
@@ -49,7 +56,9 @@ def get_notification_template(object_type, object_id):
     # elif object_type == "xxx"
     return unicode(tmpl, 'utf-8')
 
+
 RE_AT_USERS = re.compile(r'@([^\s@]+)\s')
+
 
 def notify_at_users(content, object_type, object_id, by_user):
     """
@@ -69,10 +78,12 @@ def notify_at_users(content, object_type, object_id, by_user):
             user = User.objects.get(username=username)
         except:
             continue
-        if not user: continue
+        if not user:
+            continue
         tmpl = get_notification_template(object_type, object_id)
         noti = tmpl % (by_user.username, content)
         user.notifications.create(content=noti, viewed=False)
+
 
 def filter_at_users(content):
     "Add link to '@somebody'"
@@ -80,7 +91,7 @@ def filter_at_users(content):
         username = username.group(0)[1:].strip()
         try:
             user = User.objects.get(username=username)
-        except Exception, e:
+        except Exception:
             return "@" + username + " "
         return u"<a href='/users/%d/'>@%s</a> " % (user.id, username)
     content = RE_AT_USERS.sub(add_link, content + " ")
