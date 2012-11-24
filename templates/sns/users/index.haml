@@ -57,18 +57,18 @@
         %button.btn{type:'submit'} 搜索
     .section
       %h5.section-title 我的粉丝
-        %a{ 'href': '#followersModal', 'data-toggle': 'modal', 'id': 'allfollowers', 'user_id':"{{user.id}}" }
-          显示全部
-      {% include "sns/users/_followers" %}
+        (
+        %a{'data-toggle':"hudson-modal", href:'javascript:void(0);', title:"我的粉丝", url:"{% url sns.views.users.followers user.id %}"} 查看全部
+        )
       - if followers
         {% include "sns/users/_sidebar_list" with users=followers %}
       - else
         .muted 还没有人关注我...    
     .section
       %h5.section-title 我的关注
-        %a{ 'href': '#followeesModal', 'data-toggle': 'modal', 'id': 'allfollowees', 'user_id':"{{user.id}}" }
-          显示全部
-      {% include "sns/users/_followees" %}
+        (
+        %a{'data-toggle':"hudson-modal", href:'javascript:void(0);', title:"我的关注", url:"{% url sns.views.users.followees user.id %}"} 查看全部
+        )
       - if followees
         {% include "sns/users/_sidebar_list" with users=followees %}
       - else

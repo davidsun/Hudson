@@ -6,6 +6,19 @@
     line-height: 28px;
 }
 
+/**
+ * sns/users/_modal_list
+ */
+.users-modal-list li{
+    height: 32px;
+    line-height: 32px;
+    border-bottom: 1px solid #E5E5E5;
+}
+.users-modal-list li:last-child{
+    border-bottom: none;
+}
+
+
 /* 
  * sns/users/index 
  */

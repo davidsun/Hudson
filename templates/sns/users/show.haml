@@ -55,19 +55,25 @@
         return false;
       });
     .section-news
-      %h1 他的新鲜事
+      %h1 新鲜事
       {% include "sns/posts/_appending_list" with posts=posts %}
 
 - block right_content
   .users-index-right
     .section
-      %h5.section-title 他的粉丝
+      %h5.section-title {{ user.username }} 的粉丝
+        (
+        %a{'data-toggle':"hudson-modal", href:'javascript:void(0);', title:"{{ user.username }} 的粉丝", url:"{% url sns.views.users.followers user.id %}"} 查看全部
+        )
       - if followers
         {% include "sns/users/_sidebar_list" with users=followers %}
       - else
         .muted 还没有人关注他...
     .section
-      %h5.section-title 他的关注
+      %h5.section-title {{ user.username }} 的关注
+        (
+        %a{'data-toggle':"hudson-modal", href:'javascript:void(0);', title:"{{ user.username }} 的关注", url:"{% url sns.views.users.followees user.id %}"} 查看全部
+        )
       - if followees
         {% include "sns/users/_sidebar_list" with users=followees %}
       - else

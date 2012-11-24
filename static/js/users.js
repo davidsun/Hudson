@@ -25,12 +25,23 @@ $.users = {
     });
   },
 
+  showInModalList: function(element){
+    var t = $(element);
+    t.find("a[data-toggle='follow-button']").each(function(){
+      $.users.showFollowButton(this);
+    });
+  },
+
   showInSidebarList: function(element){
     var t = $(element);
     t.find("a[data-toggle='follow-button']").each(function(){
       $.users.showFollowButton(this);
     });
   }
+};
+
+$.fn.showModalListUser = function(){
+  $.users.showInModalList(this);
 };
 
 $.fn.showSidebarListUser = function(){

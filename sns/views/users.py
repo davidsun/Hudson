@@ -24,23 +24,21 @@ def follow(request, user_id):
 
 
 @login_required
-@jsonize
-def followers(request, user_id):
-    followers = list(User.objects.get(id=user_id).followers.all())
-    allfollowers = []
-    for follower in followers:
-        allfollowers.append({'id': follower.follower.id, 'name': follower.follower.username})
-    return allfollowers
+def followees(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    followees = list(User.objects.filter(id__in=list(user.followees.values_list('followee_id', flat=True))))
+    for followee in followees:
+        followee.followed = followee.followers.filter(follower_id=request.user.id).count() > 0
+    return render_to_response('sns/users/_modal_list', {'users': followees}, context_instance=RequestContext(request))
 
 
 @login_required
-@jsonize
-def followees(request, user_id):
-    followees = list(User.objects.get(id=user_id).followees.all())
-    allfollowees = []
-    for followee in followees:
-        allfollowees.append({'id': followee.followee.id, 'name': followee.followee.username})
-    return allfollowees
+def followers(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    followers = list(User.objects.filter(id__in=list(user.followers.values_list('follower_id', flat=True))))
+    for follower in followers:
+        follower.followed = follower.followers.filter(follower_id=request.user.id).count() > 0
+    return render_to_response('sns/users/_modal_list', {'users': followers}, context_instance=RequestContext(request))
 
 
 @login_required
