@@ -61,18 +61,7 @@
           显示全部
       {% include "sns/users/_followers" %}
       - if followers
-        %ul.unstyled
-          - for follower in followers
-            %li.li-height
-              %a{href:"{% url sns.views.users.show follower.id %}" } 
-                  {{follower.username}}
-              %small.follow-buttons{followed:"{{follower.followed|lower}}", user_id:"{{follower.id}}"}
-                - if follower == request.user
-                - else
-                  .btn.btn-mini.btn-follow.pull-right.followed.hidden
-                    %span.not-hover 已关注
-                    %span.hover.hidden 取消关注
-                  .btn.btn-mini.btn-primary.btn-follow.pull-right.not-followed.hidden 关注
+        {% include "sns/users/_sidebar_list" with users=followers %}
       - else
         .muted 还没有人关注我...    
     .section
@@ -81,69 +70,12 @@
           显示全部
       {% include "sns/users/_followees" %}
       - if followees
-        %ul.unstyled
-          - for followee in followees
-            %li.li-height
-              %a{href:"{% url sns.views.users.show followee.id %}" } 
-                {{followee.username}}
-              %small.follow-buttons{followed:"{{followee.followed|lower}}", user_id:"{{followee.followee.id}}"}
-                - if followee == request.user
-                - else
-                  .btn.btn-mini.btn-follow.pull-right.followed.hidden
-                    %span.not-hover 已关注
-                    %span.hover.hidden 取消关注
-                  .btn.btn-mini.btn-primary.btn-follow.pull-right.not-followed.hidden 关注
+        {% include "sns/users/_sidebar_list" with users=followees %}
       - else
         .muted 还没有关注任何人...
     .section
       %h5.section-title 最新注册
       - if latest_users
-        %ul.unstyled
-          - for user in latest_users
-            %li.li-height
-              %a{href:"{% url sns.views.users.show user.id %}" } 
-                {{user.username}}
-              %small.follow-buttons{followed:"{{follower.followed|lower}}", user_id:"{{user.id}}"}
-                - if user == request.user
-                - else
-                  .btn.btn-mini.btn-follow.pull-right.followed.hidden
-                    %span.not-hover 已关注
-                    %span.hover.hidden 取消关注
-                  .btn.btn-mini.btn-primary.btn-follow.pull-right.not-followed.hidden 关注
+        {% include "sns/users/_sidebar_list" with users=latest_users %}
       - else
         .muted 还没有任何人注册...
-    :javascript
-      function showFollowButton(ele){
-        ele = $(ele);
-        var user_id = ele.attr("user_id");
-        if (ele.attr("followed") == "true"){
-          ele.find(".not-followed").addClass("hidden");
-          ele.find(".followed").removeClass("hidden");
-        } else {
-          ele.find(".not-followed").removeClass("hidden");
-          ele.find(".followed").addClass("hidden");
-        }
-        ele.find(".followed").unbind('hover').hover(function(){
-          var t = $(this);
-          t.find(".not-hover").addClass("hidden");
-          t.find(".hover").removeClass("hidden");
-          t.addClass("btn-danger");
-        }, function(){
-          var t = $(this);
-          t.find(".not-hover").removeClass("hidden");
-          t.find(".hover").addClass("hidden");
-          t.removeClass("btn-danger");
-        });
-        ele.find(".followed").unbind('click').click(function(){
-          $.get("/users/" + user_id + "/unfollow");
-          ele.attr("followed", "false");
-          showFollowButton(ele);
-        });
-        ele.find(".not-followed").unbind('click').click(function(){
-          $.get("/users/" + user_id + "/follow");
-          ele.attr("followed", "true");
-          showFollowButton(ele);
-        });
-      }
-      $(".follow-buttons").each(function(){ showFollowButton(this); });
-
