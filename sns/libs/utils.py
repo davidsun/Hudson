@@ -64,7 +64,9 @@ def get_notification_template(object_type, object_id):
     if object_type == "post":
         url = "/posts/%s/" % str(object_id)
         tmpl = "@%s 在「<a href='" + url + "'>%s</a>」中提到了你"
-    # elif object_type == "xxx"
+    elif object_type == "post_comment":
+        url = "/posts/%s/" % str(object_id)
+        tmpl = "@%s 在回复「<a href='" + url + "'>%s</a>」中提到了你"
     return unicode(tmpl, 'utf-8')
 
 

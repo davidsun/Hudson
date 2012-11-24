@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 
-from django.shortcuts import render_to_response
+from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from sns.models import Post, PostLike
@@ -59,11 +59,11 @@ def comments(request, post_id):
 def comments_post(request, post_id):
     if len(request.POST.get('content', '')) > 0 and len(request.POST.get('content', '')) <= 200:
         content = request.POST['content']
-        post = Post.objects.get(id=post_id)
+        post = get_object_or_404(Post, pk=post_id)
         post.comments.create(content=content, user=request.user)
 
         # get users who has been @, and send notification to them
-        notify_at_users(content, "post", post.id, request.user)
+        notify_at_users(content, "post_comment", post.id, request.user)
         return {'status': 'ok'}
     else:
         return {'status': 'error'}

@@ -20,7 +20,7 @@
             %li.divider-vertical
             %li
               %a{href:"{% url sns.views.notifications.index %}"}
-                通知 ({{ request.new_notifications|length }})
+                通知 ({{ request.user.new_notifications|length }})
             %li.divider-vertical
             %li.dropdown
               %a.dropdown-toggle{href:"javascript:void(0);", "data-toggle":"dropdown"}
