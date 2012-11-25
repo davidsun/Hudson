@@ -1,0 +1,12 @@
+- if users
+  %ul.unstyled.users-modal-list
+    - for user in users
+      %li{class:"user-{{ user.id }}"}
+        %a{href:"{% url sns.views.users.show user.id %}" } 
+            {{user.username}}
+        - if user != request.user
+          %a.pull-right.btn.btn-small.{"data-toggle":"follow-button", followed:"{{user.followed|lower}}", "user-id":"{{user.id}}"} 关注
+        :javascript
+          $(".users-modal-list .user-{{ user.id }}").showModalListUser();
+- else
+  没有更多内容了...

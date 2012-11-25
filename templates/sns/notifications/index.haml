@@ -13,7 +13,10 @@
           .row-fluid
             .notifications-list-notification
               .clearfix
-                .content.pull-left {{notification.content|safe|at_users}}
+                - if notification.viewed
+                  .content.pull-left {{notification.content|safe|at_users}}
+                - else
+                  %strong.content.pull-left {{notification.content|safe|at_users}}
               .clearfix.notification-bottom
                 .pull-right
                   %span.muted {{ notification.created_at|date:"m-d H:i" }}
@@ -30,32 +33,25 @@
         %button.btn{type:'submit'} 搜索
     .section
       %h5.section-title 我的粉丝
+        (
+        %a{'data-toggle':"hudson-modal", href:'javascript:void(0);', title:"我的粉丝", url:"{% url sns.views.users.followers user.id %}"} 查看全部
+        )
       - if followers
-        %ul.unstyled
-          - for follower in followers
-            %li
-              %a{href:"{% url sns.views.users.show follower.follower.id %}" } 
-                {{follower.follower.username}}
+        {% include "sns/users/_sidebar_list" with users=followers %}
       - else
-        .muted 还没有人关注我...
+        .muted 还没有人关注我...    
     .section
       %h5.section-title 我的关注
+        (
+        %a{'data-toggle':"hudson-modal", href:'javascript:void(0);', title:"我的关注", url:"{% url sns.views.users.followees user.id %}"} 查看全部
+        )
       - if followees
-        %ul.unstyled
-          - for followee in followees
-            %li
-              %a{href:"{% url sns.views.users.show followee.followee.id %}" } 
-                {{followee.followee.username}}
+        {% include "sns/users/_sidebar_list" with users=followees %}
       - else
         .muted 还没有关注任何人...
     .section
       %h5.section-title 最新注册
       - if latest_users
-        %ul.unstyled
-          - for user in latest_users
-            %li
-              %a{href:"{% url sns.views.users.show user.id %}" } 
-                {{user.username}}
+        {% include "sns/users/_sidebar_list" with users=latest_users %}
       - else
         .muted 还没有任何人注册...
-

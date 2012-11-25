@@ -1,4 +1,5 @@
 - load custom_filters
+
 - for post in posts
   .posts-list-post{class:"post-{{ post.id }}"}
     .clearfix
@@ -8,7 +9,7 @@
       .content.pull-left {{post.content|at_users}}
     .clearfix.post-bottom
       .pull-right
-        %a{"data-toggle":"comments-link", href:"javascript:void(0);", "post-class":".post-{{ post.id }}", "post-id":"{{post.id}}"}
+        %a{"data-toggle":"comments-link", href:"javascript:void(0);", "post-id":"{{post.id}}"}
           回复({{ post.comments_count }})
         %span.muted ·
         %a.muted.btn-like{href:"{% url sns.views.posts.show post.id %}"} 详情
@@ -20,7 +21,7 @@
       .comments-list
       %form.form-post{"post-id":"{{post.id}}"}
         - csrf_token
-        %textarea.post{rows:1,placeholder:'发点评论吧'}
-        %button.btn.btn-primary{type:'submit'} 发布评论
+        %textarea.post{rows:1,placeholder:'评论...'}
+        %button.btn.btn-primary{type:'submit'} 评论
     :javascript
       $(".post-{{ post.id }}").showListPost();

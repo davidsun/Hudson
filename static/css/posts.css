@@ -1,0 +1,65 @@
+/*
+ * sns/posts/_appending_list
+ */
+.posts-appending-list .list-indicator{
+    padding: 15px 0;
+}
+
+/*
+ * sns/posts/liked
+ */
+.posts-liked-left .section-news h1{
+    padding-bottom: 8px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #E5E5E5;
+}
+.posts-liked-right .section{
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+.posts-liked-right .section-title{
+    border-bottom: 1px solid #E5E5E5;
+}
+
+/*
+ * sns/posts/_list
+ */
+.posts-list-post{
+    border-bottom: 1px solid #E5E5E5;
+    font-size: 17px;
+    line-height: 26px;
+    padding: 10px 12px;
+}
+.posts-list-post:hover{
+    background-color: #F5F5F5;
+}
+.posts-list-post .content{
+    font-size: 25px;
+    line-height: 32px;
+}
+.posts-list-post .post-bottom{
+    font-size: 14px;
+}
+
+/*
+ * sns/posts/show
+ */
+.posts-show-post{
+    border-bottom: 1px solid #E5E5E5;
+    padding: 10px;
+}
+.posts-show-post .post-top{
+    font-size: 30px;
+    line-height: 40px;
+}
+.posts-show-post .content{
+    font-size: 45px;
+    line-height: 60px;
+}
+.posts-show-post .post-bottom{
+    font-size: 18px;
+    line-height: 24px;
+}
+.posts-show-post .input-comment{
+    width: 736px;
+}

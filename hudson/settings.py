@@ -16,7 +16,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'hudson',                      # Or path to database file if using sqlite3.
         'USER': 'hudson_admin',                      # Not used with sqlite3.
         'PASSWORD': '134256',                  # Not used with sqlite3.
@@ -80,7 +80,9 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+#   'django.contrib.staticfiles.finders.DefaultStorageFinder',
+#   Other finders ...
+    'compressor.finders.CompressorFinder'
 )
 
 # Make this unique, and don't share it with anybody.
@@ -137,6 +139,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'sns',
+    # Other apps
+    "compressor",
 )
 
 # A sample logging configuration. The only tangible logging
@@ -169,7 +173,7 @@ LOGGING = {
 }
 
 AUTH_PROFILE_MODULE = 'sns.UserProfile'
- 
+
 
 # The URL where requests are redirected for login
 LOGIN_URL = '/login/'
