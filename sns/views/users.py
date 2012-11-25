@@ -17,9 +17,13 @@ from sns.views.forms.users import Edit
 @login_required
 @jsonize
 def follow(request, user_id) :
-    user = User.objects.get(id=user_id)
-    user.followers.get_or_create(follower_id=request.user.id)
-    return {'status': 'ok'}
+    if request.user.id != user_id :
+        #user = User.objects.get(id=user_id)
+	user = get_object_or_404(User, pk=user_id)
+	user.followers.get_or_create(follower_id=request.user.id)
+        return {'status': 'ok'}
+    else :
+    	return {'status':'error'}
 
 @login_required
 @posts_loader('sns/users/index')
@@ -36,7 +40,7 @@ def login(request) :
     if request.user.is_authenticated() : return redirect('/')
     from forms.users import Login
     if request.method == 'POST' :
-        form = Login(request.POST)
+       	form = Login(request.POST)
         if form.is_valid() :
             form.save(request)
             return HttpResponseRedirect(reverse('sns.views.users.index'))
