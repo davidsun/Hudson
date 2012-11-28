@@ -1,4 +1,5 @@
 - extends 'layout/site'
+- load custom_filters
 
 - block header
   %script{"src": "#{STATIC_URL}js/purl.js", "type":"text/javascript"}
@@ -18,9 +19,18 @@
               %a{href:"{% url sns.views.posts.liked %}"} 我的收藏
           %ul.nav.pull-right
             %li.divider-vertical
-            %li
-              %a{href:"{% url sns.views.notifications.index %}"}
+            %li.dropdown
+              %a.dropdown-toggle{href:"javascript:void(0);", "data-toggle":"dropdown"}
                 通知 ({{ request.user.new_notifications|length }})
+              %ul.dropdown-menu.main-list-notification
+                - if request.user.new_notifications
+                  - for notification in request.user.new_notifications
+                    %li
+                      .content {{notification.content|safe|at_users}}
+                  %li.divider
+                %li
+                  %a.content{href:"{% url sns.views.notifications.index %}"}
+                    查看更多通知
             %li.divider-vertical
             %li.dropdown
               %a.dropdown-toggle{href:"javascript:void(0);", "data-toggle":"dropdown"}
