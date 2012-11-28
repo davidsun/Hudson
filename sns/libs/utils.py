@@ -109,11 +109,3 @@ def filter_at_users(content):
         return u"<a href='/users/%d/'>@%s</a> " % (user.id, username)
     content = RE_AT_USERS.sub(add_link, content + " ")
     return content.strip()
-
-def at_users(content, autoescape=None):
-    if autoescape:
-        esca = conditional_escape
-    else:
-        esca = lambda x: x
-    filtered = filter_at_users(esca(content))
-    return mark_safe(filtered)
