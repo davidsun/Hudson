@@ -1,5 +1,7 @@
 *.swp
 *.pyc
+*.pyc2
+*.bak
 *.orig
 *.sublime-project
 *.sublime-workspace
