@@ -2,14 +2,13 @@ $.posts = {
   bindCommentLink: function(comments_block, element){
     var t = $(element);
     var post_id = t.attr("post-id");
-    comments_block = $(comments_block);
     comments_block.hide();
     t.attr("shown", "false");
     t.unbind("click").click(function(){
       if (t.attr("shown") == "true"){
         comments_block.hide();
         t.attr("shown", "false");
-        var count = comments_block.find(".posts-comments-list .comment").length;
+        var count = comments_block.find(".comments-list .comment").length;
         if (count === null) count = 0;
         t.html("回复(" + count + ")");
       } else {
@@ -17,7 +16,10 @@ $.posts = {
         t.attr("shown", "true");
         t.html("收起回复");
         $.get("/posts/" + post_id + "/comments", function(result){
-          comments_block.find(".comments-list").html(result);
+          var ar = {
+            "comments" : ko.observableArray(result)
+          };
+          ko.applyBindings(ar, comments_block[0]);
         });
       }
     });
@@ -82,7 +84,11 @@ $.posts = {
       }, function(result){
         if (result.status == "ok"){
           $.get("/posts/" + post_id + "/comments", function(result){
-            t.parent().find(".comments-list").html(result);
+            t.parent().find(".comments-list").html("");
+            var ar = {
+              "comments" : ko.observableArray(result)
+            };
+            ko.applyBindings(ar, t.parent().find(".comments-list")[0]);
           });
           t.find(".btn-primary").removeClass("disabled").html("发布评论");
           t.find(".post").val("");

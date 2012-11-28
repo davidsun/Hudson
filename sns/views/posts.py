@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from sns.models import Post, PostLike
-from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login_user
+from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login_user,filter_at_users
 
 
 @process_login_user
@@ -46,16 +46,20 @@ def show(request, post_id):
 
 
 @process_login_user
+@jsonize
 def comments(request, post_id):
     if request.method == 'POST':
         return comments_post(request, post_id)
     else:
         post = Post.objects.get(id=post_id)
         comments = list(post.comments.all())
-        return render_to_response('sns/posts/_comments_list', {'comments': comments}, context_instance=RequestContext(request))
+        #return render_to_response('sns/posts/_comments_list', {'comments': comments}, context_instance=RequestContext(request))
+        result = list([]);
+        for comment in comments:
+            result.append({"content":filter_at_users(comment.content), "username": comment.user.username, "user_link": "users/"+str(comment.user.id)})
+        return result
 
 
-@jsonize
 def comments_post(request, post_id):
     if len(request.POST.get('content', '')) > 0 and len(request.POST.get('content', '')) <= 200:
         content = request.POST['content']

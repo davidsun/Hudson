@@ -4,7 +4,7 @@ from django import template
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 
-from sns.libs.utils import filter_at_users
+from sns.libs.utils import filter_at_users, at_users
 
 
 register = template.Library()

@@ -1,9 +1,0 @@
-- load custom_filters
-
-.posts-comments-list{"data-toggle":"comments"}
-  - for comment in comments
-    .comment.clearfix
-      %span {{comment.content|at_users}}
-      %span.muted -
-      %a{href:"{% url sns.views.users.show comment.user.id %}" }
-        {{ comment.user.username }}

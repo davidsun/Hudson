@@ -17,7 +17,7 @@
         %span.muted ·
         %a{"data-toggle":"like-link", href:"javascript:void(0);", liked:"{{post.liked|lower}}", "post-id":"{{post.id}}"} 收藏
       .clearfix.comments
-        .comments-list
+        .comments-list{"data-bind":'template: { foreach : comments, name : "comments-template" }'}
           - for comment in comments
             .clearfix
               %span {{comment.content|at_users}}
@@ -28,6 +28,11 @@
           - csrf_token
           %textarea.input-comment.post{rows:1,placeholder:'评论...'}
           %button.btn.btn-primary{type:'submit'} 评论
+      %script{"type":"text/html","id":"comments-template"}
+        .comment.clearfix
+          %span{"data-bind":"html: content"}
+          %span.muted -
+          %a{"data-bind":"text: username, attr:{href: user_link}"}
       :javascript
       	$(".post-{{ post.id }}").showSinglePost();
 
