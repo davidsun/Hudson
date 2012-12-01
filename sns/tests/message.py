@@ -7,12 +7,11 @@ from django.contrib.auth.models import User
 
 class MessageTest(unittest.TestCase):
     def test_message(self):
-        sender = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        receiver = User.objects.create_user('felix', 'felix@thebeatles.com', 'felixpassword')
-	
-	client = Client()
+        User.objects.create_user('john_message', 'john_message@thebeatles.com', 'johnpassword')
+        receiver = User.objects.create_user('felix_message', 'felix_message@thebeatles.com', 'felixpassword')
 
-        client.login(email='lennon@thebeatles.com', password='johnpassword')
+        client = Client()
+        client.login(email='john_message@thebeatles.com', password='johnpassword')
 
         # Empty content
         response = client.post('/users/' + str(receiver.id) + '/messages/', {'content': '', })
@@ -25,14 +24,14 @@ class MessageTest(unittest.TestCase):
         # Valid content
         response = client.post('/users/' + str(receiver.id) + '/messages/', {'content': 'shiyanchen'})
         self.assertEqual(response.content, json.dumps({"status": "ok"}))
-	
-	
-	response = client.post('/users/0/messages/', {'content': 'shiyanchen', })
-	self.assertEqual(response.status_code, 404)
+
+        # User that doesn't exist
+        response = client.post('/users/0/messages/', {'content': 'shiyanchen', })
+        self.assertEqual(response.status_code, 404)
 
     def test_message_no_login(self):
-        receiver = User.objects.create_user('felix2', 'felix2@thebeatles.com', 'felixpassword')
-    
+        receiver = User.objects.create_user('felix_message2', 'felix_message2@thebeatles.com', 'felixpassword')
+
         client = Client()
-	response = client.post('/users/' + str(receiver.id) + '/messages/', {'content': 'shiyanchen', })
-	self.assertEqual(response.status_code, 302)
+        response = client.post('/users/' + str(receiver.id) + '/messages/', {'content': 'shiyanchen', })
+        self.assertEqual(response.status_code, 302)
