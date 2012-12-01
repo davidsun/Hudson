@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'sns',
     # Other apps
     "compressor",
+    "south"
 )
 
 # A sample logging configuration. The only tangible logging

@@ -6,7 +6,7 @@ all:
 install:
 	pip install -r requirements.txt
 db:
-	python manage.py syncdb
+	python manage.py migrate sns
 coffee:
 	cd static; \
 	coffee -b -c -o js coffee

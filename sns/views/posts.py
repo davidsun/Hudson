@@ -11,15 +11,19 @@ from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login
 @jsonize
 def index(request):
     if request.method == 'POST':
-        if len(request.POST.get('content', '')) > 0 and len(request.POST.get('content', '')) <= 200:
-            content = request.POST['content']
-            post = request.user.posts.create(content=content)
-
-            # get users who has been @, and send notification to them
-            notify_at_users(content, "post", post.id, request.user)
-            return {'status': 'ok'}
-        else:
+        if len(request.POST.get('content', '')) <= 0 or len(request.POST.get('content', '')) > 200:
             return {'status': 'error'}
+        original_id = None
+        if 'original_id' in request.POST:
+            if (Post.objects.filter(original_id=original_id).count() == 0):
+                return {'status': 'error'}
+            original_id = int(request.POST.get('original_id'))
+        content = request.POST['content']
+        post = request.user.posts.create(content=content, original_id=original_id)
+
+        # get users who has been @, and send notification to them
+        notify_at_users(content, "post", post.id, request.user)
+        return {'status': 'ok'}
 
 
 @process_login_user
