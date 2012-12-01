@@ -1,8 +1,7 @@
-# -*- coding: utf8 -*- 
+# -*- coding: utf8 -*-
 
 from django.contrib.auth.models import User
-from django.core import validators
-from django.db import models 
+from django.db import models
 from sns.models.hudson_model import HudsonModel
 from sns.models.post import Post
 

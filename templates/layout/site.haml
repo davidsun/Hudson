@@ -14,12 +14,13 @@
   %link{"rel":"stylesheet", "href":"http://fonts.googleapis.com/css?family=Molle:400italic", "type":"text/css"}
   - compress js
     %script{"src": "#{STATIC_URL}js/jquery.min.js", "type":"text/javascript"}
+    %script{"src": "#{STATIC_URL}js/jquery.debounce.js", "type":"text/javascript"}
+    %script{"src": "#{STATIC_URL}js/jquery.attips.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/bootstrap.min.js", "type":"text/javascript"}
+    %script{"src": "#{STATIC_URL}js/date.format.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/site.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/users.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/posts.js", "type":"text/javascript"}
-    %script{"src": "#{STATIC_URL}js/jquery.debounce.js", "type":"text/javascript"}
-    %script{"src": "#{STATIC_URL}js/jquery.attips.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/knockout-2.2.0.js", "type":"text/javascript"}
   - block header
   %title

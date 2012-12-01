@@ -2,6 +2,8 @@ $.posts = {
   bindCommentLink: function(comments_block, element){
     var t = $(element);
     var post_id = t.attr("post-id");
+
+    comments_block = $(comments_block);
     comments_block.hide();
     t.attr("shown", "false");
     t.unbind("click").click(function(){
@@ -56,42 +58,41 @@ $.posts = {
     }
   },
 
-  initPostComment: function(element){
+  initPostComment: function(comments_block, element){
     var t = $(element);
     var post_id = t.attr("post-id");
     
-    t.find(".post").atTips();
+    comments_block = $(comments_block);
+    t.find(".reply").atTips();
     t.submit(function(){
-      var content = $(this).find(".post").val();
+      var content = $(this).find(".reply").val();
       var error = "";
       if (content.length === 0) error = "请输入您希望发布的内容...";
       else if (content.length > 200) error = "您输入的内容太长了。";
       if (error.length > 0){
-        $(this).find(".post").tooltip({
+        $(this).find(".reply").tooltip({
           placement: 'top',
           title: error,
           trigger: "manual"
         }).tooltip("show");
-        $(this).find(".post").unbind('click keydown').bind('click keydown', function(){
+        $(this).find(".reply").unbind('click keydown').bind('click keydown', function(){
           $(this).tooltip('destroy');
         });
         return false;
       }
-      $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
+      $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍候...");
       $.post("/posts/" + post_id + "/comments", {
         "content": content,
         "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
       }, function(result){
         if (result.status == "ok"){
           $.get("/posts/" + post_id + "/comments", function(result){
-            t.parent().find(".comments-list").html("");
-            var ar = {
-              "comments" : ko.observableArray(result)
-            };
-            ko.applyBindings(ar, t.parent().find(".comments-list")[0]);
+            comments_block.find(".comments-list").html("");
+            var ar = {"comments": ko.observableArray(result)};
+            ko.applyBindings(ar, comments_block.find(".comments-list")[0]);
           });
-          t.find(".btn-primary").removeClass("disabled").html("发布评论");
-          t.find(".post").val("");
+          t.find(".btn-primary").removeClass("disabled").html("评论");
+          t.find(".reply").val("");
         }
       });
       return false;
@@ -153,8 +154,8 @@ $.posts = {
     }, function(){
       t.find(".post-bottom a").addClass("muted");
     });
-    t.find(".form-post").each(function(){
-      $.posts.initPostComment(this);
+    t.find(".form-reply").each(function(){
+      $.posts.initPostComment(t.find(".comments"), this);
     });
     t.find("a[data-toggle='comments-link']").each(function(){
       $.posts.bindCommentLink(t.find(".comments"), this);
@@ -166,8 +167,8 @@ $.posts = {
     t.find("a[data-toggle='like-link']").each(function(){
       $.posts.bindLikeLink(this);
     });
-    t.find(".form-post").each(function(){
-      $.posts.initPostComment(this);
+    t.find(".form-reply").each(function(){
+      $.posts.initPostComment(t.find(".comments"), this);
     });
   }
 };

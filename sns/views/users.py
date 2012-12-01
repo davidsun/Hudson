@@ -11,13 +11,13 @@ from sns.views.forms.users import Edit
 
 @process_login_user
 @jsonize
-def follow(request, user_id) :
-    if request.user.id != int(user_id) :
-	user = get_object_or_404(User, pk=user_id)
-	user.followers.get_or_create(follower_id=request.user.id)
+def follow(request, user_id):
+    if request.user.id != int(user_id):
+        user = get_object_or_404(User, pk=user_id)
+        user.followers.get_or_create(follower_id=request.user.id)
         return {'status': 'ok'}
-    else :
-    	return {'status':'error'}
+    else:
+        return {'status': 'error'}
 
 
 @process_login_user

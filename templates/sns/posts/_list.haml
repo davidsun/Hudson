@@ -18,16 +18,17 @@
         %span.muted ·
         %span.muted {{ post.created_at|date:"m-d H:i" }}  
     .clearfix.comments
-      .comments-list{"data-bind":'template: { foreach : comments, name : "comments-template" }'}
-      %form.form-post{"post-id":"{{post.id}}"}
+      .comments-list{"data-bind":'template:{ foreach:comments, name:"comments-template" }'}
+      %script#comments-template{"type":"text/html"}
+        .comment.clearfix
+          %span{"data-bind":"html:content"}
+          %span -
+          %a{"data-bind":'text:user.username, attr:{href:"/users/" + user_id + "/"}'}
+          %span.muted{"data-bind":'text:new Date(created_at).format("mm-dd HH:MM")'}
+      %form.form-inline.form-reply{"post-id":"{{post.id}}"}
         - csrf_token
-        %textarea.post{rows:1,placeholder:'评论...'}
+        %input.input-xlarge.reply{type:'text', placeholder:'评论...'}
         %button.btn.btn-primary{type:'submit'} 评论
-    %script{"type":"text/html","id":"comments-template"}
-      .comment.clearfix
-        %span{"data-bind":"html: content"}
-        %span.muted -
-        %a{"data-bind":"text: username, attr:{href: user_link}"}
     :javascript
       $(".post-{{ post.id }}").showListPost();
     

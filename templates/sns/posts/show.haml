@@ -7,32 +7,35 @@
 - block content
   .row-fluid
     .posts-show-post{class:"post-{{ post.id }}"}
-      .clearfix.post-top
-        %a.pull-left{href:"{% url sns.views.users.show post.user.id %}" } 
-        	{{ post.user.username }}
-      .clearfix
-        .content.pull-left {{post.content|at_users}}
-      .clearfix.post-bottom
-        %span.muted {{ post.created_at|date:"m-d H:i" }}
-        %span.muted ·
-        %a{"data-toggle":"like-link", href:"javascript:void(0);", liked:"{{post.liked|lower}}", "post-id":"{{post.id}}"} 收藏
+      .post-info
+        .clearfix.post-top
+          %a.pull-left{href:"{% url sns.views.users.show post.user.id %}" } 
+          	{{ post.user.username }}
+        .clearfix
+          .content.pull-left {{post.content|at_users}}
+        .clearfix.post-bottom
+          %span.muted {{ post.created_at|date:"m-d H:i" }}
+          %span.muted ·
+          %a{"data-toggle":"like-link", href:"javascript:void(0);", liked:"{{post.liked|lower}}", "post-id":"{{post.id}}"} 收藏
       .clearfix.comments
-        .comments-list{"data-bind":'template: { foreach : comments, name : "comments-template" }'}
+        .comments-list{"data-bind":'template: {foreach: comments, name: "comments-template"}'}
           - for comment in comments
-            .clearfix
+            .comment.clearfix
               %span {{comment.content|at_users}}
-              %span.muted -
+              %span -
               %a{href:"{% url sns.views.users.show comment.user.id %}" }
                 {{ comment.user.username }}
-        %form.form-post{"post-id":"{{post.id}}"}
+              %span.muted {{ comment.created_at|date:"m-d H:i"}}
+        %script{type:"text/html", id:"comments-template"}
+          .comment.clearfix
+            %span{"data-bind":"html: content"}
+            %span -
+            %a{"data-bind":'text:user.username, attr:{href:"/users/" + user_id + "/"}'}
+            %span.muted{"data-bind":'text:new Date(created_at).format("mm-dd HH:MM")'}
+        %form.form-inline.form-reply{"post-id":"{{post.id}}"}
           - csrf_token
-          %textarea.input-comment.post{rows:1,placeholder:'评论...'}
+          %input.input-xlarge.reply{type:"text", placeholder:'评论...'}
           %button.btn.btn-primary{type:'submit'} 评论
-      %script{"type":"text/html","id":"comments-template"}
-        .comment.clearfix
-          %span{"data-bind":"html: content"}
-          %span.muted -
-          %a{"data-bind":"text: username, attr:{href: user_link}"}
       :javascript
       	$(".post-{{ post.id }}").showSinglePost();
 

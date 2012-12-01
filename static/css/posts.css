@@ -40,12 +40,25 @@
 .posts-list-post .post-bottom{
     font-size: 14px;
 }
+.posts-list-post .comments{
+    font-size: 14px;
+    line-height: 21px;
+    margin: 6px 16px;
+    padding: 4px 20% 2px 4px;
+    border-top: 1px dashed #E5E5E5;
+}
+.posts-list-post .comments .comment{
+    padding: 2px 0;
+}
+.posts-list-post .form-reply{
+    padding-top: 5px;
+}
+
 
 /*
  * sns/posts/show
  */
 .posts-show-post{
-    border-bottom: 1px solid #E5E5E5;
     padding: 10px;
 }
 .posts-show-post .post-top{
@@ -60,6 +73,18 @@
     font-size: 18px;
     line-height: 24px;
 }
-.posts-show-post .input-comment{
-    width: 736px;
+.posts-show-post .post-info{
+    border-bottom: 1px solid #E5E5E5;
+    padding-bottom: 10px;
+}
+.posts-show-post .comments{
+    font-size: 14px;
+    line-height: 21px;
+    padding: 4px 20% 2px 4px;
+}
+.posts-show-post .comments .comment{
+    padding: 2px 0;
+}
+.posts-show-post .form-reply{
+    padding-top: 5px;
 }

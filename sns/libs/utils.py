@@ -1,21 +1,83 @@
 #-*- coding:utf-8 -*-
 
 import re
-import json
-from functools import wraps
+import types
 
+from decimal import *
+from django.core.serializers.json import DateTimeAwareJSONEncoder
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db import models
+from django.db.models.fields.related import ForeignKey
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import simplejson as json
+from functools import wraps
+
+
+def json_encode(data):
+    """
+    TODO: Move DATA_BINDING to each model.
+    """
+    DATA_BINDING = {
+        "PostComment": ["content", "created_at", "id", "post_id", "updated_at", "user", "user_id"],
+        "User": ["id", "username"]
+    }
+
+    def _any(data):
+        ret = None
+        if type(data) is types.ListType:
+            ret = _list(data)
+        elif type(data) is types.DictType:
+            ret = _dict(data)
+        elif isinstance(data, Decimal):
+            # json.dumps() cant handle Decimal
+            ret = str(data)
+        elif isinstance(data, models.query.QuerySet):
+            # Actually its the same as a list ...
+            ret = _list(data)
+        elif isinstance(data, models.Model):
+            ret = _model(data)
+        else:
+            ret = data
+        return ret
+
+    def _model(data):
+        ret = {}
+        avail_attributes = []
+        if data.__class__.__name__ in DATA_BINDING:
+            avail_attributes = DATA_BINDING[data.__class__.__name__]
+
+        for f in data._meta.fields:
+            if len(avail_attributes) == 0 or f.attname in avail_attributes:
+                ret[f.attname] = _any(getattr(data, f.attname))
+            # Hack into Django's structure ...
+            if isinstance(f, ForeignKey) and (len(avail_attributes) == 0 or f.name in avail_attributes) and ('_' + f.name + '_cache') in dir(data):
+                ret[f.name] = _any(getattr(data, f.name))
+        return ret
+
+    def _list(data):
+        ret = []
+        for v in data:
+            ret.append(_any(v))
+        return ret
+
+    def _dict(data):
+        ret = {}
+        for k, v in data.items():
+            ret[k] = _any(v)
+        return ret
+
+    ret = _any(data)
+    return json.dumps(ret, cls=DateTimeAwareJSONEncoder)
 
 
 def jsonize(func):
     @wraps(func)
     def _(*args, **kwargs):
         result = func(*args, **kwargs)
-        return HttpResponse(json.dumps(result), mimetype="application/json")
+        return HttpResponse(json_encode(result), mimetype="application/json")
     return _
 
 
