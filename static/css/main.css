@@ -1,0 +1,15 @@
+.main-list-notification .content{
+    font: 18px;
+    line-height: 24px;
+    white-space: nowrap;
+    padding-left: 10px;
+    padding-right: 10px; 
+}
+.main-list-notification .notification .content{
+    padding: 3px 10px;
+}
+.main-list-notification .notification .content a{
+    display: inline;
+    padding: 0px;
+    color: #08C;
+}

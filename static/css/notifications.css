@@ -30,16 +30,3 @@
     border-bottom: 1px solid #E5E5E5;
 }
 
-.main-list-notification .content{
-    font: 18px;
-    line-height: 24px;
-    white-space:nowrap;
-    padding-left: 10px;
-    padding-right: 10px; 
-}
-
-.main-list-notification a{
-    display: inline;
-    padding: 0px;
-}
-

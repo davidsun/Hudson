@@ -25,7 +25,7 @@
               %ul.dropdown-menu.main-list-notification
                 - if request.user.new_notifications
                   - for notification in request.user.new_notifications
-                    %li
+                    %li.notification
                       .content {{notification.content|safe|at_users}}
                   %li.divider
                 %li
