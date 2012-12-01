@@ -58,6 +58,62 @@ $.posts = {
     }
   },
 
+  bindRepostLink: function(post_block, element){
+    var t = $(element);
+    var post_id = t.attr("post-id");
+
+    post_block = $(post_block);
+    t.click(function(){
+      if (post_block.find(".original").length > 0){
+        $(".modal-repost-post .original-post").html("<b>" + post_block.find(".original-username").html() + ": </b>" +
+          post_block.find(".original-content").html());
+        $(".modal-repost-post .content").val("//@" + $.trim(post_block.find(".username").html()) + " " + post_block.find(".content").text());
+      } else {
+        $(".modal-repost-post .original-post").html("<b>" + post_block.find(".username").html() + ": </b>" +
+          post_block.find(".content").html());
+        $(".modal-repost-post .content").val("//@" + $.trim(post_block.find(".username").html()));
+      }
+      $(".modal-repost-post button[type='submit']").addClass("btn-primary").removeClass("btn-success").html("发送");
+      $(".modal-repost-post").on("shown", function(){
+        $(this).find(".content").focus();
+      });
+      $(".modal-repost-post").modal('show');
+      $(".modal-repost-post").unbind("submit").submit(function(){
+        var t = $(this);
+        var content = t.find(".content").val();
+        var error = "";
+
+        if (content.length === 0) error = "请输入您希望发布的内容...";
+        else if (content.length > 200) error = "您输入的内容太长了。";
+        if (error.length > 0){
+          t.find(".content").tooltip({
+            placement: 'top',
+            title: error,
+            trigger: "manual"
+          }).tooltip("show").data('tooltip').tip().css('z-index', 2080);
+          t.find(".content").unbind('click keydown').bind('click keydown', function(){
+            $(this).tooltip('destroy');
+          });
+          return false;
+        }
+        t.unbind("click").find("button[type='submit']").addClass("disabled").html("正在发送，请稍后...");
+        $.post("/posts", {
+          "content": content,
+          "original_id": post_id,
+          "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
+        }, function(result){
+          if (result.status == "ok"){
+            t.find("button[type='submit']").removeClass("disabled").removeClass("btn-primary").addClass("btn-success").html("发送成功！");
+            setTimeout(function(){
+              window.location.reload();
+            }, 1500);
+          }
+        });
+        return false;
+      });
+    });
+  },
+
   initPostComment: function(comments_block, element){
     var t = $(element);
     var post_id = t.attr("post-id");
@@ -148,6 +204,9 @@ $.posts = {
     t.find("a[data-toggle='like-link']").each(function(){
       $.posts.bindLikeLink(this);
     });
+    t.find("a[data-toggle='repost-link']").each(function(){
+      $.posts.bindRepostLink(t, this);
+    });
     t.find(".post-bottom a").addClass("muted");
     t.unbind('hover').hover(function(){
       t.find(".post-bottom a").removeClass("muted");
@@ -166,6 +225,9 @@ $.posts = {
     var t = $(element);
     t.find("a[data-toggle='like-link']").each(function(){
       $.posts.bindLikeLink(this);
+    });
+    t.find("a[data-toggle='repost-link']").each(function(){
+      $.posts.bindRepostLink(t, this);
     });
     t.find(".form-reply").each(function(){
       $.posts.initPostComment(t.find(".comments"), this);

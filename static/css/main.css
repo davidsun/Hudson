@@ -10,6 +10,18 @@
 }
 .main-list-notification .notification .content a{
     display: inline;
-    padding: 0px;
+    padding: 0;
     color: #08C;
+}
+.modal-repost-post .original-post{
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #F5F5F5;
+}
+.modal-repost-post textarea{
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
 }

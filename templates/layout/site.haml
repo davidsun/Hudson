@@ -18,6 +18,7 @@
     %script{"src": "#{STATIC_URL}js/jquery.debounce.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/jquery.attips.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/bootstrap.min.js", "type":"text/javascript"}
+    %script{"src": "#{STATIC_URL}js/purl.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/date.format.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/site.js", "type":"text/javascript"}
     %script{"src": "#{STATIC_URL}js/users.js", "type":"text/javascript"}
@@ -34,5 +35,15 @@
       %h3
     %div.modal-body
     %div.modal-footer
+      %button.btn{'data-dismiss':'modal'} 关闭
+  %form.modal-repost-post.modal.hide.fade{role:'dialog'}
+    %div.modal-header
+      %h3 转发
+    %div.modal-body
+      - csrf_token
+      .original-post
+      %textarea.content{name:'content'}
+    %div.modal-footer
+      %button.btn.btn-primary{type:'submit'} 转发
       %button.btn{'data-dismiss':'modal'} 关闭
   

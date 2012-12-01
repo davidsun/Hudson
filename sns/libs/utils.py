@@ -92,7 +92,7 @@ def posts_loader(template):
             result = func(*args, **kwargs)
 
             if 'posts' in result:
-                posts = result['posts']
+                posts = result['posts'].prefetch_related()
                 if offset > 0:
                     posts = posts.all()[offset:offset + DEFAULT_LIMIT]
                 else:
@@ -153,7 +153,7 @@ def notify_at_users(content, object_type, object_id, by_user):
             user = User.objects.get(username=username)
         except:
             continue
-        if not user:
+        if (not user) or (user.id == by_user.id):
             continue
         tmpl = get_notification_template(object_type, object_id)
         noti = tmpl % (by_user.username, content)

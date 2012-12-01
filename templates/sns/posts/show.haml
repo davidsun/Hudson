@@ -9,14 +9,24 @@
     .posts-show-post{class:"post-{{ post.id }}"}
       .post-info
         .clearfix.post-top
-          %a.pull-left{href:"{% url sns.views.users.show post.user.id %}" } 
+          %a.username.pull-left{href:"{% url sns.views.users.show post.user.id %}" } 
           	{{ post.user.username }}
         .clearfix
-          .content.pull-left {{post.content|at_users}}
+          .content {{post.content|at_users}}
+          - if post.original
+            .original{"post-id":"{{post.original.id}}"}
+              %b.original-username {{ post.original.user.username }}
+              %b :&nbsp
+              %span.original-content {{ post.original.content|at_users }}
         .clearfix.post-bottom
           %span.muted {{ post.created_at|date:"m-d H:i" }}
           %span.muted ·
           %a{"data-toggle":"like-link", href:"javascript:void(0);", liked:"{{post.liked|lower}}", "post-id":"{{post.id}}"} 收藏
+          %span.muted · 
+          - if post.original
+            %a{"data-toggle":"repost-link", href:"javascript:void(0);", "post-id":"{{post.original.id}}"} 转发
+          - else
+            %a{"data-toggle":"repost-link", href:"javascript:void(0);", "post-id":"{{post.id}}"} 转发
       .clearfix.comments
         .comments-list{"data-bind":'template: {foreach: comments, name: "comments-template"}'}
           - for comment in comments
