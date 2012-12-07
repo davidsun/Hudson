@@ -3,7 +3,8 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.contrib.auth.models import User
 from django.template import RequestContext
-from sns.models import Post, PostLike
+from django.db.models import Count
+from sns.models import Post, PostLike, PostTag
 from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login_user, filter_at_users
 
 
@@ -45,6 +46,11 @@ def unlike(request, post_id):
 def show(request, post_id):
     post = Post.objects.get(id=post_id)
     post.liked = post.likes.filter(user_id=request.user.id).count() > 0
+    if post.tags.filter(user_id=request.user.id).count() > 0:
+        post.user_tag = post.tags.filter(user_id=request.user.id)[0].content
+    else:
+        post.user_tag = None
+    post.tags_list = list(post.tags.values('content').annotate(count=Count('content')))
     comments = list(post.comments.all())
     return render_to_response('sns/posts/show', {'post': post, 'comments': comments}, context_instance=RequestContext(request))
 
@@ -69,6 +75,28 @@ def comments(request, post_id):
         for comment in comments:
             comment.content = filter_at_users(comment.content)
         return comments
+
+
+@process_login_user
+@jsonize
+def tags(request, post_id):
+    if request.method == 'POST':
+        content = request.POST['content']
+        if content in PostTag.VALID_TAGS:
+            post = get_object_or_404(Post, pk=post_id)
+            post.tags.filter(user_id=request.user.id).delete();
+            tag = post.tags.get_or_create(user_id=request.user.id,content=content)
+            return {'status': 'ok'}
+        else:
+            return {'status': 'error'}
+    else:
+        post = get_object_or_404(Post,pk=post_id)
+        tags = list(post.tags.values('content').annotate(count=Count('content')))
+        if post.tags.filter(user_id=request.user.id).count() > 0:
+            user_tag = post.tags.filter(user_id=request.user.id)[0].content
+        else:
+            user_tag = None
+        return {"tags":tags, "user_tag":user_tag}
 
 
 @process_login_user

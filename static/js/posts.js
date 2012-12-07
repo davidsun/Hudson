@@ -27,6 +27,32 @@ $.posts = {
     });
   },
 
+  bindTagLink: function(tags_block, add_tag_block, element){
+    var t = $(element);
+    var post_id = t.attr("post-id");
+    var content = t.html();
+    content = content.replace(/(^\s*)|(\s*$)/g, "");
+    t.unbind("click").click(function(){
+      $.post("/posts/" + post_id + "/tags", {
+        "content": content,
+        "csrfmiddlewaretoken": add_tag_block.find("input[name='csrfmiddlewaretoken']").val()
+      },function(result){
+        if (result.status == "ok"){
+          $.get("/posts/" + post_id + "/tags", function(result){
+            if (result.user_tag == null) result.user_tag = "加标签";
+            else result.user_tag =  "标签:"+result.user_tag;
+            for (var i = 0; i < result.tags.length; i ++)
+              result.tags[i].content += '(' + result.tags[i].count + ')';
+            result.tags = ko.observableArray(result.tags);
+            tags_block.html("");
+            ko.applyBindings(result, tags_block[0]);
+            ko.applyBindings(result, add_tag_block[0]);
+          });
+        }
+      });  
+    });
+  },
+
   bindLikeLink: function(element){
     var t = $(element);
     var post_id = t.attr("post-id");
@@ -73,9 +99,9 @@ $.posts = {
           post_block.find(".content").html());
         $(".modal-repost-post .content").val("//@" + $.trim(post_block.find(".username").html()));
       }
-      $(".modal-repost-post button[type='submit']").addClass("btn-primary").removeClass("btn-success").html("发送");
+      $(".modal-repost-post button[type='submit']").addClass("b.atTips()tn-primary").removeClass("btn-success").html("发送");
       $(".modal-repost-post").on("shown", function(){
-        $(this).find(".content").focus();
+        $(this).find(".content").focus().atTips();
       });
       $(".modal-repost-post").modal('show');
       $(".modal-repost-post").unbind("submit").submit(function(){
@@ -219,6 +245,9 @@ $.posts = {
     t.find("a[data-toggle='comments-link']").each(function(){
       $.posts.bindCommentLink(t.find(".comments"), this);
     });
+    t.find("a[data-toggle='tag-link']").each(function(){
+      $.posts.bindTagLink(t.find(".post-tags"),t.find(".add-tag"),this)
+    });
   },
 
   showSingle: function(element){
@@ -231,6 +260,9 @@ $.posts = {
     });
     t.find(".form-reply").each(function(){
       $.posts.initPostComment(t.find(".comments"), this);
+    });
+    t.find("a[data-toggle='tag-link']").each(function(){
+      $.posts.bindTagLink(t.find(".post-tags"),t.find(".add-tag"),this)
     });
   }
 };

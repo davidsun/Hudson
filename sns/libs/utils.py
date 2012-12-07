@@ -7,13 +7,15 @@ from decimal import *
 from django.core.serializers.json import DateTimeAwareJSONEncoder
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db import models
+from django.db import models 
+from django.db.models import Count
 from django.db.models.fields.related import ForeignKey
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson as json
 from functools import wraps
+from sns.models import PostTag
 
 
 def json_encode(data):
@@ -100,8 +102,12 @@ def posts_loader(template):
                 posts = list(posts)
                 for post in posts:
                     post.liked = post.likes.filter(user_id=request.user.id).count() > 0
-                for post in posts:
                     post.comments_count = post.comments.count()
+                    if post.tags.filter(user_id=request.user.id).count() > 0:
+                        post.user_tag = post.tags.filter(user_id=request.user.id)[0].content
+                    else:
+                        post.user_tag = None
+                    post.tags_list = list(post.tags.values('content').annotate(count=Count('content')))
                 result['posts'] = posts
 
             if offset > 0:

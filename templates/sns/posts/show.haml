@@ -18,6 +18,11 @@
               %b.original-username {{ post.original.user.username }}
               %b :&nbsp
               %span.original-content {{ post.original.content|at_users }}
+        .clearfix.post-tags{"data-bind":'template:{ foreach:tags, name:"tags-template"}'}
+          - for tag in post.tags_list
+            %span.label.tag-label {{tag.content}}({{tag.count}})
+        %script#tags-template{"type":"text/html"}
+          %span.label.tag-label{"data-bind":"text:content"}
         .clearfix.post-bottom
           %span.muted {{ post.created_at|date:"m-d H:i" }}
           %span.muted ·
@@ -27,6 +32,19 @@
             %a{"data-toggle":"repost-link", href:"javascript:void(0);", "post-id":"{{post.original.id}}"} 转发
           - else
             %a{"data-toggle":"repost-link", href:"javascript:void(0);", "post-id":"{{post.id}}"} 转发
+          %span.muted ·
+          %span.add-tag.dropdown
+            %a.user-tag.dropdown-toggle{href:"javascript:void(0);", "data-toggle":"dropdown","data-bind":"text:user_tag"} 
+              - if post.user_tag
+                标签:{{post.user_tag}}
+              - else
+                加标签
+            %ul.dropdown-menu
+              - csrf_token
+              - for tag in post.VALID_TAGS
+                %li
+                  %a{"data-toggle":"tag-link", href:"javascript:void(0);", "post-id":"{{post.id}}"}
+                    {{tag}}
       .clearfix.comments
         .comments-list{"data-bind":'template: {foreach: comments, name: "comments-template"}'}
           - for comment in comments
