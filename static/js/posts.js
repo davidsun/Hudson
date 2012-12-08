@@ -31,25 +31,37 @@ $.posts = {
     var t = $(element);
     var post_id = t.attr("post-id");
     var content = t.html();
-    content = content.replace(/(^\s*)|(\s*$)/g, "");
+    var content = content.replace(/(^\s*)|(\s*$)/g, "");
+    var callbackFunc = function(result){
+      if (result.status == "ok"){
+        $.get("/posts/" + post_id + "/tags", function(result){
+          if (result.user_tag == null) {
+            result.user_tag = "加标签";
+            add_tag_block.find(".untag").hide();
+          } else {
+            result.user_tag =  "标签:"+result.user_tag;
+            add_tag_block.find(".untag").show();
+          }
+          for (var i = 0; i < result.tags.length; i ++)
+            result.tags[i].content += '(' + result.tags[i].count + ')';
+          result.tags = ko.observableArray(result.tags);
+          tags_block.html("");
+          ko.applyBindings(result, tags_block[0]);
+          ko.applyBindings(result, add_tag_block[0]);
+        });
+      }
+    };
     t.unbind("click").click(function(){
-      $.post("/posts/" + post_id + "/tags", {
-        "content": content,
-        "csrfmiddlewaretoken": add_tag_block.find("input[name='csrfmiddlewaretoken']").val()
-      },function(result){
-        if (result.status == "ok"){
-          $.get("/posts/" + post_id + "/tags", function(result){
-            if (result.user_tag == null) result.user_tag = "加标签";
-            else result.user_tag =  "标签:"+result.user_tag;
-            for (var i = 0; i < result.tags.length; i ++)
-              result.tags[i].content += '(' + result.tags[i].count + ')';
-            result.tags = ko.observableArray(result.tags);
-            tags_block.html("");
-            ko.applyBindings(result, tags_block[0]);
-            ko.applyBindings(result, add_tag_block[0]);
-          });
-        }
-      });  
+      if (content == "删除标签"){
+        $.post("/posts/" + post_id + "/untag", { 
+          "csrfmiddlewaretoken": add_tag_block.find("input[name='csrfmiddlewaretoken']").val()
+        },callbackFunc);
+      } else {
+        $.post("/posts/" + post_id + "/tags", {
+          "content": content,
+          "csrfmiddlewaretoken": add_tag_block.find("input[name='csrfmiddlewaretoken']").val()
+        },callbackFunc);  
+      }
     });
   },
 

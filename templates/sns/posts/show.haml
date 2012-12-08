@@ -50,6 +50,16 @@
                 %li
                   %a{"data-toggle":"tag-link", href:"javascript:void(0);", "post-id":"{{post.id}}"}
                     {{tag}}
+              - if post.user_tag
+                .untag
+                  %li.divider
+                  %li
+                    %a{"data-toggle":"tag-link", href:"javascript:void(0);", "post-id":"{{post.id}}"} 删除标签
+              - else 
+                .untag.hide
+                  %li.divider
+                  %li
+                    %a{"data-toggle":"tag-link", href:"javascript:void(0);", "post-id":"{{post.id}}"} 删除标签
       .clearfix.comments
         .comments-list{"data-bind":'template: {foreach: comments, name: "comments-template"}'}
           - for comment in comments

@@ -129,6 +129,13 @@ def tags(request, post_id):
             user_tag = None
         return {"tags": tags, "user_tag": user_tag}
 
+@process_login_user 
+@jsonize
+def untag(request, post_id):
+    if request.method == 'POST':
+        post = get_object_or_404(Post, pk=post_id)
+        post.tags.filter(user_id=request.user.id).delete()
+        return {'status': 'ok'}
 
 @process_login_user
 @posts_loader('sns/posts/liked')
