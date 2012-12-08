@@ -6,16 +6,19 @@
 - block center_content
   .users-index-left
     %legend 发布我的新鲜事
-    %ul#myPost.nav.nav-tabs
+    %ul#myPost.nav.nav-pills.nav-post-news
       %li.active
         %a{href:"#normal",data-toggle:"tab"}
           %i.icon-comment
+          状态
       %li
         %a{href:"#image",data-toggle:"tab"}
           %i.icon-picture
+          图片
       %li
         %a{href:"#video",data-toggle:"tab"}
           %i.icon-facetime-video
+          视频
     .tab-content
       #normal.tab-pane.fade.in.active
         %form.form-post
@@ -25,17 +28,15 @@
       #image.tab-pane.fade
         %form.form-post
           - csrf_token
-          %textarea.post{rows:3,placeholder:'你要发布图片？'}
-          图片链接：
-          %input.post-image{placeholder:'图片链接地址'}
+          %textarea.post{rows:3,placeholder:'描述一下这幅图片吧...'}
+          %input.input-xlarge.post-image{type:'text', placeholder:'图片链接'}
           %br
           %button.btn.btn-primary{type:'submit'} 发布 
       #video.tab-pane.fade
         %form.form-post
           - csrf_token
-          %textarea.post{rows:3,placeholder:'你想发布视频？'}
-          视频链接：
-          %input.post-video{placeholder:'视频所在地址'}
+          %textarea.post{rows:3,placeholder:'描述一下这个视频吧...'}
+          %input.input-xlarge.post-video{type:'text', placeholder:'视频链接'}
           %br
           %button.btn.btn-primary{type:'submit'} 发布 
     :javascript
@@ -54,7 +55,7 @@
         if (type=='image') {
           video_link="";
           if (image_link.length > 200) error = "您输入的图片链接地址太长了。";
-          if (image_link.length == 0) error = "请输入您希望发布的图片链接地址...";
+          if (image_link.length == 0) error = "请输入您希望发布的图片链接...";
           if (error.length > 0){
             $(this).find(".post-image").tooltip({
               placement: 'top',
@@ -70,7 +71,7 @@
         if (type=='video') {
           image_link="";
           if (video_link.length > 200) error = "您输入的视频所在地址太长了。";
-          if (video_link.length == 0) error = "请输入您希望发布的视频所在地址...";
+          if (video_link.length == 0) error = "请输入您希望发布的视频链接...";
           if (error.length > 0){
             $(this).find(".post-video").tooltip({
               placement: 'top',

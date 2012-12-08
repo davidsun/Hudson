@@ -23,10 +23,13 @@
 /* 
  * sns/users/index 
  */
-.users-index-left .form-post .post{
+.users-index-left .form-post .post,
+.users-index-left .form-post .post-image,
+.users-index-left .form-post .post-video{
     font-size: 20px;
     line-height: 26px;
     padding: 8px;
+    height: auto;
     width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -35,6 +38,9 @@
 }
 .users-index-left .section-news{
     padding-top: 20px;
+}
+.users-index-left .nav-post-news{
+    margin-bottom: 5px;
 }
 .users-index-left .section-news h1{
     padding-bottom: 8px;

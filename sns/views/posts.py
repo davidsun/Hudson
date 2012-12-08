@@ -8,28 +8,29 @@ from sns.models import Post, PostLike, PostTag
 from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login_user, filter_at_users
 import re
 
-video_params = {
-    'youku':('http://player.youku.com/player.php/sid/', lambda elements: [element[3:] for element in elements if element.startswith('id_')][0], '/v.swf'),
-    'tudou':('http://http://www.tudou.com/a/', lambda elements: '', '/v.swf')
+
+VIDEO_PARAMS = {
+    'youku': ('http://player.youku.com/player.php/sid/', lambda elements: [element[3:] for element in elements if element.startswith('id_')][0], '/v.swf'),
+    'tudou': ('http://http://www.tudou.com/a/', lambda elements: '', '/v.swf')
 }
+
 
 def get_video_link_type(elements):
     for element in elements:
-        if element in video_params:
+        if element in VIDEO_PARAMS:
             return element
+
 
 def get_normalized_video_link(raw_video_link):
     if len(raw_video_link) == 0:
         return '', 0
     elements = re.split(r'\W+', raw_video_link)
-    print elements
     video_type = get_video_link_type(elements)
-    print video_type
-    if not video_type in video_params:
+    if not video_type in VIDEO_PARAMS:
         return '', -1
-    video_link = video_params[video_type][0] + video_params[video_type][1](elements) + video_params[video_type][2]
-    print video_link
+    video_link = VIDEO_PARAMS[video_type][0] + VIDEO_PARAMS[video_type][1](elements) + VIDEO_PARAMS[video_type][2]
     return video_link, 0
+
 
 @process_login_user
 @jsonize
@@ -49,9 +50,7 @@ def index(request):
             if (Post.objects.filter(original_id=original_id).count() == 0):
                 return {'status': 'error'}
             original_id = int(request.POST.get('original_id'))
-        print content, image_link, video_link
         post = request.user.posts.create(content=content, original_id=original_id, image_link=image_link, video_link=video_link)
-        print 'ok'
 
         # get users who has been @, and send notification to them
         notify_at_users(content, "post", post.id, request.user)
@@ -115,19 +114,19 @@ def tags(request, post_id):
         content = request.POST['content']
         if content in PostTag.VALID_TAGS:
             post = get_object_or_404(Post, pk=post_id)
-            post.tags.filter(user_id=request.user.id).delete();
-            tag = post.tags.get_or_create(user_id=request.user.id,content=content)
+            post.tags.filter(user_id=request.user.id).delete()
+            post.tags.get_or_create(user_id=request.user.id, content=content)
             return {'status': 'ok'}
         else:
             return {'status': 'error'}
     else:
-        post = get_object_or_404(Post,pk=post_id)
+        post = get_object_or_404(Post, pk=post_id)
         tags = list(post.tags.values('content').annotate(count=Count('content')))
         if post.tags.filter(user_id=request.user.id).count() > 0:
             user_tag = post.tags.filter(user_id=request.user.id)[0].content
         else:
             user_tag = None
-        return {"tags":tags, "user_tag":user_tag}
+        return {"tags": tags, "user_tag": user_tag}
 
 
 @process_login_user
