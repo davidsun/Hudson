@@ -14,6 +14,10 @@
               %a{href:"{% url sns.views.users.show request.user.id %}"} 个人主页
             %li
               %a{href:"{% url sns.views.posts.liked %}"} 我的收藏
+            {%if request.user and request.user.is_superuser%}
+            %li
+              %a{href:"{% url sns.views.statistics.index %}"} 统计
+            {%endif%}
           %ul.nav.pull-right
             %li.divider-vertical
             %li.dropdown
