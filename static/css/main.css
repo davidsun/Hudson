@@ -25,3 +25,7 @@
     -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+.main-attips-dropdown-menu{
+    z-index: 10000;
+}

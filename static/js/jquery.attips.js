@@ -58,7 +58,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
         debounce: 150,
         api: '/users/contact/%s',
         items: 8,
-        menu: '<ul class="typeahead dropdown-menu"></ul>',
+        menu: '<ul class="typeahead dropdown-menu main-attips-dropdown-menu"></ul>',
         item: '<li><a href="#"></a></li>',
         minLength: 0,
         wrapper: '<div class="at-tips-wrapper"></div>'
