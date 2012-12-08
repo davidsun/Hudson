@@ -1,0 +1,69 @@
+- extends "layout/main"
+
+- block title
+  统计
+
+- block center_content
+  .stats-wrapper
+    #stats
+    %p.stats-info
+      共计{{total}}
+
+- block right_content
+  .stats-panel
+    %form.stats-form
+      %fieldset
+        %legend Dashboard
+        %label.control-label 关键词
+        %input.{type:'text', name:'q', value:"{{q}}"}
+        %label.control-label 起始日期
+        %input.datepicker{type:'text', name:'startdate', value:"{{startdate}}"}
+        %label.control-label 终止日期
+        %input.datepicker{type:'text', name:'enddate', value: "{{enddate}}"}
+      .p
+        %input.btn.btn-primary{type:'submit', value: '查询'}
+
+  :javascript
+    $(document).ready(function () {
+      $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true
+      })
+      chart = new Highcharts.Chart({
+        chart: {
+          renderTo: 'stats',
+          defaultSeriesType: 'column',
+          zoomType: "xy"
+        },
+        title: {
+          text: 'Statistics'
+        },
+        {%if q %}
+          subtitle: {
+              text: '包含「{{q}}」'
+          },
+        {% endif %}
+        xAxis: {
+          type: 'datetime',
+        },
+        yAxis: {
+          title: {
+            text: 'Posts'
+          }
+        },
+        tooltip: {
+          formatter: function () {
+            return '' +
+            this.series.name + ': ' + this.y + '';
+          }
+        },
+        credits: {
+          enabled: false
+        },
+        series: [{
+          name: 'Posts',
+          data: {{data}}
+        }]
+      });
+    });

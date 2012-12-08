@@ -34,3 +34,7 @@ urlpatterns += patterns('sns.views.messages',
 urlpatterns += patterns('sns.views.notifications',
     url(r'^notifications/?$', 'index'),
 )
+
+urlpatterns += patterns('sns.views.statistics',
+    url(r'^statistics/?$', 'index'),
+)
