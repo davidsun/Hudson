@@ -84,6 +84,8 @@ def jsonize(func):
 
 
 def generate_additional_content(post):
+    if post.original:
+        post = post.original
     if len(post.video_link) > 0:
         return "<embed src=\"" + post.video_link + "\" quality=\"high\" width=\"480\" height=\"400\" align=\"middle\" allowScriptAccess=\"always\" allowFullScreen=\"true\" mode=\"transparent\" type=\"application/x-shockwave-flash\"></embed>"
     if len(post.image_link) > 0:
