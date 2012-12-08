@@ -12,6 +12,8 @@
           %b.original-username {{ post.original.user.username }}
           %b :&nbsp
           %span.original-content {{ post.original.content|at_users }}
+    .clearfix
+      =post.additional_content|safe
     .clearfix.post-bottom
       .pull-left{style:"display:inline"}
         %span.post-tags{"data-bind":'template:{ foreach:tags, name:"tags-template"}'}
