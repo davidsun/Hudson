@@ -5,18 +5,89 @@
 
 - block center_content
   .users-index-left
-    %form.form-post
-      - csrf_token
-      %legend 发布我的新鲜事
-      %textarea.post{rows:3,placeholder:'写些什么吧...'}
-      %button.btn.btn-primary{type:'submit'} 发布 
+    %legend 发布我的新鲜事
+    %ul#myPost.nav.nav-tabs
+      %li.active
+        %a{href:"#normal",data-toggle:"tab"}
+          %i.icon-comment
+      %li
+        %a{href:"#image",data-toggle:"tab"}
+          %i.icon-picture
+      %li
+        %a{href:"#video",data-toggle:"tab"}
+          %i.icon-facetime-video
+    .tab-content
+      #normal.tab-pane.fade.in.active
+        %form.form-post
+          - csrf_token
+          %textarea.post{rows:3,placeholder:'写些什么吧...'}
+          %button.btn.btn-primary{type:'submit'} 发布 
+      #image.tab-pane.fade
+        %form.form-post
+          - csrf_token
+          %textarea.post{rows:3,placeholder:'你要发布图片？'}
+          图片链接：
+          %input.post-image{placeholder:'图片链接地址'}
+          %br
+          %button.btn.btn-primary{type:'submit'} 发布 
+      #video.tab-pane.fade
+        %form.form-post
+          - csrf_token
+          %textarea.post{rows:3,placeholder:'你想发布视频？'}
+          视频链接：
+          %input.post-video{placeholder:'视频所在地址'}
+          %br
+          %button.btn.btn-primary{type:'submit'} 发布 
     :javascript
       $(".post").atTips()
       $(".form-post").submit(function(){
         var content = $(this).find(".post").val();
+        var image_link = $(this).find(".post-image").val();
+        var video_link = $(this).find(".post-video").val();
+        type = this.parentNode.id
         var error = "";
+
+        if (type=='normal') {
+          image_link="";
+          video_link="";
+        }
+        if (type=='image') {
+          video_link="";
+          if (image_link.length > 200) error = "您输入的图片链接地址太长了。";
+          if (image_link.length == 0) error = "请输入您希望发布的图片链接地址...";
+          if (error.length > 0){
+            $(this).find(".post-image").tooltip({
+              placement: 'top',
+              title: error, 
+              trigger: "manual",
+            }).tooltip("show");
+            $(this).find(".post-image").unbind('click keydown').bind('click keydown', function(){
+              $(this).tooltip('destroy');
+            });
+            return false;
+          }
+        }
+        if (type=='video') {
+          image_link="";
+          if (video_link.length > 200) error = "您输入的视频所在地址太长了。";
+          if (video_link.length == 0) error = "请输入您希望发布的视频所在地址...";
+          if (error.length > 0){
+            $(this).find(".post-video").tooltip({
+              placement: 'top',
+              title: error, 
+              trigger: "manual",
+            }).tooltip("show");
+            $(this).find(".post-video").unbind('click keydown').bind('click keydown', function(){
+              $(this).tooltip('destroy');
+            });
+            return false;
+          }
+        }
+
+        // Common
+        if (content.length > 200) error = "您输入的内容太长了。";
         if (content.length == 0) error = "请输入您希望发布的内容...";
-        else if (content.length > 200) error = "您输入的内容太长了。";
+
         if (error.length > 0){
           $(this).find(".post").tooltip({
             placement: 'top',
@@ -31,6 +102,8 @@
         $(this).find(".btn-primary").addClass("disabled").html("正在发布，请稍后...");
         $.post("/posts", {
           "content": content,
+          "image_link": image_link,
+          "video_link": video_link,
           "csrfmiddlewaretoken": $(this).find("input[name='csrfmiddlewaretoken']").val()
         }, function(result){
           if (result.status == "ok"){

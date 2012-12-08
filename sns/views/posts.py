@@ -6,21 +6,52 @@ from django.template import RequestContext
 from django.db.models import Count
 from sns.models import Post, PostLike, PostTag
 from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login_user, filter_at_users
+import re
 
+video_params = {
+    'youku':('http://player.youku.com/player.php/sid/', lambda elements: [element[3:] for element in elements if element.startswith('id_')][0], '/v.swf'),
+    'tudou':('http://http://www.tudou.com/a/', lambda elements: '', '/v.swf')
+}
+
+def get_video_link_type(elements):
+    for element in elements:
+        if element in video_params:
+            return element
+
+def get_normalized_video_link(raw_video_link):
+    if len(raw_video_link) == 0:
+        return '', 0
+    elements = re.split(r'\W+', raw_video_link)
+    print elements
+    video_type = get_video_link_type(elements)
+    print video_type
+    if not video_type in video_params:
+        return '', -1
+    video_link = video_params[video_type][0] + video_params[video_type][1](elements) + video_params[video_type][2]
+    print video_link
+    return video_link, 0
 
 @process_login_user
 @jsonize
 def index(request):
     if request.method == 'POST':
-        if len(request.POST.get('content', '')) <= 0 or len(request.POST.get('content', '')) > 200:
+        content = request.POST.get('content', '')
+        image_link = request.POST.get('image_link', '')
+        video_link, status = get_normalized_video_link(request.POST.get('video_link', ''))
+        if status != 0:
+            return {'status': 'error'}
+        if len(content) <= 0 or len(content) > 200 or len(image_link) > 200 or len(video_link) > 200:
+            return {'status': 'error'}
+        if len(image_link) > 0 and len(video_link) > 0:
             return {'status': 'error'}
         original_id = None
         if 'original_id' in request.POST:
             if (Post.objects.filter(original_id=original_id).count() == 0):
                 return {'status': 'error'}
             original_id = int(request.POST.get('original_id'))
-        content = request.POST['content']
-        post = request.user.posts.create(content=content, original_id=original_id)
+        print content, image_link, video_link
+        post = request.user.posts.create(content=content, original_id=original_id, image_link=image_link, video_link=video_link)
+        print 'ok'
 
         # get users who has been @, and send notification to them
         notify_at_users(content, "post", post.id, request.user)
