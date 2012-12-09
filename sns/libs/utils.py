@@ -83,15 +83,6 @@ def jsonize(func):
     return _
 
 
-def generate_additional_content(post):
-    if post.original:
-        post = post.original
-    if len(post.video_link) > 0:
-        return "<embed src=\"" + post.video_link + "\" quality=\"high\" width=\"480\" height=\"400\" align=\"middle\" allowScriptAccess=\"always\" allowFullScreen=\"true\" mode=\"transparent\" type=\"application/x-shockwave-flash\"></embed>"
-    if len(post.image_link) > 0:
-        return "<img src=\"" + post.image_link + "\">"
-    return ""
-
 def posts_loader(template):
     DEFAULT_LIMIT = 20
 
@@ -117,7 +108,6 @@ def posts_loader(template):
                     else:
                         post.user_tag = None
                     post.tags_list = list(post.tags.values('content').annotate(count=Count('content')))
-                    post.additional_content = generate_additional_content(post)
                 result['posts'] = posts
 
             if offset > 0:

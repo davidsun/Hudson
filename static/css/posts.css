@@ -36,6 +36,17 @@
     background: #F5F5F5;
     border: 1px solid #DFDFDF;
 }
+.posts-list-post .post-video-wrapper{
+    clear: both;
+    margin: 5px 0;
+}
+.posts-list-post .post-image{
+    clear: both;
+    border: 1px solid #DFDFDF;
+    background: white;
+    padding: 3px;
+    margin: 5px 0;
+}
 .posts-list-post:hover{
     background-color: #F5F5F5;
 }
@@ -84,6 +95,17 @@
     line-height: 48px;
     background: #F5F5F5;
     border: 1px solid #DFDFDF;
+}
+.posts-show-post .post-video-wrapper{
+    clear: both;
+    margin: 5px 0;
+}
+.posts-show-post .post-image{
+    clear: both;
+    border: 1px solid #DFDFDF;
+    background: white;
+    padding: 3px;
+    margin: 5px 0;
 }
 .posts-show-post .post-bottom{
     font-size: 18px;

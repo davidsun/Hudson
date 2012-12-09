@@ -15,14 +15,23 @@
           .content {{post.content|at_users}}
           - if post.original
             .original{"post-id":"{{post.original.id}}"}
-              %b.original-username {{ post.original.user.username }}
-              %b :&nbsp
-              %span.original-content {{ post.original.content|at_users }}
-              %br
-              =post.additional_content|safe
+              %div
+                %b.original-username {{ post.original.user.username }}
+                %b :&nbsp
+                %span.original-content {{ post.original.content|at_users }}
+              - if post.original.video_link
+                %div.post-video-wrapper
+                  %embed.post-video{src:"{{post.original.video_link}}", quality:"high", width:"480", height:"400", align:"middle", 
+                    allowScriptAccess:"always", allowFullScreen:"true", mode:"transparent", type:"application/x-shockwave-flash"}
+              - if post.original.image_link
+                %img.post-image{src:"{{post.original.image_link}}"}
           - else
-            %br
-            =post.additional_content|safe
+            - if post.video_link
+              %div.post-video-wrapper
+                %embed.post-video{src:"{{post.video_link}}", quality:"high", width:"480", height:"400", align:"middle",
+                  allowScriptAccess:"always", allowFullScreen:"true", mode:"transparent", type:"application/x-shockwave-flash"}
+            - if post.image_link
+              %img.post-image{src:"{{post.image_link}}"}
         .clearfix.post-tags{"data-bind":'template:{ foreach:tags, name:"tags-template"}'}
           - for tag in post.tags_list
             %span.label.tag-label {{tag.content}}({{tag.count}})

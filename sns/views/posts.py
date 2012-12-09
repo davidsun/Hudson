@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.db.models import Count
 from sns.models import Post, PostLike, PostTag
-from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login_user, filter_at_users, generate_additional_content
+from sns.libs.utils import jsonize, notify_at_users, posts_loader, process_login_user, filter_at_users
 import re
 
 
@@ -81,7 +81,6 @@ def show(request, post_id):
     else:
         post.user_tag = None
     post.tags_list = list(post.tags.values('content').annotate(count=Count('content')))
-    post.additional_content = generate_additional_content(post)
     comments = list(post.comments.all())
     return render_to_response('sns/posts/show', {'post': post, 'comments': comments}, context_instance=RequestContext(request))
 
@@ -129,13 +128,15 @@ def tags(request, post_id):
             user_tag = None
         return {"tags": tags, "user_tag": user_tag}
 
-@process_login_user 
+
+@process_login_user
 @jsonize
 def untag(request, post_id):
     if request.method == 'POST':
         post = get_object_or_404(Post, pk=post_id)
         post.tags.filter(user_id=request.user.id).delete()
         return {'status': 'ok'}
+
 
 @process_login_user
 @posts_loader('sns/posts/liked')
