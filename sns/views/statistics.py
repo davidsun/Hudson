@@ -2,11 +2,10 @@
 
 from datetime import date, datetime, timedelta
 
-from django.contrib.auth.models import User
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from sns.models import Post, PostLike, PostTag
-from sns.libs.utils import jsonize, process_login_user
+from sns.models import Post
+from sns.libs.utils import process_login_user
 
 
 @process_login_user
