@@ -28,7 +28,8 @@ urlpatterns += patterns('sns.views.posts',
 )
 
 urlpatterns += patterns('sns.views.messages',
-    url(r'^users/(?P<user_id>\d+)/messages/$', 'index'),
+    url(r'^users/(?P<user_id>\d+)/messages/?$', 'user_massage'),
+    url(r'^messages/?$', 'index'),
 )
 
 urlpatterns += patterns('sns.views.notifications',

@@ -1,0 +1,34 @@
+/*
+ * sns/messages/list
+ */
+.messages-list-message{
+    border-bottom: 1px solid #E5E5E5;
+    font-size: 17px;
+    line-height: 26px;
+    padding: 10px 12px;
+}
+
+.messages-list-message .username{
+    font-size: 18px;
+    line-height: 24px;
+    padding-right: 5px; 
+}
+
+.messages-list-message .content{
+    font-size: 18px;
+    line-height: 24px;
+}
+.messages-list-message .message-bottom{
+    font-size: 14px;
+}
+.messages-list-left .section{
+    padding-bottom: 50px;
+}
+.messages-list-left .section h1{
+    padding-bottom: 8px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #E5E5E5;
+}
+.messages-list-left .section .empty-result{
+    padding-top: 20px;
+}
