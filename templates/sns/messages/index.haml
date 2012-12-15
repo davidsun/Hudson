@@ -7,38 +7,43 @@
 - block center_content
   .messages-list-left
     .section
-      %h1 收到的留言
-      - if received_messages
-        - for message in received_messages
-          .row-fluid
-            .messages-list-message
-              .clearfix
-                %a.username.pull-left{href:"{% url sns.views.users.show message.sender.id %}" } 
-                  {{ message.sender.username }}:
-                .content.pull-left {{message.content|safe|at_users}}
-              .clearfix.message-bottom
-                .pull-right
-                  %span.muted {{ message.created_at|date:"m-d H:i" }}
-      - else
-        .row-fluid.empty-result
-          .offset4.span4.btn.btn-large.disabled 没有更多留言了...
-
-    .section
-      %h1 发出的留言
-      - if sent_messages
-        - for message in sent_messages
-          .row-fluid
-            .messages-list-message
-              .clearfix
-                %a.username.pull-left{href:"{% url sns.views.users.show message.sender.id %}" } 
-                  {{ message.sender.username }}:
-                .content.pull-left {{message.content|safe|at_users}}
-              .clearfix.message-bottom
-                .pull-right
-                  %span.muted {{ message.created_at|date:"m-d H:i" }}
-      - else
-        .row-fluid.empty-result
-          .offset4.span4.btn.btn-large.disabled 没有更多留言了...
+      %h1 我的留言
+      %ul.nav.nav-tabs
+        %li.active
+          %a{href:"#received", "data-toggle":"tab"} 我收到的
+        %li
+          %a{href:"#sent", "data-toggle":"tab"} 我发出的
+      .tab-content
+        #received.tab-pane.active
+          - if received_messages
+            - for message in received_messages
+              .row-fluid
+                .messages-list-message
+                  .clearfix
+                    %a.username.pull-left{href:"{% url sns.views.users.show message.sender.id %}" } 
+                      {{ message.sender.username }}:
+                    .content.pull-left {{message.content|safe|at_users}}
+                  .clearfix.message-bottom
+                    .pull-right
+                      %span.muted {{ message.created_at|date:"m-d H:i" }}
+          - else
+            .row-fluid.empty-result
+              .offset4.span4.btn.btn-large.disabled 没有更多留言了...
+        #sent.tab-pane
+          - if sent_messages
+            - for message in sent_messages
+              .row-fluid
+                .messages-list-message
+                  .clearfix
+                    %a.username.pull-left{href:"{% url sns.views.users.show message.sender.id %}" } 
+                      {{ message.sender.username }}:
+                    .content.pull-left {{message.content|safe|at_users}}
+                  .clearfix.message-bottom
+                    .pull-right
+                      %span.muted {{ message.created_at|date:"m-d H:i" }}
+          - else
+            .row-fluid.empty-result
+              .offset4.span4.btn.btn-large.disabled 没有更多留言了...
 
 - block right_content
   .users-index-right
